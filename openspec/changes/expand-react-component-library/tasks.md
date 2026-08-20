@@ -11,7 +11,7 @@
 
 - [ ] Implement the form and feedback component batch.
   - [x] Textarea
-  - [ ] Label
+  - [x] Label
   - [ ] Checkbox
   - [ ] Radio Group
   - [ ] Switch

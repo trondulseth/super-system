@@ -159,6 +159,10 @@ aside select {
   margin: 14px 0 0;
 }
 
+.preview-section .ss-label + .ss-label {
+  margin-top: 12px;
+}
+
 #checks {
   display: grid;
   gap: 6px;

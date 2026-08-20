@@ -4,7 +4,7 @@
 import { act, createRef, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
-import { Input, Textarea } from "../packages/react/src/index.js";
+import { Input, Label, Textarea } from "../packages/react/src/index.js";
 
 function render(element: ReactElement): HTMLElement {
   const container = document.createElement("div");
@@ -18,6 +18,36 @@ function render(element: ReactElement): HTMLElement {
 
 afterEach(() => {
   document.body.innerHTML = "";
+});
+
+describe("Label", () => {
+  it("forwards refs and associates with controls", () => {
+    const ref = createRef<HTMLLabelElement>();
+    const container = render(
+      <Label ref={ref} htmlFor="email">
+        Email address
+      </Label>
+    );
+
+    const label = container.querySelector("label");
+    expect(label).not.toBeNull();
+    expect(ref.current).toBe(label);
+    expect(label?.htmlFor).toBe("email");
+    expect(label?.className).toContain("ss-label");
+    expect(label?.textContent).toBe("Email address");
+  });
+
+  it("shows required and disabled states", () => {
+    const container = render(
+      <Label required disabled>
+        Full name
+      </Label>
+    );
+    const label = container.querySelector("label");
+
+    expect(label?.className).toContain("ss-label--disabled");
+    expect(label?.querySelector(".ss-label__required")?.textContent).toContain("*");
+  });
 });
 
 describe("Textarea", () => {

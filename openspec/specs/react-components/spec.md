@@ -33,6 +33,15 @@ The package SHALL provide an `Input` supporting native input attributes, forward
 - **THEN** its visual state communicates the error
 - **AND** the native accessibility state remains available to assistive technology
 
+### Requirement: Label component
+The package SHALL provide a `Label` supporting native label attributes, forwarded refs, optional required indication, and disabled styling.
+
+#### Scenario: A required field is labeled
+- **GIVEN** a form field marked required
+- **WHEN** its label renders with the required indicator
+- **THEN** the visible label communicates the requirement
+- **AND** the native label association remains available to assistive technology
+
 ### Requirement: Textarea component
 The package SHALL provide a `Textarea` supporting native textarea attributes, forwarded refs, disabled styling, focus styling, and invalid-state styling.
 
