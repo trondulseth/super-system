@@ -23,7 +23,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       disabled={disabled || loading}
       {...props}
     >
-      {loading ? <span className="ss-spinner" aria-hidden="true" /> : null}
+      {loading ? <Spinner size="sm" aria-hidden /> : null}
       <span>{children}</span>
     </button>
   );
@@ -216,6 +216,116 @@ export function Alert({
       {title ? <p className="ss-alert__title">{title}</p> : null}
       <div className="ss-alert__body">{children}</div>
     </div>
+  );
+}
+
+export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
+  size?: "sm" | "md" | "lg";
+  label?: string;
+}
+
+export function Spinner({
+  size = "md",
+  label = "Loading",
+  className,
+  "aria-hidden": ariaHidden,
+  ...props
+}: SpinnerProps) {
+  return (
+    <span
+      role={ariaHidden ? undefined : "status"}
+      aria-label={ariaHidden ? undefined : label}
+      aria-hidden={ariaHidden || undefined}
+      className={classes("ss-spinner", `ss-spinner--${size}`, className)}
+      {...props}
+    />
+  );
+}
+
+export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "text" | "block" | "circle";
+  lines?: number;
+}
+
+export function Skeleton({
+  variant = "block",
+  lines = 1,
+  className,
+  ...props
+}: SkeletonProps) {
+  if (variant === "text" && lines > 1) {
+    return (
+      <div className={classes("ss-skeleton-group", className)} aria-hidden="true" {...props}>
+        {Array.from({ length: lines }, (_, index) => (
+          <div
+            key={index}
+            className={classes(
+              "ss-skeleton",
+              "ss-skeleton--text",
+              index === lines - 1 && "ss-skeleton--short"
+            )}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      aria-hidden="true"
+      className={classes("ss-skeleton", `ss-skeleton--${variant}`, className)}
+      {...props}
+    />
+  );
+}
+
+export interface TooltipProps {
+  content: React.ReactNode;
+  children: React.ReactElement;
+  side?: "top" | "bottom" | "left" | "right";
+}
+
+function mergeHandlers<Event extends React.SyntheticEvent>(
+  theirs: ((event: Event) => void) | undefined,
+  ours: (event: Event) => void
+): (event: Event) => void {
+  return (event) => {
+    theirs?.(event);
+    ours(event);
+  };
+}
+
+export function Tooltip({ content, children, side = "top" }: TooltipProps) {
+  const [open, setOpen] = React.useState(false);
+  const tooltipId = React.useId();
+
+  const child = React.Children.only(children);
+  const childProps = child.props as React.HTMLAttributes<HTMLElement>;
+  const trigger = React.cloneElement(child, {
+    ...childProps,
+    "aria-describedby": open ? tooltipId : childProps["aria-describedby"],
+    onMouseEnter: mergeHandlers(childProps.onMouseEnter, () => setOpen(true)),
+    onMouseLeave: mergeHandlers(childProps.onMouseLeave, () => setOpen(false)),
+    onFocus: mergeHandlers(childProps.onFocus, () => setOpen(true)),
+    onBlur: mergeHandlers(childProps.onBlur, () => setOpen(false)),
+    onKeyDown: mergeHandlers(childProps.onKeyDown, (event) => {
+      if (event.key === "Escape") setOpen(false);
+    })
+  } as React.HTMLAttributes<HTMLElement>);
+
+  return (
+    <span className="ss-tooltip">
+      {trigger}
+      {open ? (
+        <span
+          id={tooltipId}
+          role="tooltip"
+          className={classes("ss-tooltip__content", `ss-tooltip__content--${side}`)}
+        >
+          {content}
+        </span>
+      ) : null}
+    </span>
   );
 }
 

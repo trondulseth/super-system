@@ -187,6 +187,44 @@
           </section>
 
           <section class="preview-section">
+            <h4 class="preview-label">Spinner</h4>
+            <div class="demo-row">
+              <span class="ss-spinner ss-spinner--sm" role="status" aria-label="Loading"></span>
+              <span class="ss-spinner ss-spinner--md" role="status" aria-label="Loading"></span>
+              <span class="ss-spinner ss-spinner--lg" role="status" aria-label="Loading"></span>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Skeleton</h4>
+            <div class="ss-skeleton ss-skeleton--block"></div>
+            <div class="ss-skeleton-group" style="margin-top: 12px">
+              <div class="ss-skeleton ss-skeleton--text"></div>
+              <div class="ss-skeleton ss-skeleton--text"></div>
+              <div class="ss-skeleton ss-skeleton--text ss-skeleton--short"></div>
+            </div>
+            <div class="demo-row" style="margin-top: 12px">
+              <div class="ss-skeleton ss-skeleton--circle"></div>
+              <div style="flex: 1">
+                <div class="ss-skeleton ss-skeleton--text"></div>
+                <div class="ss-skeleton ss-skeleton--text ss-skeleton--short" style="margin-top: 8px"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Tooltip</h4>
+            <span class="ss-tooltip ss-tooltip--demo">
+              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-describedby="tip-demo">
+                Help
+              </button>
+              <span role="tooltip" id="tip-demo" class="ss-tooltip__content ss-tooltip__content--top">
+                Use semantic tokens instead of hard-coded colors.
+              </span>
+            </span>
+          </section>
+
+          <section class="preview-section">
             <h4 class="preview-label">Badge</h4>
             <div class="demo-row">
               <span class="ss-badge ss-badge--neutral">Draft</span>

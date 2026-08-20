@@ -6,14 +6,18 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   Alert,
+  Button,
   Checkbox,
   Input,
   Label,
   Radio,
   RadioGroup,
   Select,
+  Skeleton,
+  Spinner,
   Switch,
-  Textarea
+  Textarea,
+  Tooltip
 } from "../packages/react/src/index.js";
 
 function render(element: ReactElement): HTMLElement {
@@ -28,6 +32,56 @@ function render(element: ReactElement): HTMLElement {
 
 afterEach(() => {
   document.body.innerHTML = "";
+});
+
+describe("Spinner", () => {
+  it("exposes status semantics when standalone", () => {
+    const container = render(<Spinner label="Saving changes" />);
+    const spinner = container.querySelector('[role="status"]');
+
+    expect(spinner?.className).toContain("ss-spinner--md");
+    expect(spinner?.getAttribute("aria-label")).toBe("Saving changes");
+  });
+
+  it("can be hidden from assistive technology when decorative", () => {
+    const container = render(<Spinner aria-hidden />);
+    expect(container.querySelector('[role="status"]')).toBeNull();
+    expect(container.querySelector(".ss-spinner")).not.toBeNull();
+  });
+});
+
+describe("Skeleton", () => {
+  it("renders shape variants", () => {
+    const container = render(
+      <>
+        <Skeleton variant="block" />
+        <Skeleton variant="circle" />
+        <Skeleton variant="text" lines={3} />
+      </>
+    );
+
+    expect(container.querySelector(".ss-skeleton--block")).not.toBeNull();
+    expect(container.querySelector(".ss-skeleton--circle")).not.toBeNull();
+    expect(container.querySelectorAll(".ss-skeleton--text")).toHaveLength(3);
+  });
+});
+
+describe("Tooltip", () => {
+  it("links tooltip content on focus", () => {
+    const container = render(
+      <Tooltip content="Helpful text">
+        <Button variant="secondary">Help</Button>
+      </Tooltip>
+    );
+
+    const button = container.querySelector("button");
+    act(() => {
+      button?.focus();
+    });
+
+    expect(button?.getAttribute("aria-describedby")).toBeTruthy();
+    expect(container.querySelector('[role="tooltip"]')?.textContent).toBe("Helpful text");
+  });
 });
 
 describe("Checkbox", () => {

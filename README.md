@@ -391,6 +391,36 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 `Alert` uses `role="alert"` for important status messages.
 
+### Spinner
+
+```tsx
+<Spinner />
+<Spinner size="lg" label="Saving changes" />
+<Button loading>Saving</Button>
+```
+
+Use `aria-hidden` when the spinner is decorative inside a control that already communicates status.
+
+### Skeleton
+
+```tsx
+<Skeleton variant="block" />
+<Skeleton variant="text" lines={3} />
+<Skeleton variant="circle" />
+```
+
+Skeleton placeholders are marked `aria-hidden` because surrounding content should communicate loading state.
+
+### Tooltip
+
+```tsx
+<Tooltip content="Use semantic tokens instead of hard-coded colors.">
+  <Button variant="secondary">Help</Button>
+</Tooltip>
+```
+
+Tooltip content appears on hover and focus, links with `aria-describedby`, and closes on Escape.
+
 ### Badge
 
 ```tsx

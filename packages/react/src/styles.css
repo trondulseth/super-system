@@ -254,11 +254,92 @@
 .ss-badge--destructive { color: var(--ss-color-destructive-foreground); background: var(--ss-color-destructive); }
 
 .ss-spinner {
-  width: 1em;
-  height: 1em;
+  display: inline-block;
   border: 2px solid currentColor;
   border-right-color: transparent;
   border-radius: 50%;
   animation: ss-spin .65s linear infinite;
 }
+.ss-spinner--sm { width: 0.875rem; height: 0.875rem; }
+.ss-spinner--md { width: 1rem; height: 1rem; }
+.ss-spinner--lg { width: 1.25rem; height: 1.25rem; }
 @keyframes ss-spin { to { transform: rotate(360deg); } }
+
+.ss-skeleton-group {
+  display: grid;
+  gap: var(--ss-space-2, 8px);
+  width: 100%;
+}
+.ss-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--ss-color-muted) 0%,
+    color-mix(in srgb, var(--ss-color-muted) 65%, var(--ss-color-background)) 50%,
+    var(--ss-color-muted) 100%
+  );
+  background-size: 200% 100%;
+  animation: ss-shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--ss-radius-sm, 6px);
+}
+.ss-skeleton--text {
+  height: 1em;
+  width: 100%;
+}
+.ss-skeleton--short {
+  width: 80%;
+}
+.ss-skeleton--block {
+  min-height: var(--ss-target-min, 44px);
+  width: 100%;
+}
+.ss-skeleton--circle {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--ss-radius-full, 9999px);
+}
+@keyframes ss-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.ss-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+.ss-tooltip__content {
+  position: absolute;
+  z-index: 20;
+  max-width: 16rem;
+  padding: var(--ss-space-2, 8px) var(--ss-space-3, 12px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  background: var(--ss-color-foreground);
+  color: var(--ss-color-background);
+  font: 500 .8125rem/1.4 var(--ss-font-sans, system-ui);
+  white-space: normal;
+  pointer-events: none;
+}
+.ss-tooltip__content--top {
+  bottom: calc(100% + var(--ss-space-2, 8px));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ss-tooltip__content--bottom {
+  top: calc(100% + var(--ss-space-2, 8px));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.ss-tooltip__content--left {
+  right: calc(100% + var(--ss-space-2, 8px));
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ss-tooltip__content--right {
+  left: calc(100% + var(--ss-space-2, 8px));
+  top: 50%;
+  transform: translateY(-50%);
+}
+.ss-tooltip--demo .ss-tooltip__content {
+  opacity: 1;
+  visibility: visible;
+}

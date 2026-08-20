@@ -31,6 +31,9 @@ describe("studio demo", () => {
     expect(html).toContain("ss-switch");
     expect(html).toContain("ss-select");
     expect(html).toContain("ss-alert--destructive");
+    expect(html).toContain("ss-spinner--md");
+    expect(html).toContain("ss-skeleton--block");
+    expect(html).toContain("ss-tooltip__content");
     expect(html).toContain("ss-badge--neutral");
     expect(html).toContain("ss-card");
     expect(html).toContain("ss-spinner");
