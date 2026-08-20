@@ -93,6 +93,31 @@ The package SHALL provide an `Alert` with documented variants and `role="alert"`
 - **THEN** it exposes alert semantics to assistive technology
 - **AND** its variant styling distinguishes it from neutral alerts
 
+### Requirement: Spinner component
+The package SHALL provide a standalone `Spinner` with documented sizes and an accessible status label when rendered outside decorative contexts.
+
+#### Scenario: A standalone spinner is rendered
+- **GIVEN** a loading screen using the spinner
+- **WHEN** assistive technology reads the control
+- **THEN** the spinner exposes a meaningful status label
+
+### Requirement: Skeleton component
+The package SHALL provide a `Skeleton` placeholder with documented shape variants for loading states.
+
+#### Scenario: Content is loading
+- **GIVEN** a card waiting for data
+- **WHEN** skeleton placeholders render
+- **THEN** they provide visually consistent loading shapes without replacing semantic content
+
+### Requirement: Tooltip component
+The package SHALL provide a `Tooltip` that exposes supplementary content on hover and focus and associates it with its trigger through accessible description semantics.
+
+#### Scenario: A tooltip trigger receives focus
+- **GIVEN** a button wrapped by a tooltip
+- **WHEN** keyboard focus moves to the button
+- **THEN** the tooltip content becomes available
+- **AND** the trigger exposes an accessible description while the tooltip is open
+
 ### Requirement: Badge and Card components
 The package SHALL provide token-driven `Badge` variants and composable `Card` primitives for common status and content layouts.
 

@@ -9,7 +9,7 @@
 
 ## Implementation
 
-- [ ] Implement the form and feedback component batch.
+- [x] Implement the form and feedback component batch.
   - [x] Textarea
   - [x] Label
   - [x] Checkbox
@@ -17,9 +17,9 @@
   - [x] Switch
   - [x] Select
   - [x] Alert
-  - [ ] Spinner (standalone export)
-  - [ ] Skeleton
-  - [ ] Tooltip
+  - [x] Spinner (standalone export)
+  - [x] Skeleton
+  - [x] Tooltip
 - [ ] Implement the navigation and disclosure component batch.
 - [ ] Implement the overlay component batch.
 - [ ] Implement Table primitives and responsive usage guidance.
