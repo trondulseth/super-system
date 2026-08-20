@@ -5,13 +5,13 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active change:** expand-react-component-library
+- **Active change:** polish-library-quality
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Close out `expand-react-component-library` with release verification, then archive the change.
-- **Work state:** Icon wrapper (`Icon`), CLI `icons setup`, tests, README docs, and Studio icon previews are implemented. Release verification (fresh installs, beta publish) remains open.
-- **Recent evidence:** `Icon` supports decorative and labelled modes; `npx @super-system/cli icons setup` maps `super-system.json` icon library to install guidance; default recommendation is `lucide-react`.
-- **Risks and limitations:** Icon package install is opt-in via `--install`; dropdown and tooltip still render inline without a portal; npm packages remain at `0.1.0-beta.1`.
-- **Next handoff:** Verify installation in fresh React, Next.js, and Vite projects, publish updated beta if requested, sync specs, and archive `expand-react-component-library`.
+- **Objective:** Execute `polish-library-quality` in six phases — harden components, Studio, tokens, and tests; then release verification and archive both polish and expand changes.
+- **Work state:** Phase 0 planning artifacts complete. Phase 1 P0 blockers implemented on PR #12 (`cursor/polish-phase1-blockers-2c3d`). Phases 2–6 open.
+- **Recent evidence:** OpenSpec change `polish-library-quality` with proposal, design, tasks, and delta specs for react-components, accessibility, theme-studio, and theme-system.
+- **Risks and limitations:** Phase 1 may merge before Phase 2 starts; dropdown still inline until Phase 3; npm packages remain at `0.1.0-beta.1`.
+- **Next handoff:** Merge PR #12, then start Phase 2 (focus trap, scroll lock, Tabs, Toast, Tooltip, Label/Radio) on `cursor/polish-phase2-a11y-2c3d`.
