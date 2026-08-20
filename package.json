@@ -13,7 +13,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm test && pnpm build",
-    "dev:studio": "pnpm --filter super-system dev studio"
+    "dev:studio": "pnpm --filter @super-system/cli dev studio"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",

@@ -1,5 +1,5 @@
 {
-  "name": "super-system",
+  "name": "@super-system/cli",
   "version": "0.1.0-beta.1",
   "description": "Initialize, customize, and audit a consistent design system in React projects.",
   "type": "module",

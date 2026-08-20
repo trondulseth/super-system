@@ -7,9 +7,9 @@ and project auditing in one CLI.
 ## Quick start
 
 ```bash
-npx super-system init
-npx super-system studio
-npx super-system audit
+npx @super-system/cli init
+npx @super-system/cli studio
+npx @super-system/cli audit
 ```
 
 The first beta targets React, Next.js, and Vite. CSS tokens are framework-independent.
@@ -18,7 +18,7 @@ The first beta targets React, Next.js, and Vite. CSS tokens are framework-indepe
 
 - `@super-system/tokens` validates themes, generates CSS, and checks contrast.
 - `@super-system/react` provides the first accessible React components.
-- `super-system` provides `init`, `studio`, and `audit` commands.
+- `@super-system/cli` provides `init`, `studio`, and `audit` commands.
 
 ## Development
 

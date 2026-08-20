@@ -23,4 +23,4 @@ jobs:
       - run: pnpm check
       - run: npm publish --workspace=@super-system/tokens --tag beta
       - run: npm publish --workspace=@super-system/react --tag beta
-      - run: npm publish --workspace=super-system --tag beta
+      - run: npm publish --workspace=@super-system/cli --tag beta
