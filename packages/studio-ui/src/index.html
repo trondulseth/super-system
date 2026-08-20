@@ -126,6 +126,10 @@
                 value="Bad value"
               />
             </label>
+            <label class="ss-label">
+              Disabled field
+              <input class="ss-input" type="text" disabled value="Read only" />
+            </label>
           </section>
 
           <section class="preview-section">
@@ -138,6 +142,10 @@
               Invalid message
               <textarea class="ss-textarea ss-textarea--invalid" aria-invalid="true">Too short</textarea>
             </label>
+            <label class="ss-label">
+              Disabled bio
+              <textarea class="ss-textarea" disabled>Read only</textarea>
+            </label>
           </section>
 
           <section class="preview-section">
@@ -145,6 +153,10 @@
             <label class="ss-label ss-label--inline">
               <input class="ss-checkbox" type="checkbox" checked />
               Email me product updates
+            </label>
+            <label class="ss-label ss-label--inline">
+              <input class="ss-checkbox ss-checkbox--invalid" type="checkbox" aria-invalid="true" />
+              Accept terms (invalid)
             </label>
           </section>
 
@@ -171,23 +183,42 @@
               <input class="ss-switch" type="checkbox" role="switch" checked />
               Dark mode by default
             </label>
+            <label class="ss-label ss-label--inline">
+              <input class="ss-switch ss-switch--invalid" type="checkbox" role="switch" aria-invalid="true" />
+              Enable sync (invalid)
+            </label>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Select</h4>
             <label class="ss-label">
               Country
-              <select class="ss-select">
-                <option>Norway</option>
-                <option>Sweden</option>
-                <option>Denmark</option>
-              </select>
+              <span class="ss-select-wrap">
+                <select class="ss-select">
+                  <option>Norway</option>
+                  <option>Sweden</option>
+                  <option>Denmark</option>
+                </select>
+              </span>
+            </label>
+            <label class="ss-label">
+              Role (invalid)
+              <span class="ss-select-wrap">
+                <select class="ss-select ss-select--invalid" aria-invalid="true">
+                  <option value="">Choose a role</option>
+                  <option>Admin</option>
+                </select>
+              </span>
             </label>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Alert</h4>
-            <div class="ss-alert ss-alert--primary" role="alert">
+            <div class="ss-alert" role="status">
+              <p class="ss-alert__title">Workspace created</p>
+              <div class="ss-alert__body">Invite teammates when you are ready.</div>
+            </div>
+            <div class="ss-alert ss-alert--primary" role="status">
               <p class="ss-alert__title">Invite sent</p>
               <div class="ss-alert__body">Your teammate can now join the workspace.</div>
             </div>

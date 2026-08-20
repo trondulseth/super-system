@@ -310,13 +310,39 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 ### Label
 
+Field labels use **font-weight 600** (`Label`, `RadioGroup` legends). Inline option labels such as `Radio` option text use **font-weight 400** so grouped choices read as secondary to the field label.
+
+**Wrapping pattern** — `required` and `disabled` propagate to a single wrapped control:
+
 ```tsx
-<Label htmlFor="name">Full name</Label>
-<Label htmlFor="bio" required>Bio</Label>
-<Label disabled>Unavailable field</Label>
+<Label required>
+  Email address
+  <Input type="email" />
+</Label>
+
+<Label disabled>
+  Unavailable field
+  <Input type="text" />
+</Label>
 ```
 
-`Label` forwards native label attributes and supports `required` and `disabled` visual states. Wrap an control to stack the label above it:
+When a wrapping label sets `required`, the child receives `required` and `aria-required="true"`. When it sets `disabled`, the child receives `disabled`.
+
+**`htmlFor` pattern** — set native attributes on the associated control yourself:
+
+```tsx
+<Label htmlFor="name" required>
+  Full name
+</Label>
+<Input id="name" required aria-required="true" />
+
+<Label htmlFor="legacy" disabled>
+  Unavailable field
+</Label>
+<Input id="legacy" disabled />
+```
+
+`Label` forwards native label attributes and supports `required` and `disabled` visual states. Wrap a control to stack the label above it:
 
 ```tsx
 <Label>
@@ -383,13 +409,22 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 ### Alert
 
 ```tsx
-<Alert title="Invite sent">Your teammate can now join the workspace.</Alert>
+<Alert title="Workspace created">Invite teammates when you are ready.</Alert>
+<Alert variant="primary" title="Invite sent">
+  Your teammate can now join the workspace.
+</Alert>
 <Alert variant="destructive" title="Payment failed">
   Update your billing details to keep access.
 </Alert>
 ```
 
-`Alert` uses `role="alert"` for important status messages.
+`Alert` defaults to `role="status"` for neutral and primary variants, and `role="alert"` for destructive messages. Override with `liveRegion`:
+
+```tsx
+<Alert variant="primary" liveRegion="alert" title="Critical notice">
+  This upgrade requires immediate attention.
+</Alert>
+```
 
 ### Spinner
 

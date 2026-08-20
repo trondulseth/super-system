@@ -161,6 +161,30 @@ describe("Alert", () => {
     expect(alert?.querySelector(".ss-alert__title")?.textContent).toBe("Payment failed");
     expect(alert?.textContent).toContain("Update billing details.");
   });
+
+  it("defaults informational variants to status semantics", () => {
+    const container = render(
+      <>
+        <Alert title="Workspace created">Invite teammates when ready.</Alert>
+        <Alert variant="primary" title="Invite sent">
+          Your teammate can join.
+        </Alert>
+      </>
+    );
+
+    expect(container.querySelectorAll('[role="status"]')).toHaveLength(2);
+    expect(container.querySelector('[role="alert"]')).toBeNull();
+  });
+
+  it("allows liveRegion override", () => {
+    const container = render(
+      <Alert variant="primary" liveRegion="alert" title="Critical notice">
+        Immediate attention required.
+      </Alert>
+    );
+
+    expect(container.querySelector('[role="alert"]')).not.toBeNull();
+  });
 });
 
 describe("Label", () => {
@@ -190,6 +214,30 @@ describe("Label", () => {
 
     expect(label?.className).toContain("ss-label--disabled");
     expect(label?.querySelector(".ss-label__required")?.textContent).toContain("*");
+  });
+
+  it("propagates required to a wrapped control", () => {
+    const container = render(
+      <Label required>
+        Email address
+        <Input type="email" />
+      </Label>
+    );
+
+    const field = container.querySelector("input");
+    expect(field?.required).toBe(true);
+    expect(field?.getAttribute("aria-required")).toBe("true");
+  });
+
+  it("propagates disabled to a wrapped control", () => {
+    const container = render(
+      <Label disabled>
+        Unavailable field
+        <Input type="text" />
+      </Label>
+    );
+
+    expect(container.querySelector("input")?.disabled).toBe(true);
   });
 });
 

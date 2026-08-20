@@ -17,14 +17,14 @@ Token leaks and missing states that break themes or misrepresent control state.
 
 Behavior and preview parity for assistive technology and the live demo.
 
-- [ ] Implement Label child cloning for `required` → `required` + `aria-required="true"`.
-- [ ] Implement Label child cloning for `disabled` → `disabled` on associated control.
-- [ ] Document `htmlFor` pattern: consumer must set `required`/`disabled` on the target control.
-- [ ] Add Alert `liveRegion?: "alert" | "status"` with variant-aware defaults.
-- [ ] Add Studio preview rows: Alert neutral, Input disabled, Textarea disabled, Select/Checkbox/Switch invalid.
-- [ ] Document label typography convention (600 field labels, 400 option labels) in README.
-- [ ] Add tests: Label required/disabled propagation, Alert liveRegion defaults.
-- [ ] Run `pnpm check`.
+- [x] Implement Label child cloning for `required` → `required` + `aria-required="true"`.
+- [x] Implement Label child cloning for `disabled` → `disabled` on associated control.
+- [x] Document `htmlFor` pattern: consumer must set `required`/`disabled` on the target control.
+- [x] Add Alert `liveRegion?: "alert" | "status"` with variant-aware defaults.
+- [x] Add Studio preview rows: Alert neutral, Input disabled, Textarea disabled, Select/Checkbox/Switch invalid.
+- [x] Document label typography convention (600 field labels, 400 option labels) in README.
+- [x] Add tests: Label required/disabled propagation, Alert liveRegion defaults.
+- [x] Run `pnpm check`.
 
 ## Phase 3 — Architecture and API polish (PR 3)
 
