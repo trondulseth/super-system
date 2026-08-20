@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Super System Studio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <p id="demo-banner" class="demo-banner" hidden></p>
+    <header>
+      <h1>Super System <span style="color: #64748b; font-weight: 500">Studio</span></h1>
+      <div class="actions">
+        <span id="status"></span>
+        <button class="theme-toggle" id="toggle" type="button">Dark preview</button>
+        <button class="save" id="save" type="button">Save theme</button>
+      </div>
+    </header>
+    <main>
+      <aside>
+        <h2>Brand</h2>
+        <label>Primary color<input id="primary" type="color" /></label>
+        <label>Primary text<input id="primaryForeground" type="color" /></label>
+        <div class="row">
+          <label>Background<input id="background" type="color" /></label>
+          <label>Text<input id="foreground" type="color" /></label>
+        </div>
+        <div class="row">
+          <label>Secondary<input id="secondary" type="color" /></label>
+          <label>Secondary text<input id="secondaryForeground" type="color" /></label>
+        </div>
+        <h2>Typography and shape</h2>
+        <label>Font family<input id="fontSans" /></label>
+        <div class="row">
+          <label>Base size<input id="baseSize" /></label>
+          <label>Medium radius<input id="radiusMd" /></label>
+        </div>
+        <div class="row">
+          <label
+            >Density<select id="density">
+              <option>compact</option>
+              <option>comfortable</option>
+              <option>spacious</option>
+            </select></label
+          >
+          <label
+            >Icon library<select id="icons">
+              <option>lucide</option>
+              <option>phosphor</option>
+              <option>heroicons</option>
+              <option>custom</option>
+            </select></label
+          >
+        </div>
+        <h2>Accessibility</h2>
+        <div class="row">
+          <label
+            >Contrast<select id="contrast">
+              <option>AA</option>
+              <option>AAA</option>
+            </select></label
+          >
+          <label>Minimum target<input id="target" type="number" min="24" max="64" /></label>
+        </div>
+      </aside>
+      <section class="preview">
+        <article class="canvas">
+          <h3>Build consistent products</h3>
+          <p>Every component follows the same theme, spacing, and accessibility rules.</p>
+          <div class="demo">
+            <button class="primary" type="button">Primary action</button>
+            <button class="secondary" type="button">Secondary</button>
+          </div>
+          <label class="field"
+            >Email address<input placeholder="you@example.com"
+          /></label>
+          <div id="checks"></div>
+        </article>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

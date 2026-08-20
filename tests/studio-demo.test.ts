@@ -1,0 +1,28 @@
+import { execFile } from "node:child_process";
+import { access, readFile } from "node:fs/promises";
+import path from "node:path";
+import { promisify } from "node:util";
+import { describe, expect, it } from "vitest";
+import { checkThemeContrast, defaultTheme, validateConfig } from "../packages/tokens/src/index.js";
+
+const execFileAsync = promisify(execFile);
+const demoDir = path.join(process.cwd(), "packages/studio-ui/dist/demo");
+
+describe("studio demo", () => {
+  it("builds a static demo bundle", async () => {
+    await execFileAsync("pnpm", ["build:studio-demo"], { cwd: process.cwd() });
+
+    await expect(access(path.join(demoDir, "index.html"))).resolves.toBeUndefined();
+    await expect(access(path.join(demoDir, "app.js"))).resolves.toBeUndefined();
+    await expect(access(path.join(demoDir, "styles.css"))).resolves.toBeUndefined();
+
+    const html = await readFile(path.join(demoDir, "index.html"), "utf8");
+    expect(html).toContain("Download theme");
+    expect(html).toContain('src="./app.js"');
+  });
+
+  it("uses the same contrast logic as the token package", () => {
+    expect(checkThemeContrast(defaultTheme).every((result) => result.passes)).toBe(true);
+    expect(validateConfig(defaultTheme).version).toBe(1);
+  });
+});

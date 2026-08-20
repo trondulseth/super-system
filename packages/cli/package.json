@@ -14,11 +14,12 @@
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup src/index.ts --format esm --dts --clean && node scripts/copy-studio.mjs",
     "dev": "tsx src/index.ts"
   },
   "dependencies": {
-    "@super-system/tokens": "0.1.0-beta.1"
+    "@super-system/studio-ui": "workspace:*",
+    "@super-system/tokens": "workspace:*"
   },
   "devDependencies": {
     "tsx": "^4.19.4"

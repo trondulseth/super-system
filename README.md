@@ -123,6 +123,10 @@ Run:
 npx @super-system/cli studio
 ```
 
+Or try the browser demo without installing anything: [Super System Studio on GitHub Pages](https://trondulseth.github.io/super-system/).
+
+The public demo uses the same Studio UI as the CLI. It keeps edits in your browser and downloads `super-system.json` when you export a theme. For project integration and saving directly to your repository, use the local command above.
+
 Studio opens locally in your browser. It does not upload your project or theme anywhere.
 
 Use it to preview and adjust:
@@ -471,6 +475,8 @@ The first beta deliberately starts small. Planned work includes:
 - optional AI instruction adapters;
 - hosted theme sharing in addition to the private local Studio;
 - visual regression and expanded accessibility testing.
+
+The [Studio browser demo](https://trondulseth.github.io/super-system/) is already available on GitHub Pages and stays in sync with the local Studio UI through the shared `@super-system/studio-ui` package.
 
 ## Product specifications and roadmap
 
