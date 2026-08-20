@@ -64,7 +64,7 @@
             </select></label
           >
           <p class="field-help">
-            Saved to config for future icon adapter setup; preview icons are not rendered yet.
+            Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
           </p>
         </div>
         <h2>Accessibility</h2>
@@ -444,6 +444,29 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Icon</h4>
+            <div class="demo-row">
+              <span class="ss-icon ss-icon--md" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+              </span>
+              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-label="Add item">
+                <span class="ss-icon ss-icon--sm" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14"></path>
+                  </svg>
+                </span>
+              </button>
+              <span class="ss-icon ss-icon--lg" role="img" aria-label="Favorite">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"></path>
+                </svg>
+              </span>
             </div>
           </section>
 

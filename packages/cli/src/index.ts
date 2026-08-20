@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { checkThemeContrast } from "@super-system/tokens";
 import { auditProject } from "./audit.js";
+import { setupIcons } from "./icons.js";
 import { initialize, readConfig, writeGeneratedCss } from "./files.js";
 import { startStudio } from "./studio.js";
 
@@ -17,6 +18,7 @@ Usage:
   super-system audit [--json] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
+  super-system icons setup [--install] [--cwd path]
 `);
 }
 
@@ -53,6 +55,14 @@ async function main(): Promise<void> {
       const results = checkThemeContrast(await readConfig(cwd));
       results.forEach((result) => console.log(`${result.passes ? "PASS" : "FAIL"} ${result.theme}/${result.pair}: ${result.ratio}:1`));
       process.exitCode = results.some((result) => !result.passes) ? 1 : 0;
+      break;
+    }
+    case "icons": {
+      if (args[0] !== "setup") {
+        help();
+        break;
+      }
+      await setupIcons(cwd, args.includes("--install"));
       break;
     }
     default:

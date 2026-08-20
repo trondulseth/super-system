@@ -10,8 +10,8 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 ## Active handoff
 
-- **Objective:** Close out the React library expansion change after Batch 3 overlays and table primitives; remaining work is icon integration and beta release verification.
-- **Work state:** Batch 3 (Dialog, Drawer, Popover, Toast, Table) is implemented with portal rendering, focus trap for modals, tests, README docs, and Studio previews. Active change `expand-react-component-library` remains open for icon wrapper and release tasks.
-- **Recent evidence:** `pnpm check` with expanded test suite; dialog and drawer use `OverlayPortal`; popover and toast viewport render through portals; table wraps native semantics in `ss-table-wrap`.
-- **Risks and limitations:** Dropdown menu and tooltip still render inline without a portal; icon wrapper not shipped; npm packages remain at `0.1.0-beta.1`.
-- **Next handoff:** Implement normalized Icon wrapper and complete release verification tasks, then archive `expand-react-component-library` after living specs sync.
+- **Objective:** Close out `expand-react-component-library` with release verification, then archive the change.
+- **Work state:** Icon wrapper (`Icon`), CLI `icons setup`, tests, README docs, and Studio icon previews are implemented. Release verification (fresh installs, beta publish) remains open.
+- **Recent evidence:** `Icon` supports decorative and labelled modes; `npx @super-system/cli icons setup` maps `super-system.json` icon library to install guidance; default recommendation is `lucide-react`.
+- **Risks and limitations:** Icon package install is opt-in via `--install`; dropdown and tooltip still render inline without a portal; npm packages remain at `0.1.0-beta.1`.
+- **Next handoff:** Verify installation in fresh React, Next.js, and Vite projects, publish updated beta if requested, sync specs, and archive `expand-react-component-library`.

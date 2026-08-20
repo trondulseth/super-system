@@ -2,11 +2,11 @@
 
 ## Status
 
-Batch 2 (navigation and disclosure) and Batch 3 (overlays and data) are **complete**. Icon wrapper and release verification remain in this change.
+Batch 2 (navigation and disclosure) and Batch 3 (overlays and data) are **complete**. Icon wrapper and CLI setup guidance are **complete**. Release verification remains in this change.
 
 ## Component batches
 
-1. **Form and feedback (done):** Textarea, Label, Checkbox, Radio Group, Switch, Select, Alert, Spinner, Skeleton, Tooltip. Icon wrapper remains planned.
+1. **Form and feedback (done):** Textarea, Label, Checkbox, Radio Group, Switch, Select, Alert, Spinner, Skeleton, Tooltip, and Icon.
 2. **Navigation and disclosure (done):** Tabs, Accordion, Breadcrumb, Dropdown Menu, and Pagination.
 3. **Data and overlays (done):** Table primitives, Dialog, Drawer, Popover, and Toast.
 

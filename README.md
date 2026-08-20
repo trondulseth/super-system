@@ -142,7 +142,7 @@ Use it to preview and adjust:
 Click **Save theme**. Studio updates `super-system.json` and regenerates `.super-system/theme.css` automatically.
 
 > [!NOTE]
-> In the current beta, the icon-library setting is theme metadata. Automatic icon-package installation is planned for a later release.
+> The icon-library setting in Studio selects your preferred package. Run `npx @super-system/cli icons setup` for install commands and usage examples. Default recommendation: `lucide-react`.
 
 ## Understanding the theme file
 
@@ -292,7 +292,7 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 ## React components (Batch 1–3)
 
-The beta ships **81 exports** from `@super-system/react`: Batch 1 form and feedback, Batch 2 navigation and disclosure, and Batch 3 overlays and data (`Dialog`, `Drawer`, `Popover`, `Toast`, `ToastProvider`, `useToast`, and composable `Table` primitives).
+The beta ships **82 exports** from `@super-system/react`: Batch 1–3 components plus the normalized `Icon` wrapper for SVG and compatible icon libraries.
 
 Each component is token-driven, supports light and dark themes, and includes copy-ready examples below.
 
@@ -687,6 +687,25 @@ toast({ title: "Saved", description: "Your changes were stored." });
 
 `Table` wraps a native `<table>` in a horizontally scrollable container for responsive layouts while preserving header and cell semantics.
 
+### Icon
+
+```tsx
+import { Plus } from "lucide-react";
+import { Button, Icon } from "@super-system/react";
+
+<Button aria-label="Add item" variant="secondary">
+  <Icon decorative size="sm">
+    <Plus />
+  </Icon>
+</Button>
+
+<Icon label="Favorite" size="lg">
+  <Heart />
+</Icon>
+```
+
+Install your configured library with `npx @super-system/cli icons setup` (add `--install` to run npm install in the current project). Use `decorative` when a visible label or `aria-label` on the owning control already names the action. Use `label` when the icon communicates meaning on its own. The wrapper normalizes size (`sm`, `md`, `lg`), alignment, and `currentColor` stroke treatment for SVG children.
+
 ## Find inconsistent UI with Audit
 
 Run this inside any existing project:
@@ -775,6 +794,8 @@ Component CSS includes `prefers-reduced-motion` and `forced-colors` fallbacks; z
 | `npx @super-system/cli audit --json` | Prints findings as JSON. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
+| `npx @super-system/cli icons setup` | Prints install guidance for the configured icon library. |
+| `npx @super-system/cli icons setup --install` | Installs the recommended icon package in the project. |
 
 All commands accept `--cwd path` when the target project is not the current folder.
 
@@ -804,7 +825,7 @@ Super System does not depend on an AI tool. Its files and commands work with hum
 If you use an AI assistant, give it this project rule:
 
 ```text
-Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, tabs, accordions, breadcrumbs, dropdown menus, pagination, dialogs, drawers, popovers, toasts, tables, and theme switching.
+Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, tabs, accordions, breadcrumbs, dropdown menus, pagination, dialogs, drawers, popovers, toasts, tables, icons, and theme switching.
 Use semantic Super System CSS variables instead of hard-coded colors or spacing.
 Treat super-system.json as the single source of truth.
 Never edit .super-system/theme.css manually.
@@ -852,8 +873,7 @@ npx @super-system/cli studio --port 5000
 
 ## Beta roadmap
 
-Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure and Batch 3 overlays and data are **shipped**. Remaining work in the active OpenSpec change covers icon integration and release verification. Next planned work:
-- automatic icon-package installation and normalized icon components;
+Batch 1–3 component batches are **shipped**. Remaining work in the active OpenSpec change covers release verification. Next planned work:
 - a safer assisted migration workflow for existing projects;
 - ESLint rules and deeper framework-aware audits;
 - optional AI instruction adapters;

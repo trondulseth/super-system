@@ -37,7 +37,7 @@ describe("studio demo", () => {
     expect(html).toContain("ss-select--invalid");
     expect(html).toContain("ss-checkbox--invalid");
     expect(html).toContain("ss-switch--invalid");
-    expect(html).toContain("preview icons are not rendered yet");
+    expect(html).not.toContain("preview icons are not rendered yet");
     expect(html).toContain("ss-spinner--md");
     expect(html).toContain("ss-skeleton--block");
     expect(html).toContain("ss-tooltip__content");
@@ -57,6 +57,8 @@ describe("studio demo", () => {
     expect(html).toContain("ss-toast--primary");
     expect(html).toContain("ss-table-wrap");
     expect(html).toContain('scope="col"');
+    expect(html).toContain("ss-icon--md");
+    expect(html).toContain('aria-label="Add item"');
   });
 
   it("uses the same contrast logic as the token package", () => {
