@@ -472,6 +472,16 @@ The first beta deliberately starts small. Planned work includes:
 - hosted theme sharing in addition to the private local Studio;
 - visual regression and expanded accessibility testing.
 
+## Product specifications and roadmap
+
+Super System uses [OpenSpec](https://openspec.dev/) to keep the product plan reviewable and close to the code.
+
+- [`openspec/specs`](./openspec/specs) describes what the current beta does today.
+- [`openspec/changes`](./openspec/changes) contains complete proposals, technical designs, acceptance requirements, and implementation checklists for planned work.
+- [`openspec/changes/archive`](./openspec/changes/archive) records the completed bootstrap that produced the current public beta.
+
+Before implementing a planned feature, review its OpenSpec change. When the work and verification tasks are complete, sync the living specification and archive the change. This gives people and AI coding tools the same source of truth.
+
 ## Contributing
 
 Super System is developed as an npm workspace:

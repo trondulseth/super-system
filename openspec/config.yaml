@@ -1,0 +1,38 @@
+schema: spec-driven
+
+context: |
+  Product: Super System, a lightweight and AI-independent design system toolkit.
+  Repository: https://github.com/trondulseth/super-system
+  Runtime: Node.js 20+, TypeScript, React 18+, npm packages in a pnpm workspace.
+  Packages: @super-system/tokens, @super-system/react, and @super-system/cli.
+  Current release: 0.1.0-beta.1, published publicly under the beta tag.
+  Styling: portable CSS custom properties generated from super-system.json.
+  Quality gates: strict TypeScript, Vitest, package builds, clean-package smoke tests, and GitHub Actions.
+  Release: npm Trusted Publishing through GitHub Actions with OIDC; no long-lived publish token.
+  Compatibility: React, Next.js, and Vite are first-class in beta; token CSS is framework-independent.
+  Documentation language: English for public artifacts and package documentation.
+  Product principles: simple for beginners, one source of truth, safe by default, accessible by default, and AI-tool neutral.
+
+rules:
+  proposal:
+    - Include problem, goals, non-goals, affected capabilities, dependencies, risks, and rollout.
+    - Keep each change independently reviewable and releasable.
+  specs:
+    - Describe externally verifiable behavior rather than implementation details.
+    - Every requirement must use SHALL and include at least one GIVEN/WHEN/THEN scenario.
+    - State compatibility and accessibility behavior when relevant.
+  design:
+    - Record alternatives considered and migration or compatibility consequences.
+    - Preserve the framework-independent token layer unless a proposal explicitly changes that boundary.
+  tasks:
+    - Include implementation, tests, documentation, clean-project verification, and release work.
+    - Mark a task complete only when its acceptance behavior is implemented and verified.
+
+operations:
+  apply:
+    guidance:
+      - Run pnpm check before marking implementation complete.
+      - Do not publish a package unless the user explicitly requests a release.
+  archive:
+    guidance:
+      - Confirm living specs match the released behavior before archiving.
