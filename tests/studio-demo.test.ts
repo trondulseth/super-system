@@ -44,6 +44,12 @@ describe("studio demo", () => {
     expect(html).toContain("ss-badge--neutral");
     expect(html).toContain("ss-card");
     expect(html).toContain("ss-spinner");
+    expect(html).toContain("ss-tabs__trigger--active");
+    expect(html).toContain("ss-accordion__trigger");
+    expect(html).toContain('aria-label="Breadcrumb"');
+    expect(html).toContain("ss-dropdown__content");
+    expect(html).toContain('aria-label="Pagination"');
+    expect(html).toContain("ss-pagination__link--active");
   });
 
   it("uses the same contrast logic as the token package", () => {

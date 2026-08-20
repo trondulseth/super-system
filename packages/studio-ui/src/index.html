@@ -278,6 +278,98 @@
             </div>
           </section>
 
+          <section class="preview-section">
+            <h4 class="preview-label">Tabs</h4>
+            <div class="ss-tabs">
+              <div role="tablist" aria-orientation="horizontal" class="ss-tabs__list">
+                <button type="button" role="tab" aria-selected="true" class="ss-tabs__trigger ss-tabs__trigger--active">Profile</button>
+                <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ss-tabs__trigger">Billing</button>
+              </div>
+              <div role="tabpanel" tabindex="0" class="ss-tabs__content">Manage your profile settings.</div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Accordion</h4>
+            <div class="ss-accordion">
+              <div class="ss-accordion__item">
+                <h3 class="ss-accordion__heading">
+                  <button type="button" class="ss-accordion__trigger" aria-expanded="true">
+                    <span class="ss-accordion__trigger-label">Account</span>
+                    <span class="ss-accordion__icon" aria-hidden="true"></span>
+                  </button>
+                </h3>
+                <div role="region" class="ss-accordion__content">
+                  <div class="ss-accordion__content-inner">Update your email and password.</div>
+                </div>
+              </div>
+              <div class="ss-accordion__item">
+                <h3 class="ss-accordion__heading">
+                  <button type="button" class="ss-accordion__trigger" aria-expanded="false">
+                    <span class="ss-accordion__trigger-label">Notifications</span>
+                    <span class="ss-accordion__icon" aria-hidden="true"></span>
+                  </button>
+                </h3>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Breadcrumb</h4>
+            <nav aria-label="Breadcrumb" class="ss-breadcrumb">
+              <ol class="ss-breadcrumb__list">
+                <li class="ss-breadcrumb__item">
+                  <a href="#" class="ss-breadcrumb__link">Home</a>
+                  <span class="ss-breadcrumb__separator" aria-hidden="true">/</span>
+                </li>
+                <li class="ss-breadcrumb__item">
+                  <span role="link" aria-disabled="true" aria-current="page" class="ss-breadcrumb__page">Settings</span>
+                </li>
+              </ol>
+            </nav>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Dropdown menu</h4>
+            <div class="ss-dropdown ss-dropdown--demo">
+              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-haspopup="menu" aria-expanded="true">Actions</button>
+              <div role="menu" class="ss-dropdown__content ss-dropdown__content--start">
+                <button type="button" role="menuitem" class="ss-dropdown__item">Edit</button>
+                <button type="button" role="menuitem" class="ss-dropdown__item">Duplicate</button>
+                <button type="button" role="menuitem" class="ss-dropdown__item">Delete</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Pagination</h4>
+            <nav aria-label="Pagination" class="ss-pagination">
+              <ul class="ss-pagination__content">
+                <li class="ss-pagination__item">
+                  <a href="#" class="ss-pagination__link ss-pagination__previous" aria-label="Go to previous page">
+                    <span class="ss-pagination__chevron" aria-hidden="true"></span>
+                    <span>Previous</span>
+                  </a>
+                </li>
+                <li class="ss-pagination__item">
+                  <a href="#" class="ss-pagination__link">1</a>
+                </li>
+                <li class="ss-pagination__item">
+                  <a href="#" aria-current="page" class="ss-pagination__link ss-pagination__link--active">2</a>
+                </li>
+                <li class="ss-pagination__item">
+                  <span class="ss-pagination__ellipsis">…<span class="ss-pagination__sr-only">More pages</span></span>
+                </li>
+                <li class="ss-pagination__item">
+                  <a href="#" class="ss-pagination__link ss-pagination__next" aria-label="Go to next page">
+                    <span>Next</span>
+                    <span class="ss-pagination__chevron ss-pagination__chevron--next" aria-hidden="true"></span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </section>
+
           <div id="checks"></div>
         </article>
       </section>

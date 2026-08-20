@@ -5,8 +5,18 @@ import { act, createRef, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Alert,
   Badge,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Button,
   Card,
   CardBody,
@@ -14,14 +24,29 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Input,
   Label,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
   Radio,
   RadioGroup,
   Select,
   Skeleton,
   Spinner,
   Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Textarea,
   ThemeProvider,
   Tooltip
@@ -474,5 +499,206 @@ describe("ThemeProvider", () => {
     );
 
     expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+});
+
+describe("Tabs", () => {
+  it("activates panels and exposes tab semantics", () => {
+    const container = render(
+      <Tabs defaultValue="profile">
+        <TabsList>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">Profile content</TabsContent>
+        <TabsContent value="billing">Billing content</TabsContent>
+      </Tabs>
+    );
+
+    const profileTrigger = container.querySelector('[role="tab"][aria-selected="true"]');
+    expect(profileTrigger?.textContent).toBe("Profile");
+    expect(container.querySelector('[role="tabpanel"]:not([hidden])')?.textContent).toBe(
+      "Profile content"
+    );
+
+    act(() => {
+      container.querySelectorAll('[role="tab"]')[1]?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true })
+      );
+    });
+
+    expect(container.querySelector('[role="tab"][aria-selected="true"]')?.textContent).toBe(
+      "Billing"
+    );
+    expect(container.querySelector('[role="tabpanel"]:not([hidden])')?.textContent).toBe(
+      "Billing content"
+    );
+  });
+
+  it("moves focus between triggers with arrow keys", () => {
+    const container = render(
+      <Tabs defaultValue="one">
+        <TabsList>
+          <TabsTrigger value="one">One</TabsTrigger>
+          <TabsTrigger value="two">Two</TabsTrigger>
+        </TabsList>
+        <TabsContent value="one">One</TabsContent>
+        <TabsContent value="two">Two</TabsContent>
+      </Tabs>
+    );
+
+    const tablist = container.querySelector('[role="tablist"]') as HTMLElement;
+    const triggers = container.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    triggers[0]?.focus();
+
+    act(() => {
+      tablist.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    });
+
+    expect(document.activeElement).toBe(triggers[1]);
+  });
+});
+
+describe("Accordion", () => {
+  it("toggles single sections with aria-expanded", () => {
+    const container = render(
+      <Accordion type="single" defaultValue="item-1">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Section one</AccordionTrigger>
+          <AccordionContent>First panel</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Section two</AccordionTrigger>
+          <AccordionContent>Second panel</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    const triggers = container.querySelectorAll(".ss-accordion__trigger");
+    expect(triggers[0]?.getAttribute("aria-expanded")).toBe("true");
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("false");
+
+    act(() => {
+      triggers[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(triggers[0]?.getAttribute("aria-expanded")).toBe("false");
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("true");
+  });
+
+  it("allows multiple open sections in multiple mode", () => {
+    const container = render(
+      <Accordion type="multiple" defaultValue={["a"]}>
+        <AccordionItem value="a">
+          <AccordionTrigger>A</AccordionTrigger>
+          <AccordionContent>A content</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>B</AccordionTrigger>
+          <AccordionContent>B content</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    const triggers = container.querySelectorAll(".ss-accordion__trigger");
+
+    act(() => {
+      triggers[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(triggers[0]?.getAttribute("aria-expanded")).toBe("true");
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("true");
+  });
+});
+
+describe("Breadcrumb", () => {
+  it("renders breadcrumb navigation semantics", () => {
+    const container = render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Settings</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    );
+
+    expect(container.querySelector('nav[aria-label="Breadcrumb"]')).not.toBeNull();
+    expect(container.querySelector(".ss-breadcrumb__page")?.getAttribute("aria-current")).toBe(
+      "page"
+    );
+  });
+});
+
+describe("DropdownMenu", () => {
+  it("opens on trigger click and closes on Escape", () => {
+    const container = render(
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant="secondary">Actions</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem>Delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    const trigger = container.querySelector("button") as HTMLButtonElement;
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(container.querySelector('[role="menu"]')).toBeNull();
+
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    expect(container.querySelectorAll('[role="menuitem"]').length).toBe(2);
+
+    const menu = container.querySelector('[role="menu"]') as HTMLElement;
+    act(() => {
+      menu.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    });
+
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(container.querySelector('[role="menu"]')).toBeNull();
+  });
+});
+
+describe("Pagination", () => {
+  it("marks the active page and exposes pagination navigation", () => {
+    const container = render(
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+
+    expect(container.querySelector('nav[aria-label="Pagination"]')).not.toBeNull();
+    expect(container.querySelector(".ss-pagination__link--active")?.getAttribute("aria-current")).toBe(
+      "page"
+    );
+    expect(container.querySelector(".ss-pagination__ellipsis")?.textContent).toContain("More pages");
   });
 });

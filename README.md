@@ -290,9 +290,9 @@ function selectTheme(theme: Theme) {
 
 Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` from your own menu or buttons, or use `ThemeProvider` with `defaultMode` instead.
 
-## React components (Batch 1)
+## React components (Batch 1 & 2)
 
-The beta ships **20 exports** from `@super-system/react`: `Button`, `Input`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Radio`, `Switch`, `Select`, `Alert`, `Spinner`, `Skeleton`, `Tooltip`, `Badge`, `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`, and `ThemeProvider`.
+The beta ships **45 exports** from `@super-system/react`: Batch 1 form and feedback (`Button`, `Input`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Radio`, `Switch`, `Select`, `Alert`, `Spinner`, `Skeleton`, `Tooltip`, `Badge`, `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`, `ThemeProvider`) plus Batch 2 navigation and disclosure (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`, `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext`, `PaginationEllipsis`).
 
 Each component is token-driven, supports light and dark themes, and includes copy-ready examples below.
 
@@ -503,6 +503,98 @@ Tooltip content appears on hover and focus, merges with any existing `aria-descr
 
 `Card` provides the shared surface, border, and radius. Bare cards keep padding; composable `CardHeader`, `CardTitle`, `CardBody`, and `CardFooter` parts handle structured layouts.
 
+### Tabs
+
+```tsx
+<Tabs defaultValue="profile">
+  <TabsList>
+    <TabsTrigger value="profile">Profile</TabsTrigger>
+    <TabsTrigger value="billing">Billing</TabsTrigger>
+  </TabsList>
+  <TabsContent value="profile">Profile settings</TabsContent>
+  <TabsContent value="billing">Billing settings</TabsContent>
+</Tabs>
+```
+
+Tabs follow the WAI-ARIA tabs pattern: roving `tabIndex`, arrow-key focus movement within `TabsList`, and `aria-selected` / `aria-controls` wiring between triggers and panels. Use controlled `value` / `onValueChange` when you need external state.
+
+### Accordion
+
+```tsx
+<Accordion type="single" defaultValue="account" collapsible>
+  <AccordionItem value="account">
+    <AccordionTrigger>Account</AccordionTrigger>
+    <AccordionContent>Update your email and password.</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="notifications">
+    <AccordionTrigger>Notifications</AccordionTrigger>
+    <AccordionContent>Choose which alerts you receive.</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+Set `type="multiple"` to allow more than one section open. Triggers expose `aria-expanded` and toggle their linked region on click.
+
+### Breadcrumb
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Settings</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+The root `Breadcrumb` renders a `nav` with `aria-label="Breadcrumb"`. Use `BreadcrumbPage` for the current page (`aria-current="page"`).
+
+### Dropdown menu
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>
+    <Button variant="secondary">Actions</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="start">
+    <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
+    <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+The menu opens on trigger click, supports arrow-key navigation and Escape to close, and returns focus to the trigger. Like `Tooltip`, content renders inline without a portal and may clip inside overflow containers.
+
+### Pagination
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>2</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+Use `isActive` on `PaginationLink` to mark the current page (`aria-current="page"`). Previous and next links include accessible labels.
+
 ## Find inconsistent UI with Audit
 
 Run this inside any existing project:
@@ -562,12 +654,14 @@ Automated tools can identify many accessibility issues, but no automated tool ca
 
 ### Manual verification checklist
 
-After theme or component changes, spot-check Batch 1 controls in both light and dark themes:
+After theme or component changes, spot-check Batch 1 and Batch 2 controls in both light and dark themes:
 
 | Check | How to verify |
 | --- | --- |
-| Keyboard focus | Tab through Button, Input, Textarea, Checkbox, Radio, Switch, Select, and Tooltip triggers; confirm visible focus rings. |
-| Reduced motion | Enable `prefers-reduced-motion: reduce` in devtools; confirm spinner and skeleton animations stop. |
+| Keyboard focus | Tab through Button, Input, Textarea, Checkbox, Radio, Switch, Select, Tooltip triggers, Tabs, Accordion triggers, Breadcrumb links, Dropdown items, and Pagination links; confirm visible focus rings. |
+| Tabs & accordion | Use arrow keys in tab lists; confirm only one tab panel is visible. Toggle accordion sections and confirm `aria-expanded` updates. |
+| Dropdown menu | Open with click or Enter, move with arrow keys, close with Escape; confirm focus returns to the trigger. |
+| Reduced motion | Enable `prefers-reduced-motion: reduce` in devtools; confirm spinner, skeleton, tab, and accordion animations stop. |
 | Forced colors | Enable forced-colors / high-contrast mode; confirm inputs, checkbox, radio, switch, and select borders remain visible. |
 | Invalid states | Trigger `invalid` on Input, Textarea, Select, Checkbox, and Switch; confirm border and subtle background tint. |
 | Live regions | Confirm destructive `Alert` uses `role="alert"` and neutral/primary alerts default to `role="status"`. |
@@ -617,7 +711,7 @@ Super System does not depend on an AI tool. Its files and commands work with hum
 If you use an AI assistant, give it this project rule:
 
 ```text
-Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, and theme switching.
+Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, tabs, accordions, breadcrumbs, dropdown menus, pagination, and theme switching.
 Use semantic Super System CSS variables instead of hard-coded colors or spacing.
 Treat super-system.json as the single source of truth.
 Never edit .super-system/theme.css manually.
@@ -665,9 +759,8 @@ npx @super-system/cli studio --port 5000
 
 ## Beta roadmap
 
-Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Next planned work:
+Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure components are **in progress** on the current branch. Next planned work:
 
-- **Batch 2 — navigation and disclosure:** tabs, accordion, breadcrumb, dropdown menu, pagination;
 - **Batch 3 — overlays and data:** dialog, drawer, popover, toast, table primitives;
 - automatic icon-package installation and normalized icon components;
 - a safer assisted migration workflow for existing projects;
@@ -685,7 +778,7 @@ Super System uses [OpenSpec](https://openspec.dev/) to keep the product plan rev
 - [`openspec/changes`](./openspec/changes) contains active proposals, technical designs, acceptance requirements, and implementation checklists for planned work.
 - [`openspec/changes/archive`](./openspec/changes/archive) records completed changes, including the bootstrap beta, Batch 1 component expansion, Studio GitHub Pages demo, and the Batch 1 quality polish pass.
 
-Active work to watch: [`expand-react-component-library`](./openspec/changes/expand-react-component-library) (Batch 2 navigation components next).
+Active work to watch: [`expand-react-component-library`](./openspec/changes/expand-react-component-library) (Batch 2 navigation components).
 
 Before implementing a planned feature, review its OpenSpec change. When the work and verification tasks are complete, sync the living specification and archive the change. This gives people and AI coding tools the same source of truth.
 
@@ -701,7 +794,7 @@ pnpm install
 pnpm check
 ```
 
-`pnpm check` runs strict TypeScript validation, **47 unit tests**, production builds for every package, and a Studio demo build verification.
+`pnpm check` runs strict TypeScript validation, unit tests, production builds for every package, and a Studio demo build verification.
 
 ## License
 

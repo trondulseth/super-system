@@ -18,7 +18,12 @@
 .ss-checkbox:focus-visible,
 .ss-radio__input:focus-visible,
 .ss-switch:focus-visible,
-.ss-select:focus-visible {
+.ss-select:focus-visible,
+.ss-tabs__trigger:focus-visible,
+.ss-accordion__trigger:focus-visible,
+.ss-breadcrumb__link:focus-visible,
+.ss-dropdown__item:focus-visible,
+.ss-pagination__link:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--ss-color-focus) 40%, transparent);
   outline-offset: 2px;
 }
@@ -400,6 +405,261 @@
   visibility: visible;
 }
 
+.ss-tabs {
+  display: grid;
+  gap: var(--ss-space-4, 16px);
+}
+.ss-tabs__list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--ss-space-1, 4px);
+  padding: var(--ss-space-1, 4px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  background: var(--ss-color-muted);
+}
+.ss-tabs[data-orientation="vertical"] .ss-tabs__list {
+  flex-direction: column;
+  align-items: stretch;
+}
+.ss-tabs__trigger {
+  min-height: max(36px, var(--ss-target-min, 44px));
+  padding: 0 var(--ss-space-4, 16px);
+  border: 1px solid transparent;
+  border-radius: calc(var(--ss-radius-md, 10px) - 2px);
+  background: transparent;
+  color: var(--ss-color-muted-foreground);
+  font: 600 var(--ss-font-size-base, 16px)/1 var(--ss-font-sans, system-ui);
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+.ss-tabs__trigger:hover:not(:disabled) {
+  color: var(--ss-color-foreground);
+}
+.ss-tabs__trigger--active {
+  color: var(--ss-color-foreground);
+  background: var(--ss-color-background);
+  border-color: var(--ss-color-border);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ss-color-foreground) 8%, transparent);
+}
+.ss-tabs__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.ss-tabs__content {
+  padding: var(--ss-space-4, 16px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  background: var(--ss-color-background);
+  color: var(--ss-color-foreground);
+  font: 400 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+}
+
+.ss-accordion {
+  display: grid;
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  overflow: clip;
+}
+.ss-accordion__item + .ss-accordion__item {
+  border-top: 1px solid var(--ss-color-border);
+}
+.ss-accordion__item--disabled {
+  opacity: 0.55;
+}
+.ss-accordion__heading {
+  margin: 0;
+}
+.ss-accordion__trigger {
+  width: 100%;
+  min-height: var(--ss-target-min, 44px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ss-space-3, 12px);
+  padding: var(--ss-space-3, 12px) var(--ss-space-4, 16px);
+  border: 0;
+  background: var(--ss-color-background);
+  color: var(--ss-color-foreground);
+  font: 600 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+  text-align: left;
+  cursor: pointer;
+}
+.ss-accordion__trigger:hover:not(:disabled) {
+  background: var(--ss-color-muted);
+}
+.ss-accordion__trigger:disabled {
+  cursor: not-allowed;
+}
+.ss-accordion__trigger-label {
+  flex: 1 1 auto;
+}
+.ss-accordion__icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex: 0 0 auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+}
+.ss-accordion__trigger[aria-expanded="true"] .ss-accordion__icon {
+  transform: rotate(-135deg);
+}
+.ss-accordion__content-inner {
+  padding: 0 var(--ss-space-4, 16px) var(--ss-space-4, 16px);
+  color: var(--ss-color-muted-foreground);
+  font: 400 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+}
+
+.ss-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ss-space-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ss-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ss-space-2, 8px);
+  font: 500 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+}
+.ss-breadcrumb__link {
+  color: var(--ss-color-muted-foreground);
+  text-decoration: none;
+}
+.ss-breadcrumb__link:hover {
+  color: var(--ss-color-foreground);
+  text-decoration: underline;
+}
+.ss-breadcrumb__page {
+  color: var(--ss-color-foreground);
+  font-weight: 600;
+}
+.ss-breadcrumb__separator {
+  color: var(--ss-color-muted-foreground);
+}
+
+.ss-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+.ss-dropdown__content {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + var(--ss-space-2, 8px));
+  min-width: 12rem;
+  padding: var(--ss-space-1, 4px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  background: var(--ss-color-background);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ss-color-foreground) 12%, transparent);
+}
+.ss-dropdown__content--start {
+  left: 0;
+}
+.ss-dropdown__content--end {
+  right: 0;
+}
+.ss-dropdown__item {
+  width: 100%;
+  min-height: max(36px, var(--ss-target-min, 44px));
+  display: flex;
+  align-items: center;
+  gap: var(--ss-space-2, 8px);
+  padding: 0 var(--ss-space-3, 12px);
+  border: 0;
+  border-radius: calc(var(--ss-radius-md, 10px) - 2px);
+  background: transparent;
+  color: var(--ss-color-foreground);
+  font: 500 var(--ss-font-size-base, 16px)/1 var(--ss-font-sans, system-ui);
+  text-align: left;
+  cursor: pointer;
+}
+.ss-dropdown__item:hover:not(:disabled) {
+  background: var(--ss-color-muted);
+}
+.ss-dropdown__item:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.ss-dropdown__item--inset {
+  padding-left: var(--ss-space-6, 24px);
+}
+.ss-dropdown--demo .ss-dropdown__content {
+  display: block;
+}
+
+.ss-pagination__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ss-space-1, 4px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ss-pagination__link {
+  min-width: max(36px, var(--ss-target-min, 44px));
+  min-height: max(36px, var(--ss-target-min, 44px));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ss-space-2, 8px);
+  padding: 0 var(--ss-space-3, 12px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  background: var(--ss-color-background);
+  color: var(--ss-color-foreground);
+  font: 600 var(--ss-font-size-base, 16px)/1 var(--ss-font-sans, system-ui);
+  text-decoration: none;
+}
+.ss-pagination__link:hover {
+  background: var(--ss-color-muted);
+}
+.ss-pagination__link--active {
+  color: var(--ss-color-primary-foreground);
+  background: var(--ss-color-primary);
+  border-color: var(--ss-color-primary);
+}
+.ss-pagination__previous,
+.ss-pagination__next {
+  padding-inline: var(--ss-space-4, 16px);
+}
+.ss-pagination__chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+.ss-pagination__chevron--next {
+  transform: rotate(-135deg);
+}
+.ss-pagination__ellipsis {
+  min-width: max(36px, var(--ss-target-min, 44px));
+  min-height: max(36px, var(--ss-target-min, 44px));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ss-color-muted-foreground);
+  font: 600 var(--ss-font-size-base, 16px)/1 var(--ss-font-sans, system-ui);
+}
+.ss-pagination__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ss-spinner {
     animation: none;
@@ -409,7 +669,9 @@
   }
   .ss-button,
   .ss-switch,
-  .ss-switch::after {
+  .ss-switch::after,
+  .ss-tabs__trigger,
+  .ss-accordion__icon {
     transition: none;
   }
 }
@@ -429,7 +691,12 @@
   .ss-checkbox:focus-visible,
   .ss-radio__input:focus-visible,
   .ss-switch:focus-visible,
-  .ss-select:focus-visible {
+  .ss-select:focus-visible,
+  .ss-tabs__trigger:focus-visible,
+  .ss-accordion__trigger:focus-visible,
+  .ss-breadcrumb__link:focus-visible,
+  .ss-dropdown__item:focus-visible,
+  .ss-pagination__link:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }

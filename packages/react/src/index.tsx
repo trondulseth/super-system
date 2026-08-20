@@ -19,3 +19,63 @@ export {
   CardFooter
 } from "./card.js";
 export { ThemeProvider, type ThemeProviderProps, type ThemeMode } from "./theme-provider.js";
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  type TabsProps,
+  type TabsListProps,
+  type TabsTriggerProps,
+  type TabsContentProps
+} from "./tabs.js";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionProps,
+  type AccordionItemProps,
+  type AccordionTriggerProps,
+  type AccordionContentProps
+} from "./accordion.js";
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  type BreadcrumbProps,
+  type BreadcrumbListProps,
+  type BreadcrumbItemProps,
+  type BreadcrumbLinkProps,
+  type BreadcrumbPageProps,
+  type BreadcrumbSeparatorProps
+} from "./breadcrumb.js";
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  type DropdownMenuProps,
+  type DropdownMenuTriggerProps,
+  type DropdownMenuContentProps,
+  type DropdownMenuItemProps
+} from "./dropdown-menu.js";
+export {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+  type PaginationProps,
+  type PaginationContentProps,
+  type PaginationItemProps,
+  type PaginationLinkProps,
+  type PaginationPreviousProps,
+  type PaginationNextProps,
+  type PaginationEllipsisProps
+} from "./pagination.js";
