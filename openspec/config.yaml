@@ -1,17 +1,19 @@
 schema: spec-driven
 
 context: |
-  Product: Super System, a lightweight and AI-independent design system toolkit.
+  Product: Super System — a lightweight, AI-independent design system for React teams who need one shared theme, accessible components, a local Studio editor, and a UI consistency audit without adopting a heavyweight component library.
   Repository: https://github.com/trondulseth/super-system
   Runtime: Node.js 20+, TypeScript, React 18+, npm packages in a pnpm workspace.
-  Packages: @super-system/tokens, @super-system/react, and @super-system/cli.
+  Packages: @super-system/tokens, @super-system/react, @super-system/cli, and @super-system/studio-ui.
   Current release: 0.1.0-beta.1, published publicly under the beta tag.
   Styling: portable CSS custom properties generated from super-system.json.
-  Quality gates: strict TypeScript, Vitest, package builds, clean-package smoke tests, and GitHub Actions.
+  Quality gates: strict TypeScript, Vitest, package builds, clean-package smoke tests, and GitHub Actions (`pnpm check`).
   Release: npm Trusted Publishing through GitHub Actions with OIDC; no long-lived publish token.
+  Demo: Studio static preview deploys to GitHub Pages on pushes to main.
   Compatibility: React, Next.js, and Vite are first-class in beta; token CSS is framework-independent.
   Documentation language: English for public artifacts and package documentation.
   Product principles: simple for beginners, one source of truth, safe by default, accessible by default, and AI-tool neutral.
+  Planning journal: openspec/journal/
 
 rules:
   proposal:

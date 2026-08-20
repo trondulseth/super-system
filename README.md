@@ -759,7 +759,7 @@ npx @super-system/cli studio --port 5000
 
 ## Beta roadmap
 
-Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure components are **in progress** on the current branch. Next planned work:
+Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure components are **shipped** (Tabs, Accordion, Breadcrumb, Dropdown Menu, Pagination). Next planned work:
 
 - **Batch 3 — overlays and data:** dialog, drawer, popover, toast, table primitives;
 - automatic icon-package installation and normalized icon components;

@@ -30,7 +30,7 @@ The Studio SHALL load the current `super-system.json`, allow supported tokens to
 - **THEN** those values are collected, previewed, and persisted with other theme colors
 
 ### Requirement: Immediate component preview
-The Studio SHALL preview representative components in light and dark themes as supported token values change. Previews SHALL include primary, disabled, invalid, and neutral states for form and feedback components shipped in Batch 1.
+The Studio SHALL preview representative components in light and dark themes as supported token values change. Previews SHALL include primary, disabled, invalid, and neutral states for form and feedback components shipped in Batch 1 and representative navigation and disclosure examples shipped in Batch 2.
 
 #### Scenario: Button tokens are adjusted
 - **GIVEN** a button preview is visible
@@ -42,6 +42,11 @@ The Studio SHALL preview representative components in light and dark themes as s
 - **WHEN** the user inspects form controls
 - **THEN** disabled and invalid examples are shown alongside default states
 - **AND** a neutral alert variant is shown alongside primary and destructive alerts
+
+#### Scenario: Navigation components are previewed
+- **GIVEN** the component preview panel is visible
+- **WHEN** the user inspects tabs, accordion, breadcrumb, dropdown menu, and pagination sections
+- **THEN** static preview markup demonstrates the shipped Batch 2 class names and ARIA landmarks
 
 ### Requirement: Contrast feedback
 The Studio SHALL display WCAG contrast results for supported foreground/background pairs before the user saves the theme.

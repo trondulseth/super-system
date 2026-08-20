@@ -59,6 +59,20 @@ Interactive component styles SHALL remain operable under forced-colors mode, and
 - **WHEN** focus reaches a Super System interactive component
 - **THEN** a visible focus treatment or system highlight remains available
 
+### Requirement: Composite keyboard behavior
+Composite navigation and disclosure components that ship in the React package SHALL implement keyboard interaction consistent with their documented accessibility pattern, including roving focus or arrow-key navigation and Escape dismissal where applicable.
+
+#### Scenario: A dropdown menu is dismissed
+- **GIVEN** an open dropdown menu rendered by the React package
+- **WHEN** the user presses Escape
+- **THEN** the menu closes
+- **AND** focus returns to its trigger when the trigger remains available
+
+#### Scenario: A tab list receives arrow-key input
+- **GIVEN** a tab trigger has keyboard focus
+- **WHEN** the user presses the next-arrow key for the tab list orientation
+- **THEN** focus moves to another tab trigger in that list
+
 ### Requirement: Honest accessibility scope
 Documentation SHALL state that automated contrast and static checks do not constitute WCAG certification and that keyboard, screen-reader, zoom, content, and workflow testing remain the application's responsibility.
 

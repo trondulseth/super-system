@@ -188,3 +188,71 @@ Every Batch 1 exported component SHALL have automated tests covering primary sta
 - **GIVEN** the Batch 1 component set is complete
 - **WHEN** `pnpm check` runs
 - **THEN** tests exist for Button, Input, Textarea, Label, Checkbox, RadioGroup, Radio, Switch, Select, Alert, Spinner, Skeleton, Tooltip, Badge, Card, and ThemeProvider
+
+### Requirement: Tabs component
+The package SHALL provide composable `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` primitives that implement the WAI-ARIA tabs pattern with roving tabindex, arrow-key focus movement within the tab list, and `aria-selected` / `aria-controls` wiring between triggers and panels.
+
+#### Scenario: A user selects a tab
+- **GIVEN** a tab group with multiple triggers and panels
+- **WHEN** a user activates a different tab trigger
+- **THEN** that trigger becomes selected
+- **AND** only the matching panel is visible
+
+#### Scenario: A keyboard user moves between tabs
+- **GIVEN** focus is on a tab trigger inside a horizontal tab list
+- **WHEN** the user presses an arrow key defined for that orientation
+- **THEN** focus moves to an adjacent trigger without leaving the tab list
+
+### Requirement: Accordion component
+The package SHALL provide composable `Accordion`, `AccordionItem`, `AccordionTrigger`, and `AccordionContent` primitives supporting single and multiple open sections, `aria-expanded` on triggers, and linked regions identified through stable generated ids.
+
+#### Scenario: A single accordion section opens
+- **GIVEN** an accordion configured for single selection
+- **WHEN** a user opens a different section
+- **THEN** the previously open section closes unless collapsible mode allows an empty state
+- **AND** the active trigger exposes `aria-expanded="true"`
+
+#### Scenario: Multiple accordion sections stay open
+- **GIVEN** an accordion configured for multiple selection
+- **WHEN** a user opens an additional section
+- **THEN** previously open sections remain open
+
+### Requirement: Breadcrumb component
+The package SHALL provide composable breadcrumb primitives including a root navigation landmark with `aria-label="Breadcrumb"`, link items, a current-page item with `aria-current="page"`, and separators hidden from assistive technology.
+
+#### Scenario: A breadcrumb trail is rendered
+- **GIVEN** a breadcrumb list with a link and a current page
+- **WHEN** assistive technology reads the trail
+- **THEN** the navigation landmark is identified as a breadcrumb
+- **AND** the current page exposes `aria-current="page"`
+
+### Requirement: Dropdown menu component
+The package SHALL provide composable `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, and `DropdownMenuItem` primitives that open from a trigger, expose menu semantics, support arrow-key navigation and Escape to close, return focus to the trigger on Escape, and close on outside pointer interaction.
+
+#### Scenario: A menu opens from the keyboard
+- **GIVEN** a dropdown menu trigger
+- **WHEN** the user activates it with Enter or ArrowDown
+- **THEN** the menu becomes available
+- **AND** the trigger exposes `aria-expanded="true"`
+
+#### Scenario: A menu closes with Escape
+- **GIVEN** an open dropdown menu with focus inside the menu
+- **WHEN** the user presses Escape
+- **THEN** the menu closes
+- **AND** focus returns to the trigger
+
+### Requirement: Pagination component
+The package SHALL provide composable pagination primitives including a navigation landmark with `aria-label="Pagination"`, previous and next links with accessible names, page links that can mark the active page with `aria-current="page"`, and an ellipsis affordance for skipped ranges.
+
+#### Scenario: The active page is indicated
+- **GIVEN** a pagination control with an active page link
+- **WHEN** assistive technology reads the control
+- **THEN** the active page exposes `aria-current="page"`
+
+### Requirement: Batch 2 test coverage
+Every Batch 2 exported navigation and disclosure primitive SHALL have automated tests covering primary interaction, ARIA semantics, and documented keyboard behavior where applicable.
+
+#### Scenario: Continuous integration runs
+- **GIVEN** the Batch 2 component set is complete
+- **WHEN** `pnpm check` runs
+- **THEN** tests exist for Tabs, Accordion, Breadcrumb, DropdownMenu, and Pagination behavior

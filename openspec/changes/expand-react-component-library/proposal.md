@@ -2,7 +2,7 @@
 
 ## Status
 
-**Batch 1 (form and feedback) is complete and polished.** Shipped components: Textarea, Label, Checkbox, RadioGroup, Radio, Switch, Select, Alert, Spinner, Skeleton, and Tooltip — plus quality hardening in [archive/2026-08-20-polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality). **Batch 2 (navigation and disclosure) is next.**
+**Batch 1 (form and feedback) is complete and polished.** Shipped components: Textarea, Label, Checkbox, RadioGroup, Radio, Switch, Select, Alert, Spinner, Skeleton, and Tooltip — plus quality hardening in [archive/2026-08-20-polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality). **Batch 2 (navigation and disclosure) is implemented** (Tabs, Accordion, Breadcrumb, Dropdown Menu, Pagination). **Batch 3 (overlays and data) is next.**
 
 ## Problem
 
