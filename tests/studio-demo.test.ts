@@ -19,6 +19,12 @@ describe("studio demo", () => {
     const html = await readFile(path.join(demoDir, "index.html"), "utf8");
     expect(html).toContain("Download theme");
     expect(html).toContain('src="./app.js"');
+    expect(html).toContain("ss-button--destructive");
+    expect(html).toContain("ss-button--ghost");
+    expect(html).toContain("ss-input--invalid");
+    expect(html).toContain("ss-badge--neutral");
+    expect(html).toContain("ss-card");
+    expect(html).toContain("ss-spinner");
   });
 
   it("uses the same contrast logic as the token package", () => {

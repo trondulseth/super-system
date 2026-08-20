@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Super System Studio</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./components.css" />
   </head>
   <body>
     <p id="demo-banner" class="demo-banner" hidden></p>
@@ -64,16 +65,58 @@
         </div>
       </aside>
       <section class="preview">
-        <article class="canvas">
-          <h3>Build consistent products</h3>
-          <p>Every component follows the same theme, spacing, and accessibility rules.</p>
-          <div class="demo">
-            <button class="primary" type="button">Primary action</button>
-            <button class="secondary" type="button">Secondary</button>
-          </div>
-          <label class="field"
-            >Email address<input placeholder="you@example.com"
-          /></label>
+        <article class="ss-card preview-theme" id="preview-root" data-theme="light">
+          <span class="ss-badge ss-badge--primary">Super powered</span>
+          <h3 class="preview-title">Create your account</h3>
+          <p class="preview-lead">
+            Every component follows the same theme, spacing, and accessibility rules.
+          </p>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Button</h4>
+            <div class="demo-row">
+              <button class="ss-button ss-button--primary ss-button--md" type="button">Primary</button>
+              <button class="ss-button ss-button--secondary ss-button--md" type="button">Secondary</button>
+              <button class="ss-button ss-button--destructive ss-button--md" type="button">Delete</button>
+              <button class="ss-button ss-button--ghost ss-button--md" type="button">Learn more</button>
+            </div>
+            <div class="demo-row">
+              <button class="ss-button ss-button--primary ss-button--sm" type="button">Small</button>
+              <button class="ss-button ss-button--primary ss-button--md" type="button">Medium</button>
+              <button class="ss-button ss-button--primary ss-button--lg" type="button">Large</button>
+              <button class="ss-button ss-button--primary ss-button--md" type="button" disabled aria-busy="true">
+                <span class="ss-spinner" aria-hidden="true"></span>
+                <span>Saving</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Input</h4>
+            <label class="field-label">
+              Email address
+              <input class="ss-input" type="email" placeholder="you@example.com" />
+            </label>
+            <label class="field-label">
+              Invalid field
+              <input
+                class="ss-input ss-input--invalid"
+                type="text"
+                aria-invalid="true"
+                value="Bad value"
+              />
+            </label>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Badge</h4>
+            <div class="demo-row">
+              <span class="ss-badge ss-badge--neutral">Draft</span>
+              <span class="ss-badge ss-badge--primary">Active</span>
+              <span class="ss-badge ss-badge--destructive">Blocked</span>
+            </div>
+          </section>
+
           <div id="checks"></div>
         </article>
       </section>

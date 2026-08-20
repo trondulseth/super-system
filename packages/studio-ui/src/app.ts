@@ -1,4 +1,5 @@
 import type { SuperSystemConfig } from "@super-system/tokens";
+import { updatePreviewTheme } from "./preview-theme.js";
 import type { StudioBackend, StudioOptions } from "./types.js";
 
 const colorIds = [
@@ -82,22 +83,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
 
   async function render(): Promise<void> {
     collect();
-    const theme = config.themes[preview];
-    const root = document.documentElement;
-    root.style.setProperty("--bg", theme.background);
-    root.style.setProperty("--fg", theme.foreground);
-    root.style.setProperty("--primary", theme.primary);
-    root.style.setProperty("--primary-fg", theme.primaryForeground);
-    root.style.setProperty("--secondary", theme.secondary);
-    root.style.setProperty("--secondary-fg", theme.secondaryForeground);
-    root.style.setProperty("--muted-fg", theme.mutedForeground);
-    root.style.setProperty("--border", theme.border);
-    root.style.setProperty("--radius", config.radius.md);
-    root.style.setProperty("--target", `${config.accessibility.minimumTargetSize}px`);
-    root.style.setProperty(
-      "--pad",
-      `${config.spacing.unit * (config.spacing.density === "compact" ? 3 : config.spacing.density === "spacious" ? 5 : 4)}px`
-    );
+    updatePreviewTheme(config, preview);
 
     const results = await backend.checkContrast(config);
     checks.innerHTML = results
@@ -113,7 +99,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   fill();
   await render();
 
-  document.querySelectorAll("input,select").forEach((element) => {
+  document.querySelectorAll("aside input,aside select").forEach((element) => {
     element.addEventListener("input", () => {
       void render();
     });

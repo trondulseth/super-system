@@ -6,7 +6,13 @@ import esbuild from "esbuild";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const srcDir = path.join(packageRoot, "src");
+const reactStyles = path.resolve(packageRoot, "../react/src/styles.css");
 const demoOnly = process.argv.includes("--demo");
+
+async function copySharedAssets(outDir) {
+  await copyFile(path.join(srcDir, "styles.css"), path.join(outDir, "styles.css"));
+  await copyFile(reactStyles, path.join(outDir, "components.css"));
+}
 
 async function buildServerBundle() {
   const outDir = path.join(packageRoot, "dist", "server");
@@ -23,7 +29,7 @@ async function buildServerBundle() {
   });
 
   await copyFile(path.join(srcDir, "index.html"), path.join(outDir, "index.html"));
-  await copyFile(path.join(srcDir, "styles.css"), path.join(outDir, "styles.css"));
+  await copySharedAssets(outDir);
 }
 
 async function buildDemoBundle() {
@@ -46,7 +52,7 @@ async function buildDemoBundle() {
     "Download theme"
   );
   await writeFile(path.join(outDir, "index.html"), html, "utf8");
-  await copyFile(path.join(srcDir, "styles.css"), path.join(outDir, "styles.css"));
+  await copySharedAssets(outDir);
 }
 
 if (demoOnly) {
