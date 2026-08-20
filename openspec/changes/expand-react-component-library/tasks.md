@@ -12,11 +12,11 @@
 - [ ] Implement the form and feedback component batch.
   - [x] Textarea
   - [x] Label
-  - [ ] Checkbox
-  - [ ] Radio Group
-  - [ ] Switch
-  - [ ] Select
-  - [ ] Alert
+  - [x] Checkbox
+  - [x] Radio Group
+  - [x] Switch
+  - [x] Select
+  - [x] Alert
   - [ ] Spinner (standalone export)
   - [ ] Skeleton
   - [ ] Tooltip

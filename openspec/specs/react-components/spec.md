@@ -51,6 +51,48 @@ The package SHALL provide a `Textarea` supporting native textarea attributes, fo
 - **THEN** its visual state communicates the error
 - **AND** the native accessibility state remains available to assistive technology
 
+### Requirement: Checkbox component
+The package SHALL provide a `Checkbox` supporting native checkbox attributes, forwarded refs, focus styling, and invalid-state styling.
+
+#### Scenario: A checkbox is toggled
+- **GIVEN** an enabled checkbox
+- **WHEN** a user activates it
+- **THEN** its checked state updates through the native control
+
+### Requirement: Radio group component
+The package SHALL provide a `RadioGroup` and `Radio` pair that preserves native radio semantics and visible labels.
+
+#### Scenario: One option is selected in a group
+- **GIVEN** a radio group with multiple options
+- **WHEN** one option is selected
+- **THEN** only that option remains selected
+- **AND** each option label remains associated with its input
+
+### Requirement: Switch component
+The package SHALL provide a `Switch` supporting native switch semantics, forwarded refs, focus styling, and invalid-state styling.
+
+#### Scenario: A switch is toggled
+- **GIVEN** a switch rendered with `role="switch"`
+- **WHEN** a user activates it
+- **THEN** its checked state updates through the native control
+
+### Requirement: Select component
+The package SHALL provide a `Select` supporting native select attributes, forwarded refs, focus styling, and invalid-state styling.
+
+#### Scenario: A select value changes
+- **GIVEN** a select with multiple options
+- **WHEN** a user chooses a different option
+- **THEN** the native select value updates
+
+### Requirement: Alert component
+The package SHALL provide an `Alert` with documented variants and `role="alert"` for important status messages.
+
+#### Scenario: An error alert is rendered
+- **GIVEN** a destructive alert
+- **WHEN** it appears on screen
+- **THEN** it exposes alert semantics to assistive technology
+- **AND** its variant styling distinguishes it from neutral alerts
+
 ### Requirement: Badge and Card components
 The package SHALL provide token-driven `Badge` variants and composable `Card` primitives for common status and content layouts.
 
