@@ -79,3 +79,86 @@ export {
   type PaginationNextProps,
   type PaginationEllipsisProps
 } from "./pagination.js";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogBody,
+  DialogFooter,
+  DialogClose,
+  type DialogProps,
+  type DialogTriggerProps,
+  type DialogContentProps,
+  type DialogHeaderProps,
+  type DialogTitleProps,
+  type DialogDescriptionProps,
+  type DialogBodyProps,
+  type DialogFooterProps,
+  type DialogCloseProps
+} from "./dialog.js";
+export {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerBody,
+  DrawerFooter,
+  DrawerClose,
+  type DrawerProps,
+  type DrawerTriggerProps,
+  type DrawerContentProps,
+  type DrawerHeaderProps,
+  type DrawerTitleProps,
+  type DrawerDescriptionProps,
+  type DrawerBodyProps,
+  type DrawerFooterProps,
+  type DrawerCloseProps
+} from "./drawer.js";
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+  type PopoverProps,
+  type PopoverTriggerProps,
+  type PopoverContentProps,
+  type PopoverCloseProps
+} from "./popover.js";
+export {
+  Toast,
+  ToastProvider,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  useToast,
+  type ToastProps,
+  type ToastProviderProps,
+  type ToastInput,
+  type ToastVariant,
+  type ToastTitleProps,
+  type ToastDescriptionProps,
+  type ToastCloseProps
+} from "./toast.js";
+export {
+  Table,
+  TableCaption,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  type TableProps,
+  type TableCaptionProps,
+  type TableHeaderProps,
+  type TableBodyProps,
+  type TableFooterProps,
+  type TableRowProps,
+  type TableHeadProps,
+  type TableCellProps
+} from "./table.js";

@@ -24,6 +24,22 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -37,19 +53,31 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Radio,
   RadioGroup,
   Select,
   Skeleton,
   Spinner,
   Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
   Textarea,
   ThemeProvider,
-  Tooltip
+  Toast,
+  ToastProvider,
+  Tooltip,
+  useToast
 } from "../packages/react/src/index.js";
 
 function render(element: ReactElement): HTMLElement {
@@ -63,7 +91,9 @@ function render(element: ReactElement): HTMLElement {
 }
 
 afterEach(() => {
-  document.body.innerHTML = "";
+  act(() => {
+    document.body.innerHTML = "";
+  });
   document.documentElement.removeAttribute("data-theme");
   window.localStorage.clear();
 });
@@ -700,5 +730,162 @@ describe("Pagination", () => {
       "page"
     );
     expect(container.querySelector(".ss-pagination__ellipsis")?.textContent).toContain("More pages");
+  });
+});
+
+describe("Dialog", () => {
+  it("renders a modal dialog in a portal with dialog semantics", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete account</DialogTitle>
+            <DialogDescription>This action cannot be undone.</DialogDescription>
+          </DialogHeader>
+          <DialogBody>All data will be removed.</DialogBody>
+          <DialogFooter>
+            <Button variant="secondary">Cancel</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = document.body.querySelector('[role="dialog"]');
+    expect(dialog).not.toBeNull();
+    expect(dialog?.getAttribute("aria-modal")).toBe("true");
+    expect(document.body.querySelector(".ss-dialog__title")?.textContent).toBe("Delete account");
+  });
+
+  it("closes on Escape and returns focus to the trigger", () => {
+    render(
+      <Dialog>
+        <DialogTrigger>
+          <Button variant="secondary">Open dialog</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Settings</DialogTitle>
+          <DialogDescription>Update your preferences.</DialogDescription>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(document.body.querySelector('[role="dialog"]')).not.toBeNull();
+
+    act(() => {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    });
+
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+});
+
+describe("Drawer", () => {
+  it("renders a modal drawer panel in a portal", () => {
+    render(
+      <Drawer defaultOpen side="right">
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Filters</DrawerTitle>
+            <DrawerDescription>Refine the current view.</DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody>Filter controls go here.</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    );
+
+    const drawer = document.body.querySelector(".ss-drawer__content--right");
+    expect(drawer?.getAttribute("role")).toBe("dialog");
+    expect(drawer?.getAttribute("aria-modal")).toBe("true");
+  });
+});
+
+describe("Popover", () => {
+  it("opens from a trigger and closes on Escape", () => {
+    render(
+      <Popover>
+        <PopoverTrigger>
+          <Button variant="ghost">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent>Additional context for this item.</PopoverContent>
+      </Popover>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(document.body.querySelector(".ss-popover__content")).not.toBeNull();
+
+    act(() => {
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    });
+
+    expect(document.body.querySelector(".ss-popover__content")).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  });
+});
+
+describe("Toast", () => {
+  it("publishes toasts through ToastProvider", () => {
+    function Demo() {
+      const { toast } = useToast();
+      return (
+        <Button variant="secondary" onClick={() => toast({ title: "Saved", description: "Changes stored." })}>
+          Notify
+        </Button>
+      );
+    }
+
+    render(
+      <ToastProvider duration={10000}>
+        <Demo />
+      </ToastProvider>
+    );
+
+    act(() => {
+      document.querySelector("button")?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const toast = document.body.querySelector(".ss-toast");
+    expect(toast?.getAttribute("role")).toBe("status");
+    expect(toast?.textContent).toContain("Saved");
+  });
+
+  it("renders destructive toasts with alert semantics", () => {
+    render(<Toast variant="destructive" title="Payment failed" description="Try again." />);
+    expect(document.querySelector(".ss-toast--destructive")?.getAttribute("role")).toBe("alert");
+  });
+});
+
+describe("Table", () => {
+  it("preserves native table semantics inside a scroll wrapper", () => {
+    const container = render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Role</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Ada</TableCell>
+            <TableCell>Admin</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+
+    expect(container.querySelector(".ss-table-wrap")).not.toBeNull();
+    expect(container.querySelector("table")).not.toBeNull();
+    expect(container.querySelectorAll('th[scope="col"]').length).toBe(2);
+    expect(container.querySelector("td")?.textContent).toBe("Ada");
   });
 });

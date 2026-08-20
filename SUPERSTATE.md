@@ -10,8 +10,8 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 ## Active handoff
 
-- **Objective:** Finish the React component library expansion: Batch 2 navigation and disclosure is implemented; Batch 3 overlays (dialog, drawer, popover, toast) and table primitives remain in the active change.
-- **Work state:** Batch 1 is polished and archived. Batch 2 (Tabs, Accordion, Breadcrumb, Dropdown Menu, Pagination) is implemented in `@super-system/react` with tests, README docs, and Studio previews. The active OpenSpec change tracks remaining Batch 3 work, icon integration, and release verification tasks.
-- **Recent evidence:** `pnpm check` passes with 54 Vitest tests; GitHub Actions CI runs `pnpm check` on push and pull request; Studio demo builds include Batch 2 preview sections; draft PR #9 adds Batch 2 exports; `openspec validate --all --strict` passes for all living specs and active changes.
-- **Risks and limitations:** Tooltip and dropdown menu render inline without a portal and may clip inside overflow containers; overlay batch (dialog, drawer, popover, toast) is not shipped yet; npm packages remain at `0.1.0-beta.1`; automated tests do not replace manual keyboard, screen-reader, or zoom verification.
-- **Next handoff:** Begin Batch 3 overlay components (dialog, drawer, popover, toast) and table primitives under `expand-react-component-library`, including focus-trap and portal behavior, before publishing a new beta tag.
+- **Objective:** Close out the React library expansion change after Batch 3 overlays and table primitives; remaining work is icon integration and beta release verification.
+- **Work state:** Batch 3 (Dialog, Drawer, Popover, Toast, Table) is implemented with portal rendering, focus trap for modals, tests, README docs, and Studio previews. Active change `expand-react-component-library` remains open for icon wrapper and release tasks.
+- **Recent evidence:** `pnpm check` with expanded test suite; dialog and drawer use `OverlayPortal`; popover and toast viewport render through portals; table wraps native semantics in `ss-table-wrap`.
+- **Risks and limitations:** Dropdown menu and tooltip still render inline without a portal; icon wrapper not shipped; npm packages remain at `0.1.0-beta.1`.
+- **Next handoff:** Implement normalized Icon wrapper and complete release verification tasks, then archive `expand-react-component-library` after living specs sync.

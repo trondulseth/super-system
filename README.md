@@ -290,9 +290,9 @@ function selectTheme(theme: Theme) {
 
 Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` from your own menu or buttons, or use `ThemeProvider` with `defaultMode` instead.
 
-## React components (Batch 1 & 2)
+## React components (Batch 1–3)
 
-The beta ships **45 exports** from `@super-system/react`: Batch 1 form and feedback (`Button`, `Input`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Radio`, `Switch`, `Select`, `Alert`, `Spinner`, `Skeleton`, `Tooltip`, `Badge`, `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`, `ThemeProvider`) plus Batch 2 navigation and disclosure (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`, `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext`, `PaginationEllipsis`).
+The beta ships **81 exports** from `@super-system/react`: Batch 1 form and feedback, Batch 2 navigation and disclosure, and Batch 3 overlays and data (`Dialog`, `Drawer`, `Popover`, `Toast`, `ToastProvider`, `useToast`, and composable `Table` primitives).
 
 Each component is token-driven, supports light and dark themes, and includes copy-ready examples below.
 
@@ -595,6 +595,98 @@ The menu opens on trigger click, supports arrow-key navigation and Escape to clo
 
 Use `isActive` on `PaginationLink` to mark the current page (`aria-current="page"`). Previous and next links include accessible labels.
 
+### Dialog
+
+```tsx
+<Dialog>
+  <DialogTrigger>
+    <Button variant="destructive">Delete account</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Delete account</DialogTitle>
+      <DialogDescription>This action cannot be undone.</DialogDescription>
+    </DialogHeader>
+    <DialogBody>All project data will be permanently removed.</DialogBody>
+    <DialogFooter>
+      <Button variant="secondary">Cancel</Button>
+      <Button variant="destructive">Delete</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+Dialog content renders in a portal with `role="dialog"`, `aria-modal="true"`, focus trap, body scroll lock, Escape to close, and focus restored to the trigger.
+
+### Drawer
+
+```tsx
+<Drawer side="right">
+  <DrawerTrigger>
+    <Button variant="secondary">Filters</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Filters</DrawerTitle>
+      <DrawerDescription>Refine the current view.</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>{/* filter controls */}</DrawerBody>
+  </DrawerContent>
+</Drawer>
+```
+
+Drawers share modal overlay behaviour with dialogs and support `left`, `right`, or `bottom` placement.
+
+### Popover
+
+```tsx
+<Popover>
+  <PopoverTrigger>
+    <Button variant="ghost">Details</Button>
+  </PopoverTrigger>
+  <PopoverContent align="center" side="bottom">
+    Additional context for this item.
+  </PopoverContent>
+</Popover>
+```
+
+Popovers render in a portal, close on outside click or Escape, and return focus to the trigger. They are non-modal (`aria-modal="false"`).
+
+### Toast
+
+```tsx
+<ToastProvider>
+  <App />
+</ToastProvider>
+
+// Inside App:
+const { toast } = useToast();
+toast({ title: "Saved", description: "Your changes were stored." });
+```
+
+`ToastProvider` renders a fixed viewport in a portal. Destructive toasts use `role="alert"`; other variants default to `role="status"`. Toasts auto-dismiss after the configured duration.
+
+### Table
+
+```tsx
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Role</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Ada Lovelace</TableCell>
+      <TableCell>Admin</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+```
+
+`Table` wraps a native `<table>` in a horizontally scrollable container for responsive layouts while preserving header and cell semantics.
+
 ## Find inconsistent UI with Audit
 
 Run this inside any existing project:
@@ -658,7 +750,8 @@ After theme or component changes, spot-check Batch 1 and Batch 2 controls in bot
 
 | Check | How to verify |
 | --- | --- |
-| Keyboard focus | Tab through Button, Input, Textarea, Checkbox, Radio, Switch, Select, Tooltip triggers, Tabs, Accordion triggers, Breadcrumb links, Dropdown items, and Pagination links; confirm visible focus rings. |
+| Keyboard focus | Tab through interactive components including dialogs, drawers, popovers, and toast dismiss buttons; confirm visible focus rings. |
+| Overlays | Open dialog and drawer samples; confirm Escape closes them and focus returns to triggers. Confirm popover closes on Escape and outside click. |
 | Tabs & accordion | Use arrow keys in tab lists; confirm only one tab panel is visible. Toggle accordion sections and confirm `aria-expanded` updates. |
 | Dropdown menu | Open with click or Enter, move with arrow keys, close with Escape; confirm focus returns to the trigger. |
 | Reduced motion | Enable `prefers-reduced-motion: reduce` in devtools; confirm spinner, skeleton, tab, and accordion animations stop. |
@@ -711,7 +804,7 @@ Super System does not depend on an AI tool. Its files and commands work with hum
 If you use an AI assistant, give it this project rule:
 
 ```text
-Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, tabs, accordions, breadcrumbs, dropdown menus, pagination, and theme switching.
+Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, tabs, accordions, breadcrumbs, dropdown menus, pagination, dialogs, drawers, popovers, toasts, tables, and theme switching.
 Use semantic Super System CSS variables instead of hard-coded colors or spacing.
 Treat super-system.json as the single source of truth.
 Never edit .super-system/theme.css manually.
@@ -759,9 +852,7 @@ npx @super-system/cli studio --port 5000
 
 ## Beta roadmap
 
-Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure components are **shipped** (Tabs, Accordion, Breadcrumb, Dropdown Menu, Pagination). Next planned work:
-
-- **Batch 3 — overlays and data:** dialog, drawer, popover, toast, table primitives;
+Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Batch 2 navigation and disclosure and Batch 3 overlays and data are **shipped**. Remaining work in the active OpenSpec change covers icon integration and release verification. Next planned work:
 - automatic icon-package installation and normalized icon components;
 - a safer assisted migration workflow for existing projects;
 - ESLint rules and deeper framework-aware audits;

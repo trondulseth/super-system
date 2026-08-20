@@ -1,6 +1,6 @@
 # Tasks: Expand the React Component Library
 
-> **Status:** Batch 1 form and feedback components are implemented and polished ([archive/2026-08-20-polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality)). Next up: Batch 2 navigation and disclosure.
+> **Status:** Batch 1 and Batch 2 are complete. Batch 3 overlays and table primitives are implemented. Remaining: icon wrapper and release verification.
 
 ## Foundation
 
@@ -28,8 +28,12 @@
   - [x] Breadcrumb
   - [x] Dropdown Menu
   - [x] Pagination
-- [ ] Implement the overlay component batch.
-- [ ] Implement Table primitives and responsive usage guidance.
+- [x] Implement the overlay component batch.
+  - [x] Dialog
+  - [x] Drawer
+  - [x] Popover
+  - [x] Toast
+- [x] Implement Table primitives and responsive usage guidance.
 - [ ] Implement optional icon-package setup and the normalized Icon wrapper.
 - [x] Export each component and its public TypeScript types for the Batch 1 form and feedback set.
 
@@ -37,6 +41,7 @@
 
 - [x] Add behavior, keyboard, state, and ref-forwarding tests for every Batch 1 component.
 - [x] Add behavior, keyboard, state, and ARIA tests for every Batch 2 component.
+- [x] Add behavior, keyboard, state, and ARIA tests for every Batch 3 component.
 - [x] Add reduced-motion and forced-colors CSS coverage for Batch 1 components; document manual zoom and forced-colors checklist in README.
 - [ ] Test decorative, labeled, icon-only, and custom icon accessibility behavior (deferred until Icon wrapper lands).
 - [x] Verify tree-shakable named exports and CSS-only sideEffects on `@super-system/react`.
@@ -46,5 +51,6 @@
 
 - [x] Add copy-ready examples and accessibility notes for every Batch 1 component.
 - [x] Add copy-ready examples and accessibility notes for every Batch 2 component.
+- [x] Add copy-ready examples and accessibility notes for every Batch 3 component.
 - [ ] Add migration notes for any expanded token schema.
 - [ ] Publish an opt-in beta and verify installation in fresh React, Next.js, and Vite projects.

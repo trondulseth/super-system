@@ -370,6 +370,83 @@
             </nav>
           </section>
 
+          <section class="preview-section">
+            <h4 class="preview-label">Dialog</h4>
+            <div class="ss-dialog ss-dialog--demo">
+              <div class="ss-dialog__overlay" aria-hidden="true"></div>
+              <div role="dialog" aria-modal="true" aria-labelledby="dialog-demo-title" class="ss-dialog__content">
+                <div class="ss-dialog__header">
+                  <h2 id="dialog-demo-title" class="ss-dialog__title">Delete account</h2>
+                  <p class="ss-dialog__description">This action cannot be undone.</p>
+                </div>
+                <div class="ss-dialog__body">All project data will be permanently removed.</div>
+                <div class="ss-dialog__footer">
+                  <button class="ss-button ss-button--secondary ss-button--md" type="button">Cancel</button>
+                  <button class="ss-button ss-button--destructive ss-button--md" type="button">Delete</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Drawer</h4>
+            <div class="ss-drawer ss-drawer--demo">
+              <div class="ss-drawer__overlay" aria-hidden="true"></div>
+              <div role="dialog" aria-modal="true" class="ss-drawer__content ss-drawer__content--right">
+                <div class="ss-drawer__header">
+                  <h2 class="ss-drawer__title">Filters</h2>
+                  <p class="ss-drawer__description">Refine the current view.</p>
+                </div>
+                <div class="ss-drawer__body">Status, owner, and date filters appear here.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Popover</h4>
+            <span class="ss-popover ss-popover--demo">
+              <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Details</button>
+              <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
+                Additional context for this item.
+              </div>
+            </span>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Toast</h4>
+            <div class="ss-toast ss-toast--primary" role="status">
+              <div class="ss-toast__content">
+                <p class="ss-toast__title">Saved</p>
+                <p class="ss-toast__description">Your theme changes were stored.</p>
+              </div>
+              <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Table</h4>
+            <div class="ss-table-wrap">
+              <table class="ss-table">
+                <thead class="ss-table__header">
+                  <tr class="ss-table__row">
+                    <th scope="col" class="ss-table__head">Name</th>
+                    <th scope="col" class="ss-table__head">Role</th>
+                  </tr>
+                </thead>
+                <tbody class="ss-table__body">
+                  <tr class="ss-table__row">
+                    <td class="ss-table__cell">Ada Lovelace</td>
+                    <td class="ss-table__cell">Admin</td>
+                  </tr>
+                  <tr class="ss-table__row">
+                    <td class="ss-table__cell">Grace Hopper</td>
+                    <td class="ss-table__cell">Editor</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <div id="checks"></div>
         </article>
       </section>
