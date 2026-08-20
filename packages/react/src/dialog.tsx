@@ -8,6 +8,12 @@ interface DialogContextValue {
   contentId: string;
   titleId: string;
   descriptionId: string;
+  hasTitle: boolean;
+  hasDescription: boolean;
+  registerTitle: () => void;
+  unregisterTitle: () => void;
+  registerDescription: () => void;
+  unregisterDescription: () => void;
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -39,7 +45,14 @@ export function Dialog({
   const baseId = React.useId();
   const triggerRef = React.useRef<HTMLElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const [hasTitle, setHasTitle] = React.useState(false);
+  const [hasDescription, setHasDescription] = React.useState(false);
   const open = openProp ?? uncontrolledOpen;
+
+  const registerTitle = React.useCallback(() => setHasTitle(true), []);
+  const unregisterTitle = React.useCallback(() => setHasTitle(false), []);
+  const registerDescription = React.useCallback(() => setHasDescription(true), []);
+  const unregisterDescription = React.useCallback(() => setHasDescription(false), []);
 
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -61,6 +74,12 @@ export function Dialog({
         contentId: `${baseId}-content`,
         titleId: `${baseId}-title`,
         descriptionId: `${baseId}-description`,
+        hasTitle,
+        hasDescription,
+        registerTitle,
+        unregisterTitle,
+        registerDescription,
+        unregisterDescription,
         triggerRef,
         contentRef
       }}
@@ -113,7 +132,7 @@ export function DialogContent({
   onKeyDown,
   ...props
 }: DialogContentProps) {
-  const { open, setOpen, contentId, titleId, descriptionId, triggerRef, contentRef } =
+  const { open, setOpen, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDialogContext("DialogContent");
 
   useFocusTrap(contentRef, open, triggerRef);
@@ -154,8 +173,8 @@ export function DialogContent({
           id={contentId}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
+          aria-labelledby={hasTitle ? titleId : undefined}
+          aria-describedby={hasDescription ? descriptionId : undefined}
           tabIndex={-1}
           className={classes("ss-dialog__content", className)}
           onKeyDown={handleContentKeyDown}
@@ -177,14 +196,27 @@ export function DialogHeader({ className, ...props }: DialogHeaderProps) {
 export interface DialogTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 
 export function DialogTitle({ className, ...props }: DialogTitleProps) {
-  const { titleId } = useDialogContext("DialogTitle");
+  const { titleId, registerTitle, unregisterTitle } = useDialogContext("DialogTitle");
+
+  React.useLayoutEffect(() => {
+    registerTitle();
+    return unregisterTitle;
+  }, [registerTitle, unregisterTitle]);
+
   return <h2 id={titleId} className={classes("ss-dialog__title", className)} {...props} />;
 }
 
 export interface DialogDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 export function DialogDescription({ className, ...props }: DialogDescriptionProps) {
-  const { descriptionId } = useDialogContext("DialogDescription");
+  const { descriptionId, registerDescription, unregisterDescription } =
+    useDialogContext("DialogDescription");
+
+  React.useLayoutEffect(() => {
+    registerDescription();
+    return unregisterDescription;
+  }, [registerDescription, unregisterDescription]);
+
   return <p id={descriptionId} className={classes("ss-dialog__description", className)} {...props} />;
 }
 

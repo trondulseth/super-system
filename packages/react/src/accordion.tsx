@@ -11,7 +11,13 @@ interface AccordionContextValue {
 }
 
 const AccordionContext = React.createContext<AccordionContextValue | null>(null);
-const AccordionItemContext = React.createContext<string | null>(null);
+
+interface AccordionItemContextValue {
+  value: string;
+  disabled?: boolean;
+}
+
+const AccordionItemContext = React.createContext<AccordionItemContextValue | null>(null);
 
 function useAccordionContext(component: string): AccordionContextValue {
   const context = React.useContext(AccordionContext);
@@ -21,12 +27,12 @@ function useAccordionContext(component: string): AccordionContextValue {
   return context;
 }
 
-function useAccordionItemContext(component: string): string {
-  const value = React.useContext(AccordionItemContext);
-  if (value === null) {
+function useAccordionItemContext(component: string): AccordionItemContextValue {
+  const item = React.useContext(AccordionItemContext);
+  if (item === null) {
     throw new Error(`${component} must be used within AccordionItem.`);
   }
-  return value;
+  return item;
 }
 
 function normalizeMultiple(value: AccordionValue): string[] {
@@ -104,7 +110,7 @@ export function AccordionItem({
   ...props
 }: AccordionItemProps) {
   return (
-    <AccordionItemContext.Provider value={value}>
+    <AccordionItemContext.Provider value={{ value, disabled }}>
       <div
         className={classes("ss-accordion__item", disabled && "ss-accordion__item--disabled", className)}
         data-disabled={disabled || undefined}
@@ -120,8 +126,9 @@ export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLBu
 
 export const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   function AccordionTrigger({ className, disabled, onClick, children, ...props }, ref) {
-    const itemValue = useAccordionItemContext("AccordionTrigger");
+    const { value: itemValue, disabled: itemDisabled } = useAccordionItemContext("AccordionTrigger");
     const { value, toggleItem, baseId } = useAccordionContext("AccordionTrigger");
+    const isDisabled = disabled || itemDisabled;
     const expanded =
       Array.isArray(value) ? value.includes(itemValue) : value === itemValue;
     const triggerId = `${baseId}-trigger-${itemValue}`;
@@ -135,10 +142,10 @@ export const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTri
           type="button"
           aria-expanded={expanded}
           aria-controls={contentId}
-          disabled={disabled}
+          disabled={isDisabled}
           className={classes("ss-accordion__trigger", className)}
           onClick={mergeHandlers(onClick, () => {
-            if (!disabled) toggleItem(itemValue);
+            if (!isDisabled) toggleItem(itemValue);
           })}
           {...props}
         >
@@ -154,7 +161,7 @@ AccordionTrigger.displayName = "AccordionTrigger";
 export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function AccordionContent({ className, children, ...props }: AccordionContentProps) {
-  const itemValue = useAccordionItemContext("AccordionContent");
+  const { value: itemValue } = useAccordionItemContext("AccordionContent");
   const { value, baseId } = useAccordionContext("AccordionContent");
   const expanded =
     Array.isArray(value) ? value.includes(itemValue) : value === itemValue;

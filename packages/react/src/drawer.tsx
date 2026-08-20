@@ -9,6 +9,12 @@ interface DrawerContextValue {
   contentId: string;
   titleId: string;
   descriptionId: string;
+  hasTitle: boolean;
+  hasDescription: boolean;
+  registerTitle: () => void;
+  unregisterTitle: () => void;
+  registerDescription: () => void;
+  unregisterDescription: () => void;
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -42,7 +48,14 @@ export function Drawer({
   const baseId = React.useId();
   const triggerRef = React.useRef<HTMLElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const [hasTitle, setHasTitle] = React.useState(false);
+  const [hasDescription, setHasDescription] = React.useState(false);
   const open = openProp ?? uncontrolledOpen;
+
+  const registerTitle = React.useCallback(() => setHasTitle(true), []);
+  const unregisterTitle = React.useCallback(() => setHasTitle(false), []);
+  const registerDescription = React.useCallback(() => setHasDescription(true), []);
+  const unregisterDescription = React.useCallback(() => setHasDescription(false), []);
 
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -65,6 +78,12 @@ export function Drawer({
         contentId: `${baseId}-content`,
         titleId: `${baseId}-title`,
         descriptionId: `${baseId}-description`,
+        hasTitle,
+        hasDescription,
+        registerTitle,
+        unregisterTitle,
+        registerDescription,
+        unregisterDescription,
         triggerRef,
         contentRef
       }}
@@ -116,7 +135,7 @@ export function DrawerContent({
   children,
   ...props
 }: DrawerContentProps) {
-  const { open, setOpen, side, contentId, titleId, descriptionId, triggerRef, contentRef } =
+  const { open, setOpen, side, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDrawerContext("DrawerContent");
 
   useFocusTrap(contentRef, open, triggerRef);
@@ -153,8 +172,8 @@ export function DrawerContent({
           id={contentId}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
+          aria-labelledby={hasTitle ? titleId : undefined}
+          aria-describedby={hasDescription ? descriptionId : undefined}
           tabIndex={-1}
           className={classes("ss-drawer__content", `ss-drawer__content--${side}`, className)}
           {...props}
@@ -175,14 +194,27 @@ export function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
 export interface DrawerTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 
 export function DrawerTitle({ className, ...props }: DrawerTitleProps) {
-  const { titleId } = useDrawerContext("DrawerTitle");
+  const { titleId, registerTitle, unregisterTitle } = useDrawerContext("DrawerTitle");
+
+  React.useLayoutEffect(() => {
+    registerTitle();
+    return unregisterTitle;
+  }, [registerTitle, unregisterTitle]);
+
   return <h2 id={titleId} className={classes("ss-drawer__title", className)} {...props} />;
 }
 
 export interface DrawerDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 export function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
-  const { descriptionId } = useDrawerContext("DrawerDescription");
+  const { descriptionId, registerDescription, unregisterDescription } =
+    useDrawerContext("DrawerDescription");
+
+  React.useLayoutEffect(() => {
+    registerDescription();
+    return unregisterDescription;
+  }, [registerDescription, unregisterDescription]);
+
   return <p id={descriptionId} className={classes("ss-drawer__description", className)} {...props} />;
 }
 

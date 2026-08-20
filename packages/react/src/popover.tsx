@@ -152,6 +152,18 @@ export function PopoverContent({
     setPosition({ top, left });
   }, [align, open, side, triggerRef]);
 
+  const transform = React.useMemo(() => {
+    if (side === "top") {
+      if (align === "center") return "translate(-50%, -100%)";
+      if (align === "end") return "translate(-100%, -100%)";
+      return "translateY(-100%)";
+    }
+
+    if (align === "center") return "translateX(-50%)";
+    if (align === "end") return "translateX(-100%)";
+    return undefined;
+  }, [align, side]);
+
   if (!open || !position) return null;
 
   return (
@@ -165,12 +177,7 @@ export function PopoverContent({
           position: "fixed",
           top: position.top,
           left: position.left,
-          transform:
-            align === "center"
-              ? "translateX(-50%)"
-              : align === "end"
-                ? "translateX(-100%)"
-                : undefined
+          transform
         }}
         className={classes(
           "ss-popover__content",

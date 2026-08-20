@@ -77,8 +77,8 @@ export interface PaginationEllipsisProps extends React.HTMLAttributes<HTMLSpanEl
 
 export function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
   return (
-    <span aria-hidden="true" className={classes("ss-pagination__ellipsis", className)} {...props}>
-      …
+    <span className={classes("ss-pagination__ellipsis", className)} {...props}>
+      <span aria-hidden="true">…</span>
       <span className="ss-pagination__sr-only">More pages</span>
     </span>
   );

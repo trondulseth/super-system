@@ -640,6 +640,31 @@ describe("Accordion", () => {
     expect(triggers[0]?.getAttribute("aria-expanded")).toBe("true");
     expect(triggers[1]?.getAttribute("aria-expanded")).toBe("true");
   });
+
+  it("does not toggle disabled accordion items", () => {
+    const container = render(
+      <Accordion type="single">
+        <AccordionItem value="open">
+          <AccordionTrigger>Open</AccordionTrigger>
+          <AccordionContent>Open content</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="locked" disabled>
+          <AccordionTrigger>Locked</AccordionTrigger>
+          <AccordionContent>Locked content</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    const triggers = container.querySelectorAll(".ss-accordion__trigger");
+    expect(triggers[1]?.hasAttribute("disabled")).toBe(true);
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("false");
+
+    act(() => {
+      triggers[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("false");
+  });
 });
 
 describe("Breadcrumb", () => {
@@ -662,6 +687,7 @@ describe("Breadcrumb", () => {
     expect(container.querySelector(".ss-breadcrumb__page")?.getAttribute("aria-current")).toBe(
       "page"
     );
+    expect(container.querySelector(".ss-breadcrumb__page")?.getAttribute("role")).toBeNull();
   });
 });
 
@@ -731,6 +757,7 @@ describe("Pagination", () => {
       "page"
     );
     expect(container.querySelector(".ss-pagination__ellipsis")?.textContent).toContain("More pages");
+    expect(container.querySelector(".ss-pagination__ellipsis")?.getAttribute("aria-hidden")).toBeNull();
   });
 });
 
@@ -784,6 +811,35 @@ describe("Dialog", () => {
     expect(document.body.querySelector('[role="dialog"]')).toBeNull();
     expect(document.activeElement).toBe(trigger);
   });
+
+  it("omits aria-labelledby and aria-describedby when title and description are absent", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogBody>Confirm your changes.</DialogBody>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = document.body.querySelector('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-labelledby")).toBeNull();
+    expect(dialog?.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("sets aria-labelledby when only a title is provided", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Quick note</DialogTitle>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = document.body.querySelector('[role="dialog"]') as HTMLElement;
+    const title = document.body.querySelector(".ss-dialog__title") as HTMLElement;
+    expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+    expect(dialog.getAttribute("aria-describedby")).toBeNull();
+  });
 });
 
 describe("Drawer", () => {
@@ -803,6 +859,20 @@ describe("Drawer", () => {
     const drawer = document.body.querySelector(".ss-drawer__content--right");
     expect(drawer?.getAttribute("role")).toBe("dialog");
     expect(drawer?.getAttribute("aria-modal")).toBe("true");
+  });
+
+  it("omits aria-labelledby when drawer title is absent", () => {
+    render(
+      <Drawer defaultOpen side="left">
+        <DrawerContent>
+          <DrawerBody>Panel content</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    );
+
+    const drawer = document.body.querySelector(".ss-drawer__content--left");
+    expect(drawer?.getAttribute("aria-labelledby")).toBeNull();
+    expect(drawer?.getAttribute("aria-describedby")).toBeNull();
   });
 });
 
@@ -830,6 +900,43 @@ describe("Popover", () => {
 
     expect(document.body.querySelector(".ss-popover__content")).toBeNull();
     expect(document.activeElement).toBe(trigger);
+  });
+
+  it("positions top popovers above the trigger", () => {
+    const rect = {
+      top: 120,
+      bottom: 160,
+      left: 40,
+      right: 140,
+      width: 100,
+      height: 40,
+      x: 40,
+      y: 120,
+      toJSON: () => ({})
+    };
+
+    render(
+      <Popover>
+        <PopoverTrigger>
+          <Button variant="ghost">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent side="top" align="center">
+          Above the trigger
+        </PopoverContent>
+      </Popover>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    trigger.getBoundingClientRect = () => rect as DOMRect;
+
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const content = document.body.querySelector(".ss-popover__content") as HTMLElement;
+    expect(content).not.toBeNull();
+    expect(content.style.transform).toBe("translate(-50%, -100%)");
+    expect(content.style.top).toBe("112px");
   });
 });
 

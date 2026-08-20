@@ -90,6 +90,12 @@
   cursor: not-allowed;
   opacity: 0.55;
 }
+.ss-label--inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ss-space-2, 8px);
+  width: fit-content;
+}
 .ss-label__required {
   color: var(--ss-color-destructive);
 }
