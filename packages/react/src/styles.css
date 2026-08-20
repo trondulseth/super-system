@@ -51,6 +51,20 @@
 }
 .ss-textarea--invalid { border-color: var(--ss-color-destructive); }
 
+.ss-label {
+  display: grid;
+  gap: var(--ss-space-2, 8px);
+  font: 600 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+  color: var(--ss-color-foreground);
+}
+.ss-label--disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.ss-label__required {
+  color: var(--ss-color-destructive);
+}
+
 .ss-card {
   padding: var(--ss-space-4, 16px);
   border: 1px solid var(--ss-color-border);

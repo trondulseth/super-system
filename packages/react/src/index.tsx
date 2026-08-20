@@ -65,6 +65,27 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(fun
   );
 });
 
+export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  disabled?: boolean;
+  required?: boolean;
+}
+
+export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(function Label(
+  { disabled, required, className, children, ...props },
+  ref
+) {
+  return (
+    <label
+      ref={ref}
+      className={classes("ss-label", disabled && "ss-label--disabled", className)}
+      {...props}
+    >
+      {children}
+      {required ? <span className="ss-label__required" aria-hidden="true"> *</span> : null}
+    </label>
+  );
+});
+
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: "neutral" | "primary" | "destructive";
 }

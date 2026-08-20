@@ -92,12 +92,21 @@
           </section>
 
           <section class="preview-section">
+            <h4 class="preview-label">Label</h4>
+            <label class="ss-label" for="preview-email">Email address</label>
+            <label class="ss-label" for="preview-name">
+              Full name <span class="ss-label__required" aria-hidden="true"> *</span>
+            </label>
+            <label class="ss-label ss-label--disabled" for="preview-disabled">Disabled field</label>
+          </section>
+
+          <section class="preview-section">
             <h4 class="preview-label">Input</h4>
-            <label class="field-label">
+            <label class="ss-label">
               Email address
               <input class="ss-input" type="email" placeholder="you@example.com" />
             </label>
-            <label class="field-label">
+            <label class="ss-label">
               Invalid field
               <input
                 class="ss-input ss-input--invalid"
@@ -110,11 +119,11 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Textarea</h4>
-            <label class="field-label">
+            <label class="ss-label">
               Bio
               <textarea class="ss-textarea" placeholder="Tell us about yourself"></textarea>
             </label>
-            <label class="field-label">
+            <label class="ss-label">
               Invalid message
               <textarea class="ss-textarea ss-textarea--invalid" aria-invalid="true">Too short</textarea>
             </label>

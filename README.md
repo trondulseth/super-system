@@ -297,11 +297,33 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 ### Input
 
 ```tsx
-<Input type="text" />
-<Input type="email" invalid aria-describedby="email-error" />
+<Label htmlFor="email">Email address</Label>
+<Input id="email" type="email" />
+
+<Label htmlFor="email-error" required>
+  Email address
+</Label>
+<Input id="email-error" type="email" invalid aria-describedby="email-error-message" />
 ```
 
-`Input` forwards normal HTML input properties and applies `aria-invalid` when `invalid` is true. You are still responsible for providing a visible label.
+`Input` forwards normal HTML input properties and applies `aria-invalid` when `invalid` is true.
+
+### Label
+
+```tsx
+<Label htmlFor="name">Full name</Label>
+<Label htmlFor="bio" required>Bio</Label>
+<Label disabled>Unavailable field</Label>
+```
+
+`Label` forwards native label attributes and supports `required` and `disabled` visual states. Wrap an control to stack the label above it:
+
+```tsx
+<Label>
+  Email address
+  <Input type="email" />
+</Label>
+```
 
 ### Textarea
 
