@@ -56,7 +56,7 @@ Complete Batch 1 quality bar and close related expand-change verification items.
 - [x] Update README: ThemeProvider API, Label patterns, Tooltip limits, Card composition, forced-colors manual checklist.
 - [x] Mark applicable Batch 1 verification items complete in `expand-react-component-library/tasks.md`.
 - [x] Verify tree-shakable imports still pass after module split.
-- [ ] Run full `pnpm check` and confirm GitHub Pages demo deploy succeeds.
+- [x] Run full `pnpm check` and confirm GitHub Pages demo deploy succeeds.
 
 ## Exit criteria
 
