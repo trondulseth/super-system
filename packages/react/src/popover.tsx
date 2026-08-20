@@ -1,6 +1,11 @@
 import * as React from "react";
-import { OverlayPortal } from "./overlay-utils.js";
-import { classes, mergeHandlers } from "./utils.js";
+import {
+  OverlayPortal,
+  useDismissOnOutsideClick,
+  useEscapeToClose,
+  useFloatingPosition
+} from "./overlay-utils.js";
+import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface PopoverContextValue {
   open: boolean;
@@ -49,35 +54,8 @@ export function Popover({
     [onOpenChange, openProp]
   );
 
-  React.useEffect(() => {
-    if (!open) return;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (contentRef.current?.contains(target) || triggerRef.current?.contains(target)) {
-        return;
-      }
-      setOpen(false);
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    return () => document.removeEventListener("mousedown", handlePointerDown);
-  }, [open, setOpen]);
-
-  React.useEffect(() => {
-    if (!open) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, setOpen]);
+  useDismissOnOutsideClick(open, [contentRef, triggerRef], () => setOpen(false));
+  useEscapeToClose(open, () => setOpen(false), triggerRef);
 
   return (
     <PopoverContext.Provider value={{ open, setOpen, contentId, triggerRef, contentRef }}>
@@ -94,17 +72,11 @@ export function PopoverTrigger({ children }: PopoverTriggerProps) {
   const { open, setOpen, contentId, triggerRef } = usePopoverContext("PopoverTrigger");
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
 
   return React.cloneElement(child, {
     ...childProps,
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node;
-      const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
-    },
+    ref: composeRefs(childRef, triggerRef),
     "aria-expanded": open,
     "aria-controls": open ? contentId : undefined,
     onClick: mergeHandlers(childProps.onClick, () => setOpen(!open)),
@@ -130,39 +102,7 @@ export function PopoverContent({
   ...props
 }: PopoverContentProps) {
   const { open, contentId, triggerRef, contentRef } = usePopoverContext("PopoverContent");
-  const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
-
-  React.useLayoutEffect(() => {
-    if (!open || !triggerRef.current) {
-      setPosition(null);
-      return;
-    }
-
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const gap = 8;
-    let top = side === "bottom" ? triggerRect.bottom + gap : triggerRect.top - gap;
-    let left = triggerRect.left;
-
-    if (align === "center") {
-      left = triggerRect.left + triggerRect.width / 2;
-    } else if (align === "end") {
-      left = triggerRect.right;
-    }
-
-    setPosition({ top, left });
-  }, [align, open, side, triggerRef]);
-
-  const transform = React.useMemo(() => {
-    if (side === "top") {
-      if (align === "center") return "translate(-50%, -100%)";
-      if (align === "end") return "translate(-100%, -100%)";
-      return "translateY(-100%)";
-    }
-
-    if (align === "center") return "translateX(-50%)";
-    if (align === "end") return "translateX(-100%)";
-    return undefined;
-  }, [align, side]);
+  const position = useFloatingPosition(open, triggerRef, { side, align });
 
   if (!open || !position) return null;
 
@@ -171,13 +111,11 @@ export function PopoverContent({
       <div
         ref={contentRef}
         id={contentId}
-        role="dialog"
-        aria-modal="false"
         style={{
           position: "fixed",
           top: position.top,
           left: position.left,
-          transform
+          transform: position.transform
         }}
         className={classes(
           "ss-popover__content",

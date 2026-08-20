@@ -7,6 +7,8 @@ interface TabsContextValue {
   baseId: string;
   orientation: "horizontal" | "vertical";
   listRef: React.RefObject<HTMLDivElement | null>;
+  autoSelectedRef: React.MutableRefObject<boolean>;
+  isControlled: boolean;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -28,17 +30,19 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Tabs({
   value: valueProp,
-  defaultValue = "",
+  defaultValue,
   onValueChange,
   orientation = "horizontal",
   className,
   children,
   ...props
 }: TabsProps) {
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
+  const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue ?? "");
   const baseId = React.useId();
   const listRef = React.useRef<HTMLDivElement>(null);
+  const autoSelectedRef = React.useRef(false);
   const value = valueProp ?? uncontrolledValue;
+  const isControlled = valueProp !== undefined;
 
   const setValue = React.useCallback(
     (next: string) => {
@@ -51,7 +55,9 @@ export function Tabs({
   );
 
   return (
-    <TabsContext.Provider value={{ value, setValue, baseId, orientation, listRef }}>
+    <TabsContext.Provider
+      value={{ value, setValue, baseId, orientation, listRef, autoSelectedRef, isControlled }}
+    >
       <div className={classes("ss-tabs", className)} data-orientation={orientation} {...props}>
         {children}
       </div>
@@ -119,10 +125,17 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
   { value, className, disabled, onClick, ...props },
   ref
 ) {
-  const { value: activeValue, setValue, baseId } = useTabsContext("TabsTrigger");
+  const { value: activeValue, setValue, baseId, autoSelectedRef, isControlled } =
+    useTabsContext("TabsTrigger");
   const selected = activeValue === value;
   const triggerId = `${baseId}-trigger-${value}`;
   const panelId = `${baseId}-panel-${value}`;
+
+  React.useLayoutEffect(() => {
+    if (isControlled || autoSelectedRef.current || activeValue !== "") return;
+    autoSelectedRef.current = true;
+    setValue(value);
+  }, [activeValue, autoSelectedRef, isControlled, setValue, value]);
 
   return (
     <button
@@ -146,13 +159,15 @@ TabsTrigger.displayName = "TabsTrigger";
 
 export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
+  forceMount?: boolean;
 }
 
-export function TabsContent({ value, className, children, ...props }: TabsContentProps) {
+export function TabsContent({ value, forceMount, className, children, ...props }: TabsContentProps) {
   const { value: activeValue, baseId } = useTabsContext("TabsContent");
   const selected = activeValue === value;
   const triggerId = `${baseId}-trigger-${value}`;
   const panelId = `${baseId}-panel-${value}`;
+  const mounted = forceMount || selected;
 
   return (
     <div
@@ -164,7 +179,7 @@ export function TabsContent({ value, className, children, ...props }: TabsConten
       className={classes("ss-tabs__content", className)}
       {...props}
     >
-      {selected ? children : null}
+      {mounted ? children : null}
     </div>
   );
 }

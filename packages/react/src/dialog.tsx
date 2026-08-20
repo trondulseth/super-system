@@ -1,6 +1,6 @@
 import * as React from "react";
 import { OverlayPortal, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
-import { classes, mergeHandlers } from "./utils.js";
+import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DialogContextValue {
   open: boolean;
@@ -98,16 +98,11 @@ export function DialogTrigger({ children }: DialogTriggerProps) {
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
 
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+
   return React.cloneElement(child, {
     ...childProps,
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node;
-      const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
-    },
+    ref: composeRefs(childRef, triggerRef),
     "aria-haspopup": "dialog",
     "aria-expanded": open,
     "aria-controls": open ? contentId : undefined,

@@ -58,14 +58,21 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
       (document.getElementById(id) as HTMLInputElement).value = theme[id];
     });
     (document.getElementById("fontSans") as HTMLInputElement).value = config.typography.fontSans;
+    (document.getElementById("fontMono") as HTMLInputElement).value = config.typography.fontMono;
     (document.getElementById("baseSize") as HTMLInputElement).value = config.typography.baseSize;
+    (document.getElementById("lineHeight") as HTMLInputElement).value = String(config.typography.lineHeight);
+    (document.getElementById("radiusSm") as HTMLInputElement).value = config.radius.sm;
     (document.getElementById("radiusMd") as HTMLInputElement).value = config.radius.md;
+    (document.getElementById("radiusLg") as HTMLInputElement).value = config.radius.lg;
     (document.getElementById("density") as HTMLSelectElement).value = config.spacing.density;
     (document.getElementById("icons") as HTMLSelectElement).value = config.icons.library;
     (document.getElementById("contrast") as HTMLSelectElement).value = config.accessibility.contrast;
     (document.getElementById("target") as HTMLInputElement).value = String(
       config.accessibility.minimumTargetSize
     );
+    (document.getElementById("modeDefault") as HTMLSelectElement).value = config.mode.default;
+    (document.getElementById("reducedMotion") as HTMLInputElement).checked =
+      config.accessibility.reducedMotion;
   }
 
   function collect(): void {
@@ -74,8 +81,14 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
       theme[id] = (document.getElementById(id) as HTMLInputElement).value;
     });
     config.typography.fontSans = (document.getElementById("fontSans") as HTMLInputElement).value;
+    config.typography.fontMono = (document.getElementById("fontMono") as HTMLInputElement).value;
     config.typography.baseSize = (document.getElementById("baseSize") as HTMLInputElement).value;
+    config.typography.lineHeight = Number(
+      (document.getElementById("lineHeight") as HTMLInputElement).value
+    );
+    config.radius.sm = (document.getElementById("radiusSm") as HTMLInputElement).value;
     config.radius.md = (document.getElementById("radiusMd") as HTMLInputElement).value;
+    config.radius.lg = (document.getElementById("radiusLg") as HTMLInputElement).value;
     config.spacing.density = (document.getElementById("density") as HTMLSelectElement)
       .value as SuperSystemConfig["spacing"]["density"];
     config.icons.library = (document.getElementById("icons") as HTMLSelectElement)
@@ -85,6 +98,10 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
     config.accessibility.minimumTargetSize = Number(
       (document.getElementById("target") as HTMLInputElement).value
     );
+    config.mode.default = (document.getElementById("modeDefault") as HTMLSelectElement)
+      .value as SuperSystemConfig["mode"]["default"];
+    config.accessibility.reducedMotion = (document.getElementById("reducedMotion") as HTMLInputElement)
+      .checked;
   }
 
   async function render(): Promise<void> {
@@ -107,6 +124,9 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
 
   document.querySelectorAll("aside input,aside select").forEach((element) => {
     element.addEventListener("input", () => {
+      void render();
+    });
+    element.addEventListener("change", () => {
       void render();
     });
   });

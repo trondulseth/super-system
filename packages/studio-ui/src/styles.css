@@ -232,3 +232,34 @@ aside select {
     min-height: 600px;
   }
 }
+
+/* Studio-only demo modifiers (not shipped in @super-system/react) */
+.ss-tooltip--demo .ss-tooltip__content {
+  opacity: 1;
+  visibility: visible;
+}
+.ss-dropdown--demo .ss-dropdown__content {
+  position: relative;
+  display: block;
+  top: auto;
+  margin-top: var(--ss-space-2, 8px);
+}
+.ss-dialog--demo .ss-dialog__overlay,
+.ss-drawer--demo .ss-drawer__overlay {
+  position: relative;
+  min-height: 12rem;
+  border-radius: var(--ss-radius-md, 10px);
+}
+.ss-dialog--demo .ss-dialog__content,
+.ss-drawer--demo .ss-drawer__content {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+  max-height: none;
+}
+.ss-popover--demo .ss-popover__content {
+  position: relative;
+  display: block;
+}

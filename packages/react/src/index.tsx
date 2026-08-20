@@ -163,3 +163,73 @@ export {
   type TableCellProps
 } from "./table.js";
 export { Icon, type IconProps, type IconSize } from "./icon.js";
+export {
+  Sparkline,
+  BarChart,
+  LineChart,
+  DonutChart,
+  type SparklineProps,
+  type BarChartProps,
+  type LineChartProps,
+  type DonutChartProps,
+  type ChartTone
+} from "./charts.js";
+export {
+  KpiCard,
+  KpiCardHeader,
+  KpiCardTitle,
+  KpiCardValue,
+  KpiCardTrend,
+  KpiCardDescription,
+  KpiCardChart,
+  KpiCardFooter,
+  type KpiCardProps,
+  type KpiCardHeaderProps,
+  type KpiCardTitleProps,
+  type KpiCardValueProps,
+  type KpiCardTrendProps,
+  type KpiCardDescriptionProps,
+  type KpiCardChartProps,
+  type KpiCardFooterProps,
+  type KpiTrend
+} from "./kpi-card.js";
+export {
+  Box,
+  Stack,
+  Row,
+  Container,
+  Spacer,
+  Divider,
+  type BoxProps,
+  type StackProps,
+  type RowProps,
+  type ContainerProps,
+  type SpacerProps,
+  type DividerProps
+} from "./layout.js";
+export {
+  PageHeader,
+  PageFooter,
+  Main,
+  AppShell,
+  Sidebar,
+  SidebarBrand,
+  SidebarNav,
+  SidebarNavItem,
+  HamburgerMenu,
+  TopBar,
+  TopBarBrand,
+  TopBarActions,
+  type PageHeaderProps,
+  type PageFooterProps,
+  type MainProps,
+  type AppShellProps,
+  type SidebarProps,
+  type SidebarBrandProps,
+  type SidebarNavProps,
+  type SidebarNavItemProps,
+  type HamburgerMenuProps,
+  type TopBarProps,
+  type TopBarBrandProps,
+  type TopBarActionsProps
+} from "./page-shell.js";

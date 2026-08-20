@@ -1,5 +1,5 @@
 import * as React from "react";
-import { classes, mergeDescribedBy, mergeHandlers } from "./utils.js";
+import { classes, composeRefs, mergeDescribedBy, mergeHandlers } from "./utils.js";
 
 export interface TooltipProps {
   content: React.ReactNode;
@@ -20,11 +20,12 @@ export function Tooltip({
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
   const describedBy = childProps["aria-describedby"];
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+
   const trigger = React.cloneElement(child, {
     ...childProps,
-    "aria-describedby": open
-      ? mergeDescribedBy(describedBy, tooltipId)
-      : describedBy,
+    ref: composeRefs(childRef, undefined),
+    "aria-describedby": open ? mergeDescribedBy(describedBy, tooltipId) : describedBy,
     onMouseEnter: mergeHandlers(childProps.onMouseEnter, () => setOpen(true)),
     onMouseLeave: mergeHandlers(childProps.onMouseLeave, () => setOpen(false)),
     onFocus: mergeHandlers(childProps.onFocus, () => setOpen(true)),

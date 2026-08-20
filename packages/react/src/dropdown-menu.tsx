@@ -1,5 +1,10 @@
 import * as React from "react";
-import { classes, mergeHandlers } from "./utils.js";
+import {
+  OverlayPortal,
+  useDismissOnOutsideClick,
+  useFloatingPosition
+} from "./overlay-utils.js";
+import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DropdownMenuContextValue {
   open: boolean;
@@ -48,20 +53,7 @@ export function DropdownMenu({
     [onOpenChange, openProp]
   );
 
-  React.useEffect(() => {
-    if (!open) return;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (contentRef.current?.contains(target) || triggerRef.current?.contains(target)) {
-        return;
-      }
-      setOpen(false);
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    return () => document.removeEventListener("mousedown", handlePointerDown);
-  }, [open, setOpen]);
+  useDismissOnOutsideClick(open, [contentRef, triggerRef], () => setOpen(false));
 
   return (
     <DropdownMenuContext.Provider value={{ open, setOpen, menuId, triggerRef, contentRef }}>
@@ -78,17 +70,11 @@ export function DropdownMenuTrigger({ children }: DropdownMenuTriggerProps) {
   const { open, setOpen, menuId, triggerRef } = useDropdownMenuContext("DropdownMenuTrigger");
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
 
   return React.cloneElement(child, {
     ...childProps,
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node;
-      const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
-    },
+    ref: composeRefs(childRef, triggerRef),
     "aria-haspopup": "menu",
     "aria-expanded": open,
     "aria-controls": open ? menuId : undefined,
@@ -113,11 +99,18 @@ export function DropdownMenuContent({
   onKeyDown,
   ...props
 }: DropdownMenuContentProps) {
-  const { open, setOpen, menuId, triggerRef, contentRef } = useDropdownMenuContext("DropdownMenuContent");
+  const { open, setOpen, menuId, triggerRef, contentRef } =
+    useDropdownMenuContext("DropdownMenuContent");
+  const position = useFloatingPosition(open, triggerRef, {
+    side: "bottom",
+    align: align === "end" ? "end" : "start"
+  });
 
   React.useEffect(() => {
     if (!open) return;
-    const firstItem = contentRef.current?.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])');
+    const firstItem = contentRef.current?.querySelector<HTMLElement>(
+      '[role="menuitem"]:not([aria-disabled="true"])'
+    );
     firstItem?.focus();
   }, [contentRef, open]);
 
@@ -126,7 +119,8 @@ export function DropdownMenuContent({
     if (event.defaultPrevented) return;
 
     const items = Array.from(
-      contentRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? []
+      contentRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') ??
+        []
     );
     const currentIndex = items.indexOf(document.activeElement as HTMLElement);
 
@@ -163,20 +157,28 @@ export function DropdownMenuContent({
     }
   };
 
-  if (!open) return null;
+  if (!open || !position) return null;
 
   return (
-    <div
-      ref={contentRef}
-      id={menuId}
-      role="menu"
-      tabIndex={-1}
-      className={classes("ss-dropdown__content", `ss-dropdown__content--${align}`, className)}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </div>
+    <OverlayPortal>
+      <div
+        ref={contentRef}
+        id={menuId}
+        role="menu"
+        tabIndex={-1}
+        style={{
+          position: "fixed",
+          top: position.top,
+          left: position.left,
+          transform: position.transform
+        }}
+        className={classes("ss-dropdown__content", `ss-dropdown__content--${align}`, className)}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </div>
+    </OverlayPortal>
   );
 }
 

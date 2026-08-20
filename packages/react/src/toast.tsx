@@ -78,11 +78,13 @@ export function ToastProvider({ children, duration = 5000 }: ToastProviderProps)
     };
   }, []);
 
+  const viewportLive = toasts.some((entry) => entry.variant === "destructive") ? "assertive" : "polite";
+
   return (
     <ToastContext.Provider value={{ toast, dismiss }}>
       {children}
       <OverlayPortal>
-        <div className="ss-toast-viewport" aria-live="polite" aria-relevant="additions">
+        <div className="ss-toast-viewport" aria-live={viewportLive} aria-relevant="additions">
           {toasts.map((entry) => (
             <div
               key={entry.id}

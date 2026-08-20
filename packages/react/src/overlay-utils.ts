@@ -44,7 +44,11 @@ export function useFocusTrap(
     const container = containerRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const focusables = getFocusableElements(container);
-    focusables[0]?.focus();
+    if (focusables[0]) {
+      focusables[0].focus();
+    } else {
+      container.focus();
+    }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
@@ -52,6 +56,7 @@ export function useFocusTrap(
       const items = getFocusableElements(container);
       if (items.length === 0) {
         event.preventDefault();
+        container.focus();
         return;
       }
 
@@ -77,21 +82,114 @@ export function useFocusTrap(
   }, [active, containerRef, restoreFocusRef]);
 }
 
+let scrollLockCount = 0;
+let savedBodyOverflow: string | null = null;
+
 export function useBodyScrollLock(active: boolean) {
   React.useEffect(() => {
-    if (!active) {
-      document.body.style.removeProperty("overflow");
-      return;
+    if (!active) return;
+
+    scrollLockCount += 1;
+    if (scrollLockCount === 1) {
+      savedBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
     }
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     return () => {
-      if (previousOverflow) {
-        document.body.style.overflow = previousOverflow;
-      } else {
-        document.body.style.removeProperty("overflow");
+      scrollLockCount -= 1;
+      if (scrollLockCount <= 0) {
+        scrollLockCount = 0;
+        if (savedBodyOverflow) {
+          document.body.style.overflow = savedBodyOverflow;
+        } else {
+          document.body.style.removeProperty("overflow");
+        }
+        savedBodyOverflow = null;
       }
     };
   }, [active]);
+}
+
+export interface FloatingPositionOptions {
+  side?: "top" | "bottom";
+  align?: "start" | "center" | "end";
+  gap?: number;
+}
+
+export function useFloatingPosition(
+  open: boolean,
+  triggerRef: React.RefObject<HTMLElement | null>,
+  options: FloatingPositionOptions = {}
+): { top: number; left: number; transform?: string } | null {
+  const { side = "bottom", align = "start", gap = 8 } = options;
+  const [position, setPosition] = React.useState<{
+    top: number;
+    left: number;
+    transform?: string;
+  } | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (!open || !triggerRef.current) {
+      setPosition(null);
+      return;
+    }
+
+    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const top = side === "bottom" ? triggerRect.bottom + gap : triggerRect.top - gap;
+    let left = triggerRect.left;
+    let transform: string | undefined;
+
+    if (align === "center") {
+      left = triggerRect.left + triggerRect.width / 2;
+      transform = side === "top" ? "translate(-50%, -100%)" : "translateX(-50%)";
+    } else if (align === "end") {
+      left = triggerRect.right;
+      transform = side === "top" ? "translate(-100%, -100%)" : "translateX(-100%)";
+    } else if (side === "top") {
+      transform = "translateY(-100%)";
+    }
+
+    setPosition({ top, left, transform });
+  }, [align, gap, open, side, triggerRef]);
+
+  return position;
+}
+
+export function useDismissOnOutsideClick(
+  active: boolean,
+  refs: Array<React.RefObject<Node | null>>,
+  onDismiss: () => void
+) {
+  React.useEffect(() => {
+    if (!active) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (refs.some((ref) => ref.current?.contains(target))) return;
+      onDismiss();
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [active, onDismiss, refs]);
+}
+
+export function useEscapeToClose(
+  active: boolean,
+  onClose: () => void,
+  restoreFocusRef?: React.RefObject<HTMLElement | null>
+) {
+  React.useEffect(() => {
+    if (!active) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onClose();
+      restoreFocusRef?.current?.focus();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [active, onClose, restoreFocusRef]);
 }

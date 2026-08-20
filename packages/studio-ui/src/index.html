@@ -48,6 +48,12 @@
           <label>Medium radius<input id="radiusMd" /></label>
         </div>
         <div class="row">
+          <label>Small radius<input id="radiusSm" /></label>
+          <label>Large radius<input id="radiusLg" /></label>
+        </div>
+        <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
+        <label>Monospace font<input id="fontMono" /></label>
+        <div class="row">
           <label
             >Density<select id="density">
               <option>compact</option>
@@ -77,6 +83,20 @@
           >
           <label>Minimum target<input id="target" type="number" min="24" max="64" /></label>
         </div>
+        <div class="row">
+          <label
+            >Default mode<select id="modeDefault">
+              <option>system</option>
+              <option>light</option>
+              <option>dark</option>
+            </select></label
+          >
+          <label class="ss-label ss-label--inline">
+            <input id="reducedMotion" type="checkbox" />
+            Reduced motion default
+          </label>
+        </div>
+        <p class="field-help">Mode default and reduced motion are saved to config; preview toggle controls the live demo theme.</p>
       </aside>
       <section class="preview">
         <article class="ss-card preview-theme" id="preview-root" data-theme="light">
@@ -468,6 +488,62 @@
                 </svg>
               </span>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">KPI &amp; charts</h4>
+            <div class="demo-row" style="flex-wrap: wrap; align-items: stretch">
+              <article class="ss-kpi-card ss-kpi-card--primary" style="min-width: 14rem; flex: 1">
+                <div class="ss-kpi-card__header">
+                  <p class="ss-kpi-card__title">Monthly revenue</p>
+                  <span class="ss-kpi-card__trend ss-kpi-card__trend--up">+12.4%</span>
+                </div>
+                <p class="ss-kpi-card__value">$84,250</p>
+                <div class="ss-kpi-card__chart">
+                  <svg class="ss-sparkline ss-sparkline--primary" width="120" height="36" viewBox="0 0 120 36" role="img" aria-label="Revenue sparkline">
+                    <polyline class="ss-sparkline__line" fill="none" points="2,28 22,22 42,24 62,14 82,16 102,8 118,4" />
+                  </svg>
+                </div>
+              </article>
+              <article class="ss-kpi-card" style="min-width: 14rem; flex: 1">
+                <div class="ss-kpi-card__header">
+                  <p class="ss-kpi-card__title">Active users</p>
+                  <span class="ss-kpi-card__trend ss-kpi-card__trend--neutral">+2.1%</span>
+                </div>
+                <p class="ss-kpi-card__value">12,480</p>
+                <div class="ss-kpi-card__chart ss-bar-chart ss-bar-chart--primary">
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 45%"></div><span class="ss-bar-chart__label">M</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 72%"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 58%"></div><span class="ss-bar-chart__label">W</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 88%"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 64%"></div><span class="ss-bar-chart__label">F</span></div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Layout &amp; page shell</h4>
+            <div class="ss-top-bar">
+              <div class="ss-top-bar__brand">Acme Dashboard</div>
+              <div class="ss-top-bar__actions">
+                <button class="ss-button ss-button--ghost ss-button--sm" type="button" aria-label="Open menu">
+                  <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+                </button>
+                <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
+              </div>
+            </div>
+            <header class="ss-page-header">
+              <div class="ss-page-header__content">
+                <h1 class="ss-page-header__title">Overview</h1>
+                <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
+              </div>
+            </header>
+            <div class="ss-box ss-box--gap-md" style="display: flex">
+              <div class="ss-kpi-card ss-kpi-card--muted" style="flex: 1"><p class="ss-kpi-card__title">Flex row</p><p class="ss-kpi-card__value">Box</p></div>
+              <div class="ss-kpi-card" style="flex: 1"><p class="ss-kpi-card__title">Gap md</p><p class="ss-kpi-card__value">Stack</p></div>
+            </div>
+            <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
           </section>
 
           <div id="checks"></div>

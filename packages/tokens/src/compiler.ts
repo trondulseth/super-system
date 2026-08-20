@@ -36,6 +36,8 @@ ${colorVariables(config.themes.light)}
   --ss-radius-lg: ${config.radius.lg};
   --ss-radius-full: ${config.radius.full};
   --ss-target-min: ${config.accessibility.minimumTargetSize}px;
+  --ss-overlay-backdrop: color-mix(in srgb, var(--ss-color-foreground) 45%, transparent);
+  --ss-overlay-shadow: 0 16px 40px color-mix(in srgb, var(--ss-color-foreground) 14%, transparent);
   color-scheme: light;
 }
 
