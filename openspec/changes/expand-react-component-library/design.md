@@ -1,10 +1,14 @@
 # Design: Expanded React Component Library
 
+## Status
+
+Batch 1 (form and feedback) is **complete**. API conventions for labels, cards, ThemeProvider, and module layout are documented in the archived [polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality) change. Batch 2 targets navigation and disclosure next.
+
 ## Component batches
 
-1. Form and feedback: Textarea, Label, Checkbox, Radio Group, Switch, Select, Alert, Spinner, Skeleton, Tooltip, and a normalized Icon wrapper.
-2. Navigation and disclosure: Tabs, Accordion, Breadcrumb, Dropdown Menu, and Pagination.
-3. Data and overlays: Table primitives, Dialog, Drawer, Popover, and Toast.
+1. **Form and feedback (done):** Textarea, Label, Checkbox, Radio Group, Switch, Select, Alert, Spinner, Skeleton, Tooltip. Icon wrapper remains planned.
+2. **Navigation and disclosure (next):** Tabs, Accordion, Breadcrumb, Dropdown Menu, and Pagination.
+3. **Data and overlays:** Table primitives, Dialog, Drawer, Popover, and Toast.
 
 Each component exposes documented variants and state attributes, forwards refs where its root is a DOM element, and consumes semantic Super System variables. Components that need generated identifiers use React-safe stable IDs.
 

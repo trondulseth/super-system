@@ -1,9 +1,11 @@
 # Tasks: Expand the React Component Library
 
+> **Status:** Batch 1 form and feedback components are implemented and polished ([archive/2026-08-20-polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality)). Next up: Batch 2 navigation and disclosure.
+
 ## Foundation
 
-- [ ] Finalize the component priority order and public API conventions.
-- [ ] Add any required semantic tokens with light/dark defaults and validation.
+- [x] Finalize the component priority order and public API conventions for Batch 1 (see polish archive for label, card, and ThemeProvider conventions).
+- [ ] Add any required semantic tokens with light/dark defaults and validation for Batch 2+ overlays.
 - [ ] Select and document the dependency approach for complex accessible primitives.
 - [ ] Select the default icon package and define the normalized icon contract.
 

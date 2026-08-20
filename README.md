@@ -131,13 +131,13 @@ Studio opens locally in your browser. It does not upload your project or theme a
 
 Use it to preview and adjust:
 
-- light and dark colors;
+- light and dark colors, including semantic colors (muted, border, destructive, focus);
 - font family and base size;
 - component density;
 - border radius;
 - minimum interactive target size;
 - AA or AAA contrast requirements;
-- icon-library preference.
+- icon-library preference (saved as metadata for a future icon adapter).
 
 Click **Save theme**. Studio updates `super-system.json` and regenerates `.super-system/theme.css` automatically.
 
@@ -270,7 +270,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ### Add a theme switcher
 
-Super System reads the `data-theme` attribute on the root `<html>` element:
+Prefer `ThemeProvider` for light, dark, and system mode. It persists the user's choice when `enablePersistence` is true and reacts to operating-system color preference changes in system mode.
+
+For a manual switcher, Super System reads the `data-theme` attribute on the root `<html>` element:
 
 ```tsx
 type Theme = "light" | "dark" | "system";
@@ -286,9 +288,13 @@ function selectTheme(theme: Theme) {
 }
 ```
 
-Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` from your own menu or buttons.
+Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` from your own menu or buttons, or use `ThemeProvider` with `defaultMode` instead.
 
-## Components in the first beta
+## React components (Batch 1)
+
+The beta ships **20 exports** from `@super-system/react`: `Button`, `Input`, `Textarea`, `Label`, `Checkbox`, `RadioGroup`, `Radio`, `Switch`, `Select`, `Alert`, `Spinner`, `Skeleton`, `Tooltip`, `Badge`, `Card`, `CardHeader`, `CardTitle`, `CardBody`, `CardFooter`, and `ThemeProvider`.
+
+Each component is token-driven, supports light and dark themes, and includes copy-ready examples below.
 
 ### Button
 
@@ -611,7 +617,7 @@ Super System does not depend on an AI tool. Its files and commands work with hum
 If you use an AI assistant, give it this project rule:
 
 ```text
-Use components from @super-system/react for buttons, inputs, badges, and cards.
+Use components from @super-system/react for buttons, inputs, textareas, labels, checkboxes, radio groups, switches, selects, alerts, spinners, skeletons, tooltips, badges, cards, and theme switching.
 Use semantic Super System CSS variables instead of hard-coded colors or spacing.
 Treat super-system.json as the single source of truth.
 Never edit .super-system/theme.css manually.
@@ -659,25 +665,27 @@ npx @super-system/cli studio --port 5000
 
 ## Beta roadmap
 
-The first beta deliberately starts small. Planned work includes:
+Batch 1 form and feedback components are **shipped and polished** (see archived change `2026-08-20-polish-batch1-quality`). Next planned work:
 
-- form fields, textarea, select, checkbox, radio, switch, dialog, drawer, toast, tabs, and table;
+- **Batch 2 — navigation and disclosure:** tabs, accordion, breadcrumb, dropdown menu, pagination;
+- **Batch 3 — overlays and data:** dialog, drawer, popover, toast, table primitives;
 - automatic icon-package installation and normalized icon components;
 - a safer assisted migration workflow for existing projects;
 - ESLint rules and deeper framework-aware audits;
 - optional AI instruction adapters;
-- hosted theme sharing in addition to the private local Studio;
-- visual regression and expanded accessibility testing.
+- hosted theme sharing in addition to the private local Studio.
 
-The [Studio browser demo](https://trondulseth.github.io/super-system/) is already available on GitHub Pages and stays in sync with the local Studio UI through the shared `@super-system/studio-ui` package.
+The [Studio browser demo](https://trondulseth.github.io/super-system/) is available on GitHub Pages and stays in sync with the local Studio UI through the shared `@super-system/studio-ui` package.
 
 ## Product specifications and roadmap
 
 Super System uses [OpenSpec](https://openspec.dev/) to keep the product plan reviewable and close to the code.
 
 - [`openspec/specs`](./openspec/specs) describes what the current beta does today.
-- [`openspec/changes`](./openspec/changes) contains complete proposals, technical designs, acceptance requirements, and implementation checklists for planned work.
-- [`openspec/changes/archive`](./openspec/changes/archive) records the completed bootstrap that produced the current public beta.
+- [`openspec/changes`](./openspec/changes) contains active proposals, technical designs, acceptance requirements, and implementation checklists for planned work.
+- [`openspec/changes/archive`](./openspec/changes/archive) records completed changes, including the bootstrap beta, Batch 1 component expansion, Studio GitHub Pages demo, and the Batch 1 quality polish pass.
+
+Active work to watch: [`expand-react-component-library`](./openspec/changes/expand-react-component-library) (Batch 2 navigation components next).
 
 Before implementing a planned feature, review its OpenSpec change. When the work and verification tasks are complete, sync the living specification and archive the change. This gives people and AI coding tools the same source of truth.
 
@@ -693,7 +701,7 @@ pnpm install
 pnpm check
 ```
 
-`pnpm check` runs strict TypeScript validation, unit tests, and production builds for every package.
+`pnpm check` runs strict TypeScript validation, **47 unit tests**, production builds for every package, and a Studio demo build verification.
 
 ## License
 

@@ -1,8 +1,12 @@
 # Expand the React Component Library
 
+## Status
+
+**Batch 1 (form and feedback) is complete and polished.** Shipped components: Textarea, Label, Checkbox, RadioGroup, Radio, Switch, Select, Alert, Spinner, Skeleton, and Tooltip — plus quality hardening in [archive/2026-08-20-polish-batch1-quality](../archive/2026-08-20-polish-batch1-quality). **Batch 2 (navigation and disclosure) is next.**
+
 ## Problem
 
-The beta proves the shared-token model but only includes Button, Input, Badge, Card, and ThemeProvider. Real SaaS products still have to invent many common controls, which reintroduces inconsistent markup, spacing, state handling, and accessibility.
+The beta originally proved the shared-token model with only Button, Input, Badge, Card, and ThemeProvider. Real SaaS products still needed common form and feedback controls; Batch 1 closed that gap. Navigation, overlays, and data primitives remain for later batches.
 
 ## Goals
 
@@ -39,4 +43,4 @@ The beta proves the shared-token model but only includes Button, Input, Badge, C
 
 ## Rollout
 
-Deliver components in reviewed batches, starting with simple form and layout primitives, followed by overlays and navigation. Document and test each batch before publishing it under the beta tag.
+Deliver components in reviewed batches. Batch 1 is complete. Continue with Batch 2 navigation and disclosure, then Batch 3 overlays and data primitives. Document and test each batch before publishing it under the beta tag.

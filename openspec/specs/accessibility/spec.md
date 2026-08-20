@@ -31,12 +31,33 @@ Interactive components SHALL display a visible focus indicator when operated fro
 - **THEN** a visible token-driven focus treatment is rendered
 
 ### Requirement: Semantic component behavior
-Components SHALL preserve native semantics and accessibility attributes for their underlying controls.
+Components SHALL preserve native semantics and accessibility attributes for their underlying controls. Composite labeling components SHALL propagate required and disabled state to associated controls when composed as documented.
 
 #### Scenario: Assistive technology inspects a disabled control
 - **GIVEN** a disabled Super System control
 - **WHEN** assistive technology reads it
 - **THEN** the disabled state is programmatically available
+
+#### Scenario: A required labeled control is inspected
+- **GIVEN** a required field using the documented wrapping label pattern
+- **WHEN** assistive technology reads the control
+- **THEN** the required state is programmatically available
+
+### Requirement: Live region appropriateness
+Informational alerts SHALL default to non-interrupting live region semantics unless configured for urgent interruption.
+
+#### Scenario: A neutral alert is announced
+- **GIVEN** a neutral informational alert
+- **WHEN** it appears after page load
+- **THEN** assistive technology can treat it as a status update rather than an urgent interruption by default
+
+### Requirement: High contrast and motion preferences
+Interactive component styles SHALL remain operable under forced-colors mode, and non-essential motion SHALL respect reduced-motion preferences in component-level styles.
+
+#### Scenario: A keyboard user focuses a control in forced-colors mode
+- **GIVEN** forced-colors mode is active
+- **WHEN** focus reaches a Super System interactive component
+- **THEN** a visible focus treatment or system highlight remains available
 
 ### Requirement: Honest accessibility scope
 Documentation SHALL state that automated contrast and static checks do not constitute WCAG certification and that keyboard, screen-reader, zoom, content, and workflow testing remain the application's responsibility.
