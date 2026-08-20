@@ -86,6 +86,13 @@ aside select {
   gap: 10px;
 }
 
+.field-help {
+  margin: -4px 0 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #64748b;
+}
+
 .actions {
   display: flex;
   gap: 8px;

@@ -30,38 +30,38 @@ Behavior and preview parity for assistive technology and the live demo.
 
 Structural improvements and consistency before expanding the library.
 
-- [ ] Split `packages/react/src/index.tsx` into per-component modules with barrel re-export.
-- [ ] Add optional `label` prop to Checkbox and Switch (Radio parity); document `className` placement rules.
-- [ ] Add `CardHeader`, `CardTitle`, `CardBody`, `CardFooter` composable exports and styles.
-- [ ] Merge Tooltip `aria-describedby` with existing trigger IDs when open.
-- [ ] Add Tooltip `display` prop for layout-sensitive triggers; document clipping limitation.
-- [ ] Refactor ThemeProvider: `defaultMode`, `enablePersistence`, `matchMedia` listener for system mode.
-- [ ] Keep backward-compatible `mode` prop alias with JSDoc deprecation note.
-- [ ] Extend invalid-state styling with subtle destructive background tint on all form controls.
-- [ ] Improve Switch unchecked thumb contrast.
-- [ ] Add `prefers-reduced-motion` and `forced-colors` rules to `styles.css`.
-- [ ] Add tests: Tooltip ID merge, Card composition, Checkbox/Switch label prop, ThemeProvider system/storage.
-- [ ] Run `pnpm check`.
+- [x] Split `packages/react/src/index.tsx` into per-component modules with barrel re-export.
+- [x] Add optional `label` prop to Checkbox and Switch (Radio parity); document `className` placement rules.
+- [x] Add `CardHeader`, `CardTitle`, `CardBody`, `CardFooter` composable exports and styles.
+- [x] Merge Tooltip `aria-describedby` with existing trigger IDs when open.
+- [x] Add Tooltip `display` prop for layout-sensitive triggers; document clipping limitation.
+- [x] Refactor ThemeProvider: `defaultMode`, `enablePersistence`, `matchMedia` listener for system mode.
+- [x] Keep backward-compatible `mode` prop alias with JSDoc deprecation note.
+- [x] Extend invalid-state styling with subtle destructive background tint on all form controls.
+- [x] Improve Switch unchecked thumb contrast.
+- [x] Add `prefers-reduced-motion` and `forced-colors` rules to `styles.css`.
+- [x] Add tests: Tooltip ID merge, Card composition, Checkbox/Switch label prop, ThemeProvider system/storage.
+- [x] Run `pnpm check`.
 
 ## Phase 4 — Verification closure and docs (PR 4)
 
 Complete Batch 1 quality bar and close related expand-change verification items.
 
-- [ ] Add Button tests: loading, `aria-busy`, disabled-when-loading, ref forward.
-- [ ] Add Badge variant tests.
-- [ ] Add Card composable layout tests.
-- [ ] Add ThemeProvider tests: OS theme change simulation, persistence on/off.
-- [ ] Add Input/Textarea invalid background visual regression or class assertion tests.
-- [ ] Add Studio icons metadata helper text in `index.html`.
-- [ ] Update README: ThemeProvider API, Label patterns, Tooltip limits, Card composition, forced-colors manual checklist.
-- [ ] Mark applicable Batch 1 verification items complete in `expand-react-component-library/tasks.md`.
-- [ ] Verify tree-shakable imports still pass after module split.
+- [x] Add Button tests: loading, `aria-busy`, disabled-when-loading, ref forward.
+- [x] Add Badge variant tests.
+- [x] Add Card composable layout tests.
+- [x] Add ThemeProvider tests: OS theme change simulation, persistence on/off.
+- [x] Add Input/Textarea invalid background visual regression or class assertion tests.
+- [x] Add Studio icons metadata helper text in `index.html`.
+- [x] Update README: ThemeProvider API, Label patterns, Tooltip limits, Card composition, forced-colors manual checklist.
+- [x] Mark applicable Batch 1 verification items complete in `expand-react-component-library/tasks.md`.
+- [x] Verify tree-shakable imports still pass after module split.
 - [ ] Run full `pnpm check` and confirm GitHub Pages demo deploy succeeds.
 
 ## Exit criteria
 
-- [ ] All 25 review findings from the Batch 1 quality pass are addressed or explicitly documented with rationale.
+- [x] All 25 review findings from the Batch 1 quality pass are addressed or explicitly documented with rationale.
 - [ ] Living specs synced via archive/sync after implementation.
-- [ ] No hardcoded theme colors remain in `@super-system/react` component CSS.
-- [ ] Studio demo reflects every Batch 1 component state (default, disabled, invalid, neutral).
-- [ ] Batch 2 (`expand-react-component-library` navigation batch) does not start until this change is archived.
+- [x] No hardcoded theme colors remain in `@super-system/react` component CSS.
+- [x] Studio demo reflects every Batch 1 component state (default, disabled, invalid, neutral).
+- [x] Batch 2 (`expand-react-component-library` navigation batch) does not start until this change is archived.

@@ -554,6 +554,21 @@ The default theme passes its configured WCAG AA contrast threshold. If any confi
 
 Automated tools can identify many accessibility issues, but no automated tool can certify an entire product as WCAG compliant. Keyboard testing, screen-reader testing, content review, and human judgment are still important.
 
+### Manual verification checklist
+
+After theme or component changes, spot-check Batch 1 controls in both light and dark themes:
+
+| Check | How to verify |
+| --- | --- |
+| Keyboard focus | Tab through Button, Input, Textarea, Checkbox, Radio, Switch, Select, and Tooltip triggers; confirm visible focus rings. |
+| Reduced motion | Enable `prefers-reduced-motion: reduce` in devtools; confirm spinner and skeleton animations stop. |
+| Forced colors | Enable forced-colors / high-contrast mode; confirm inputs, checkbox, radio, switch, and select borders remain visible. |
+| Invalid states | Trigger `invalid` on Input, Textarea, Select, Checkbox, and Switch; confirm border and subtle background tint. |
+| Live regions | Confirm destructive `Alert` uses `role="alert"` and neutral/primary alerts default to `role="status"`. |
+| Zoom | At 200% browser zoom, confirm labels, controls, and Studio previews remain readable and usable. |
+
+Component CSS includes `prefers-reduced-motion` and `forced-colors` fallbacks; zoom and screen-reader behavior still require manual verification in your application layout.
+
 ## CLI reference
 
 | Command | What it does |

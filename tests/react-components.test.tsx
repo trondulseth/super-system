@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   Alert,
+  Badge,
   Button,
   Card,
   CardBody,
@@ -40,6 +41,46 @@ afterEach(() => {
   document.body.innerHTML = "";
   document.documentElement.removeAttribute("data-theme");
   window.localStorage.clear();
+});
+
+describe("Button", () => {
+  it("forwards refs to the native button element", () => {
+    const ref = createRef<HTMLButtonElement>();
+    const container = render(<Button ref={ref}>Save</Button>);
+
+    const button = container.querySelector("button");
+    expect(ref.current).toBe(button);
+    expect(button?.textContent).toContain("Save");
+  });
+
+  it("communicates loading state and prevents duplicate activation", () => {
+    const container = render(
+      <Button loading variant="primary">
+        Saving
+      </Button>
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.getAttribute("aria-busy")).toBe("true");
+    expect(button?.disabled).toBe(true);
+    expect(container.querySelector(".ss-spinner")).not.toBeNull();
+  });
+});
+
+describe("Badge", () => {
+  it("renders documented variants", () => {
+    const container = render(
+      <>
+        <Badge variant="neutral">Draft</Badge>
+        <Badge variant="primary">Active</Badge>
+        <Badge variant="destructive">Blocked</Badge>
+      </>
+    );
+
+    expect(container.querySelector(".ss-badge--neutral")?.textContent).toBe("Draft");
+    expect(container.querySelector(".ss-badge--primary")?.textContent).toBe("Active");
+    expect(container.querySelector(".ss-badge--destructive")?.textContent).toBe("Blocked");
+  });
 });
 
 describe("Spinner", () => {
@@ -308,6 +349,11 @@ describe("Textarea", () => {
     expect(field?.getAttribute("aria-invalid")).toBe("true");
   });
 
+  it("applies invalid styling class for background tint", () => {
+    const container = render(<Textarea invalid defaultValue="Too short" />);
+    expect(container.querySelector(".ss-textarea--invalid")).not.toBeNull();
+  });
+
   it("applies disabled styling and native disabled state", () => {
     const container = render(<Textarea disabled defaultValue="Read only" />);
     const field = container.querySelector("textarea");
@@ -326,6 +372,11 @@ describe("Input", () => {
     expect(field?.getAttribute("aria-invalid")).toBe("true");
   });
 
+  it("applies invalid styling class for background tint", () => {
+    const container = render(<Input invalid defaultValue="Bad value" />);
+    expect(container.querySelector(".ss-input--invalid")).not.toBeNull();
+  });
+
   it("applies disabled styling and native disabled state", () => {
     const container = render(<Input disabled defaultValue="Read only" />);
     const field = container.querySelector("input");
@@ -336,6 +387,14 @@ describe("Input", () => {
 });
 
 describe("Card", () => {
+  it("renders a bare card surface", () => {
+    const container = render(<Card>Simple content</Card>);
+    const card = container.querySelector(".ss-card");
+
+    expect(card).not.toBeNull();
+    expect(card?.textContent).toBe("Simple content");
+  });
+
   it("renders composable card parts", () => {
     const container = render(
       <Card>
@@ -393,5 +452,27 @@ describe("ThemeProvider", () => {
     });
 
     expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+  });
+
+  it("ignores stored preferences when persistence is disabled", () => {
+    window.localStorage.setItem("super-system-theme", "dark");
+
+    render(
+      <ThemeProvider defaultMode="light" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("light");
+  });
+
+  it("supports the deprecated mode alias as defaultMode", () => {
+    render(
+      <ThemeProvider mode="dark" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
   });
 });
