@@ -7,6 +7,11 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   Alert,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Checkbox,
   Input,
   Label,
@@ -17,6 +22,7 @@ import {
   Spinner,
   Switch,
   Textarea,
+  ThemeProvider,
   Tooltip
 } from "../packages/react/src/index.js";
 
@@ -32,6 +38,8 @@ function render(element: ReactElement): HTMLElement {
 
 afterEach(() => {
   document.body.innerHTML = "";
+  document.documentElement.removeAttribute("data-theme");
+  window.localStorage.clear();
 });
 
 describe("Spinner", () => {
@@ -82,6 +90,25 @@ describe("Tooltip", () => {
     expect(button?.getAttribute("aria-describedby")).toBeTruthy();
     expect(container.querySelector('[role="tooltip"]')?.textContent).toBe("Helpful text");
   });
+
+  it("merges aria-describedby with existing trigger ids when open", () => {
+    const container = render(
+      <Tooltip content="Helpful text">
+        <Button variant="secondary" aria-describedby="existing-id">
+          Help
+        </Button>
+      </Tooltip>
+    );
+
+    const button = container.querySelector("button");
+    act(() => {
+      button?.focus();
+    });
+
+    const describedBy = button?.getAttribute("aria-describedby") ?? "";
+    expect(describedBy).toContain("existing-id");
+    expect(describedBy.split(/\s+/).filter(Boolean)).toHaveLength(2);
+  });
 });
 
 describe("Checkbox", () => {
@@ -102,6 +129,14 @@ describe("Checkbox", () => {
 
     expect(field?.disabled).toBe(true);
     expect(field?.className).toContain("ss-checkbox");
+  });
+
+  it("renders an inline label wrapper when label prop is set", () => {
+    const container = render(<Checkbox label="Accept terms" />);
+
+    expect(container.querySelector("label.ss-label--inline")).not.toBeNull();
+    expect(container.querySelector('input[type="checkbox"]')).not.toBeNull();
+    expect(container.textContent).toContain("Accept terms");
   });
 });
 
@@ -128,6 +163,14 @@ describe("Switch", () => {
 
     expect(field?.className).toContain("ss-switch");
     expect(field?.checked).toBe(true);
+  });
+
+  it("renders an inline label wrapper when label prop is set", () => {
+    const container = render(<Switch label="Enable notifications" defaultChecked />);
+
+    expect(container.querySelector("label.ss-label--inline")).not.toBeNull();
+    expect(container.querySelector('input[role="switch"]')).not.toBeNull();
+    expect(container.textContent).toContain("Enable notifications");
   });
 });
 
@@ -289,5 +332,66 @@ describe("Input", () => {
 
     expect(field?.disabled).toBe(true);
     expect(field?.className).toContain("ss-input");
+  });
+});
+
+describe("Card", () => {
+  it("renders composable card parts", () => {
+    const container = render(
+      <Card>
+        <CardHeader>
+          <CardTitle>Account</CardTitle>
+        </CardHeader>
+        <CardBody>Manage your profile settings.</CardBody>
+        <CardFooter>
+          <Button size="sm">Save</Button>
+        </CardFooter>
+      </Card>
+    );
+
+    expect(container.querySelector(".ss-card__header")).not.toBeNull();
+    expect(container.querySelector(".ss-card__title")?.textContent).toBe("Account");
+    expect(container.querySelector(".ss-card__body")?.textContent).toContain("profile settings");
+    expect(container.querySelector(".ss-card__footer")).not.toBeNull();
+  });
+});
+
+describe("ThemeProvider", () => {
+  it("uses defaultMode when persistence is disabled", () => {
+    render(
+      <ThemeProvider defaultMode="dark" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("reads stored preference when persistence is enabled", () => {
+    window.localStorage.setItem("super-system-theme", "dark");
+
+    render(
+      <ThemeProvider defaultMode="light" enablePersistence>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("clears data-theme for system mode and responds to preference changes", () => {
+    render(
+      <ThemeProvider defaultMode="system" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+
+    act(() => {
+      window.matchMedia("(prefers-color-scheme: dark)").dispatchEvent(new Event("change"));
+    });
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
   });
 });

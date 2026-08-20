@@ -206,6 +206,15 @@ The generated theme supports three modes:
 - `dark` — always dark;
 - `system` — follows the visitor's operating-system preference.
 
+`ThemeProvider` props:
+
+- `defaultMode` — initial mode when no stored preference exists (default `"system"`);
+- `enablePersistence` — read/write `localStorage` using `storageKey` (default `true`);
+- `storageKey` — storage key for the user's theme choice (default `"super-system-theme"`);
+- `mode` — deprecated alias for `defaultMode`.
+
+When `defaultMode="system"`, the provider listens for operating-system color preference changes. The `mode` prop remains supported for compatibility but `defaultMode` is preferred.
+
 ### Vite/React
 
 Wrap your app with `ThemeProvider`:
@@ -218,7 +227,7 @@ import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider mode="system">
+    <ThemeProvider defaultMode="system">
       <App />
     </ThemeProvider>
   </StrictMode>,
@@ -236,7 +245,7 @@ createRoot(document.getElementById("root")!).render(
 import { ThemeProvider } from "@super-system/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider mode="system">{children}</ThemeProvider>;
+  return <ThemeProvider defaultMode="system">{children}</ThemeProvider>;
 }
 ```
 
@@ -363,12 +372,16 @@ When a wrapping label sets `required`, the child receives `required` and `aria-r
 ### Checkbox
 
 ```tsx
+<Checkbox label="Email me product updates" defaultChecked />
+<Checkbox invalid aria-describedby="terms-error" />
+
 <Label inline>
   <Checkbox defaultChecked />
   Email me product updates
 </Label>
-<Checkbox invalid aria-describedby="terms-error" />
 ```
+
+When `label` is provided, `Checkbox` renders an inline label wrapper and `className` applies to that wrapper. Without `label`, `className` applies to the input.
 
 ### Radio group
 
@@ -384,14 +397,16 @@ When a wrapping label sets `required`, the child receives `required` and `aria-r
 ### Switch
 
 ```tsx
+<Switch label="Enable notifications" defaultChecked />
+<Switch invalid aria-describedby="switch-error" />
+
 <Label inline>
   <Switch defaultChecked />
   Enable notifications
 </Label>
-<Switch invalid aria-describedby="switch-error" />
 ```
 
-`Switch` uses the native checkbox with `role="switch"`.
+`Switch` uses the native checkbox with `role="switch"`. The `label` prop and `className` placement follow the same rules as `Checkbox`.
 
 ### Select
 
@@ -454,7 +469,7 @@ Skeleton placeholders are marked `aria-hidden` because surrounding content shoul
 </Tooltip>
 ```
 
-Tooltip content appears on hover and focus, links with `aria-describedby`, and closes on Escape.
+Tooltip content appears on hover and focus, merges with any existing `aria-describedby` ids on the trigger, and closes on Escape. Tooltips render inline without a portal, so they may clip inside overflow containers. Use the optional `display` prop (`inline`, `inline-flex`, or `block`) when the wrapper affects layout.
 
 ### Badge
 
@@ -468,9 +483,19 @@ Tooltip content appears on hover and focus, links with `aria-describedby`, and c
 
 ```tsx
 <Card>Any React content can go here.</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle>Account</CardTitle>
+  </CardHeader>
+  <CardBody>Manage your profile settings.</CardBody>
+  <CardFooter>
+    <Button size="sm">Save</Button>
+  </CardFooter>
+</Card>
 ```
 
-`Card` provides the shared surface, border, radius, foreground, and padding.
+`Card` provides the shared surface, border, and radius. Bare cards keep padding; composable `CardHeader`, `CardTitle`, `CardBody`, and `CardFooter` parts handle structured layouts.
 
 ## Find inconsistent UI with Audit
 
