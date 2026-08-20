@@ -61,7 +61,7 @@ Complete Batch 1 quality bar and close related expand-change verification items.
 ## Exit criteria
 
 - [x] All 25 review findings from the Batch 1 quality pass are addressed or explicitly documented with rationale.
-- [ ] Living specs synced via archive/sync after implementation.
+- [x] Living specs synced via archive/sync after implementation.
 - [x] No hardcoded theme colors remain in `@super-system/react` component CSS.
 - [x] Studio demo reflects every Batch 1 component state (default, disabled, invalid, neutral).
 - [x] Batch 2 (`expand-react-component-library` navigation batch) does not start until this change is archived.
