@@ -1,0 +1,25 @@
+{
+  "name": "@super-system/tokens",
+  "version": "0.1.0-beta.1",
+  "description": "Portable design tokens, CSS generation, and contrast checks for Super System.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trondulseth/super-system.git",
+    "directory": "packages/tokens"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

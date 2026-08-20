@@ -1,0 +1,32 @@
+{
+  "name": "super-system",
+  "version": "0.1.0-beta.1",
+  "description": "Initialize, customize, and audit a consistent design system in React projects.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "super-system": "./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trondulseth/super-system.git",
+    "directory": "packages/cli"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@super-system/tokens": "0.1.0-beta.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

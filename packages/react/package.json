@@ -1,0 +1,30 @@
+{
+  "name": "@super-system/react",
+  "version": "0.1.0-beta.1",
+  "description": "Accessible React components for Super System.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": ["**/*.css"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trondulseth/super-system.git",
+    "directory": "packages/react"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm --dts --external react --clean && cp src/styles.css dist/styles.css"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
