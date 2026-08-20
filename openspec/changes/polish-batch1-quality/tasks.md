@@ -4,13 +4,13 @@
 
 Token leaks and missing states that break themes or misrepresent control state.
 
-- [ ] Replace Select chevron hardcoded `#475569` with token-driven mask/color (`styles.css`).
-- [ ] Replace Checkbox checkmark hardcoded white SVG fill with `primaryForeground` mask.
-- [ ] Add `:disabled` styles for Input, Textarea, and Checkbox (match Button/Select/Switch pattern).
-- [ ] Add Studio sidebar controls for `muted`, `mutedForeground`, `border`, `destructive`, `destructiveForeground`, and `focus`.
-- [ ] Wire new Studio color inputs through `fill()`, `collect()`, and contrast checks in `app.ts`.
-- [ ] Copy updated `components.css` to Studio after React style changes.
-- [ ] Add unit tests for disabled Input/Textarea/Checkbox rendering.
+- [x] Replace Select chevron hardcoded `#475569` with token-driven mask/color (`styles.css`).
+- [x] Replace Checkbox checkmark hardcoded white SVG fill with `primaryForeground` mask.
+- [x] Add `:disabled` styles for Input, Textarea, and Checkbox (match Button/Select/Switch pattern).
+- [x] Add Studio sidebar controls for `muted`, `mutedForeground`, `border`, `destructive`, `destructiveForeground`, and `focus`.
+- [x] Wire new Studio color inputs through `fill()`, `collect()`, and contrast checks in `app.ts`.
+- [x] Copy updated `components.css` to Studio after React style changes.
+- [x] Add unit tests for disabled Input/Textarea/Checkbox rendering.
 - [ ] Run `pnpm check`.
 
 ## Phase 2 — Accessibility and Studio preview (PR 2)

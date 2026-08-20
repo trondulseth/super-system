@@ -184,14 +184,16 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function 
   ref
 ) {
   return (
-    <select
-      ref={ref}
-      className={classes("ss-select", invalid && "ss-select--invalid", className)}
-      aria-invalid={invalid || undefined}
-      {...props}
-    >
-      {children}
-    </select>
+    <span className="ss-select-wrap">
+      <select
+        ref={ref}
+        className={classes("ss-select", invalid && "ss-select--invalid", className)}
+        aria-invalid={invalid || undefined}
+        {...props}
+      >
+        {children}
+      </select>
+    </span>
   );
 });
 

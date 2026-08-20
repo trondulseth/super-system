@@ -95,6 +95,14 @@ describe("Checkbox", () => {
     expect(field?.checked).toBe(true);
     expect(field?.className).toContain("ss-checkbox");
   });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Checkbox disabled />);
+    const field = container.querySelector('input[type="checkbox"]');
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-checkbox");
+  });
 });
 
 describe("Radio group", () => {
@@ -208,6 +216,14 @@ describe("Textarea", () => {
     expect(field?.className).toContain("ss-textarea--invalid");
     expect(field?.getAttribute("aria-invalid")).toBe("true");
   });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Textarea disabled defaultValue="Read only" />);
+    const field = container.querySelector("textarea");
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-textarea");
+  });
 });
 
 describe("Input", () => {
@@ -217,5 +233,13 @@ describe("Input", () => {
 
     expect(field?.className).toContain("ss-input--invalid");
     expect(field?.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Input disabled defaultValue="Read only" />);
+    const field = container.querySelector("input");
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-input");
   });
 });
