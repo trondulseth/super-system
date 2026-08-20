@@ -313,3 +313,17 @@ Every Batch 3 exported overlay and table primitive SHALL have automated tests co
 - **GIVEN** the Batch 3 component set is complete
 - **WHEN** `pnpm check` runs
 - **THEN** tests exist for Dialog, Drawer, Popover, Toast, and Table behaviour
+
+### Requirement: Normalized icon integration
+The package SHALL provide an `Icon` wrapper that normalizes size and alignment for SVG and compatible custom icon components, distinguishes decorative icons from labelled icons, and documents icon-only control patterns where the owning control carries the accessible name.
+
+#### Scenario: An icon-only button is created
+- **GIVEN** a button whose only visible content is an icon
+- **WHEN** the button renders with an accessible name and a decorative icon child
+- **THEN** assistive technology reads the control name from the button
+- **AND** the icon does not expose a duplicate accessible name
+
+#### Scenario: A meaningful standalone icon is rendered
+- **GIVEN** an icon that communicates meaning without adjacent visible text
+- **WHEN** it renders with an explicit label
+- **THEN** it exposes image semantics and the provided label to assistive technology

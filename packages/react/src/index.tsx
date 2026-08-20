@@ -162,3 +162,4 @@ export {
   type TableHeadProps,
   type TableCellProps
 } from "./table.js";
+export { Icon, type IconProps, type IconSize } from "./icon.js";

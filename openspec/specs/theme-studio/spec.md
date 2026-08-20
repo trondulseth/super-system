@@ -62,4 +62,4 @@ The Studio SHALL distinguish configuration metadata fields that do not yet affec
 #### Scenario: Icon library is selected
 - **GIVEN** the icon library select is visible
 - **WHEN** the user reads its helper text
-- **THEN** it is clear the setting is saved for future use and does not yet change preview icons
+- **THEN** it explains how to install the configured library and preview representative icon sizes in the component panel

@@ -1,7 +1,7 @@
 /**
  * @vitest-environment happy-dom
  */
-import { act, createRef, type ReactElement } from "react";
+import { act, createRef, type HTMLAttributes, type ReactElement, type SVGProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
@@ -45,6 +45,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   Input,
+  Icon,
   Label,
   Pagination,
   PaginationContent,
@@ -887,5 +888,91 @@ describe("Table", () => {
     expect(container.querySelector("table")).not.toBeNull();
     expect(container.querySelectorAll('th[scope="col"]').length).toBe(2);
     expect(container.querySelector("td")?.textContent).toBe("Ada");
+  });
+});
+
+function PlusGlyph(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+describe("Icon", () => {
+  it("marks decorative svg icons as hidden from assistive technology", () => {
+    const container = render(
+      <Icon decorative size="md">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </Icon>
+    );
+
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.classList.contains("ss-icon--md")).toBe(true);
+  });
+
+  it("exposes a label for meaningful standalone svg icons", () => {
+    const container = render(
+      <Icon label="Add item" size="lg">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </Icon>
+    );
+
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(svg?.getAttribute("aria-label")).toBe("Add item");
+    expect(svg?.classList.contains("ss-icon--lg")).toBe(true);
+  });
+
+  it("normalizes compatible icon components inside the icon shell", () => {
+    const container = render(
+      <Icon decorative size="md">
+        <PlusGlyph />
+      </Icon>
+    );
+
+    const icon = container.querySelector(".ss-icon");
+    expect(icon?.getAttribute("aria-hidden")).toBe("true");
+    expect(icon?.classList.contains("ss-icon--md")).toBe(true);
+    expect(container.querySelector("svg")).not.toBeNull();
+  });
+
+  it("supports icon-only buttons when the control owns the accessible name", () => {
+    const container = render(
+      <Button aria-label="Add item" variant="secondary">
+        <Icon decorative size="sm">
+          <PlusGlyph />
+        </Icon>
+      </Button>
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.getAttribute("aria-label")).toBe("Add item");
+    expect(button?.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
+  it("wraps compatible non-svg icon components in a normalized shell", () => {
+    function CustomIcon(props: HTMLAttributes<HTMLSpanElement>) {
+      return (
+        <span data-testid="custom-glyph" {...props}>
+          ★
+        </span>
+      );
+    }
+
+    const container = render(
+      <Icon label="Favorite" size="md">
+        <CustomIcon />
+      </Icon>
+    );
+
+    expect(container.querySelector(".ss-icon")?.getAttribute("role")).toBe("img");
+    expect(container.querySelector(".ss-icon")?.getAttribute("aria-label")).toBe("Favorite");
+    expect(container.querySelector("[data-testid='custom-glyph']")?.getAttribute("aria-hidden")).toBe("true");
   });
 });
