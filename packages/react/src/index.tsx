@@ -47,6 +47,24 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
   );
 });
 
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  invalid?: boolean;
+}
+
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
+  { invalid, className, ...props },
+  ref
+) {
+  return (
+    <textarea
+      ref={ref}
+      className={classes("ss-textarea", invalid && "ss-textarea--invalid", className)}
+      aria-invalid={invalid || undefined}
+      {...props}
+    />
+  );
+});
+
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: "neutral" | "primary" | "destructive";
 }

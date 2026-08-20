@@ -12,7 +12,7 @@
   cursor: pointer;
   transition: background-color 160ms ease, border-color 160ms ease, opacity 160ms ease;
 }
-.ss-button:focus-visible, .ss-input:focus-visible {
+.ss-button:focus-visible, .ss-input:focus-visible, .ss-textarea:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--ss-color-focus) 40%, transparent);
   outline-offset: 2px;
 }
@@ -37,6 +37,19 @@
   font: 400 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
 }
 .ss-input--invalid { border-color: var(--ss-color-destructive); }
+
+.ss-textarea {
+  width: 100%;
+  min-height: calc(var(--ss-target-min, 44px) * 2);
+  padding: var(--ss-space-3, 12px);
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md);
+  background: var(--ss-color-background);
+  color: var(--ss-color-foreground);
+  font: 400 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
+  resize: vertical;
+}
+.ss-textarea--invalid { border-color: var(--ss-color-destructive); }
 
 .ss-card {
   padding: var(--ss-space-4, 16px);
