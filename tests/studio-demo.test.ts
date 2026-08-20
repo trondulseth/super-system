@@ -50,6 +50,13 @@ describe("studio demo", () => {
     expect(html).toContain("ss-dropdown__content");
     expect(html).toContain('aria-label="Pagination"');
     expect(html).toContain("ss-pagination__link--active");
+    expect(html).toContain("ss-dialog__content");
+    expect(html).toContain('aria-modal="true"');
+    expect(html).toContain("ss-drawer__content--right");
+    expect(html).toContain("ss-popover__content");
+    expect(html).toContain("ss-toast--primary");
+    expect(html).toContain("ss-table-wrap");
+    expect(html).toContain('scope="col"');
   });
 
   it("uses the same contrast logic as the token package", () => {

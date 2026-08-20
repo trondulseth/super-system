@@ -256,3 +256,60 @@ Every Batch 2 exported navigation and disclosure primitive SHALL have automated 
 - **GIVEN** the Batch 2 component set is complete
 - **WHEN** `pnpm check` runs
 - **THEN** tests exist for Tabs, Accordion, Breadcrumb, DropdownMenu, and Pagination behavior
+
+### Requirement: Dialog component
+The package SHALL provide composable dialog primitives that render modal content in a portal with `role="dialog"`, `aria-modal="true"`, labelled title and description regions, focus trap, body scroll lock, Escape dismissal, and focus restoration to the trigger.
+
+#### Scenario: A dialog is opened from a trigger
+- **GIVEN** a dialog with a trigger and content
+- **WHEN** the user activates the trigger
+- **THEN** the dialog content is rendered in a portal
+- **AND** the dialog exposes modal semantics to assistive technology
+
+#### Scenario: A dialog is closed with Escape
+- **GIVEN** an open dialog opened from a trigger
+- **WHEN** the user presses Escape
+- **THEN** the dialog closes
+- **AND** focus returns to the trigger when it remains available
+
+### Requirement: Drawer component
+The package SHALL provide composable drawer primitives with modal overlay behaviour, portal rendering, configurable `left`, `right`, or `bottom` placement, and the same Escape and focus-restoration behaviour as dialogs.
+
+#### Scenario: A drawer opens from the right
+- **GIVEN** a drawer configured for right-side placement
+- **WHEN** the user opens it from its trigger
+- **THEN** the drawer panel renders in a portal with modal semantics
+
+### Requirement: Popover component
+The package SHALL provide composable popover primitives that render non-modal content in a portal, close on outside pointer interaction and Escape, and associate expanded state with the trigger.
+
+#### Scenario: A popover closes on Escape
+- **GIVEN** an open popover
+- **WHEN** the user presses Escape
+- **THEN** the popover closes
+- **AND** focus returns to the trigger
+
+### Requirement: Toast component
+The package SHALL provide a `ToastProvider` with imperative `useToast` publishing, portal-rendered viewport, auto-dismiss timing, dismiss controls, and live-region semantics that use `role="alert"` for destructive messages and `role="status"` for other variants by default.
+
+#### Scenario: A toast is published
+- **GIVEN** an application wrapped in `ToastProvider`
+- **WHEN** the application publishes a toast
+- **THEN** the toast appears in the portal viewport
+- **AND** it exposes appropriate live-region semantics for its variant
+
+### Requirement: Table primitives
+The package SHALL provide composable table primitives that preserve native table semantics, apply token-driven styling, and wrap tables in a horizontally scrollable container for responsive layouts.
+
+#### Scenario: Assistive technology reads a table
+- **GIVEN** a table composed from Super System table primitives with headers and data cells
+- **WHEN** assistive technology navigates it
+- **THEN** the native row, header, and cell relationships remain available
+
+### Requirement: Batch 3 test coverage
+Every Batch 3 exported overlay and table primitive SHALL have automated tests covering primary interaction, portal rendering where applicable, and documented accessibility behaviour.
+
+#### Scenario: Continuous integration runs
+- **GIVEN** the Batch 3 component set is complete
+- **WHEN** `pnpm check` runs
+- **THEN** tests exist for Dialog, Drawer, Popover, Toast, and Table behaviour
