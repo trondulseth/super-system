@@ -303,6 +303,15 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 `Input` forwards normal HTML input properties and applies `aria-invalid` when `invalid` is true. You are still responsible for providing a visible label.
 
+### Textarea
+
+```tsx
+<Textarea rows={4} placeholder="Tell us about yourself" />
+<Textarea invalid aria-describedby="bio-error" />
+```
+
+`Textarea` mirrors `Input`: it forwards native textarea properties, supports ref forwarding, and applies `aria-invalid` when `invalid` is true.
+
 ### Badge
 
 ```tsx

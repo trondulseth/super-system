@@ -33,6 +33,15 @@ The package SHALL provide an `Input` supporting native input attributes, forward
 - **THEN** its visual state communicates the error
 - **AND** the native accessibility state remains available to assistive technology
 
+### Requirement: Textarea component
+The package SHALL provide a `Textarea` supporting native textarea attributes, forwarded refs, disabled styling, focus styling, and invalid-state styling.
+
+#### Scenario: Textarea validation fails
+- **GIVEN** a textarea marked invalid
+- **WHEN** it renders
+- **THEN** its visual state communicates the error
+- **AND** the native accessibility state remains available to assistive technology
+
 ### Requirement: Badge and Card components
 The package SHALL provide token-driven `Badge` variants and composable `Card` primitives for common status and content layouts.
 

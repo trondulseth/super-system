@@ -22,6 +22,8 @@ describe("studio demo", () => {
     expect(html).toContain("ss-button--destructive");
     expect(html).toContain("ss-button--ghost");
     expect(html).toContain("ss-input--invalid");
+    expect(html).toContain("ss-textarea");
+    expect(html).toContain("ss-textarea--invalid");
     expect(html).toContain("ss-badge--neutral");
     expect(html).toContain("ss-card");
     expect(html).toContain("ss-spinner");
