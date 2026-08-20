@@ -6,7 +6,13 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   Alert,
+  Badge,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   Checkbox,
   Input,
   Label,
@@ -17,6 +23,7 @@ import {
   Spinner,
   Switch,
   Textarea,
+  ThemeProvider,
   Tooltip
 } from "../packages/react/src/index.js";
 
@@ -32,6 +39,48 @@ function render(element: ReactElement): HTMLElement {
 
 afterEach(() => {
   document.body.innerHTML = "";
+  document.documentElement.removeAttribute("data-theme");
+  window.localStorage.clear();
+});
+
+describe("Button", () => {
+  it("forwards refs to the native button element", () => {
+    const ref = createRef<HTMLButtonElement>();
+    const container = render(<Button ref={ref}>Save</Button>);
+
+    const button = container.querySelector("button");
+    expect(ref.current).toBe(button);
+    expect(button?.textContent).toContain("Save");
+  });
+
+  it("communicates loading state and prevents duplicate activation", () => {
+    const container = render(
+      <Button loading variant="primary">
+        Saving
+      </Button>
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.getAttribute("aria-busy")).toBe("true");
+    expect(button?.disabled).toBe(true);
+    expect(container.querySelector(".ss-spinner")).not.toBeNull();
+  });
+});
+
+describe("Badge", () => {
+  it("renders documented variants", () => {
+    const container = render(
+      <>
+        <Badge variant="neutral">Draft</Badge>
+        <Badge variant="primary">Active</Badge>
+        <Badge variant="destructive">Blocked</Badge>
+      </>
+    );
+
+    expect(container.querySelector(".ss-badge--neutral")?.textContent).toBe("Draft");
+    expect(container.querySelector(".ss-badge--primary")?.textContent).toBe("Active");
+    expect(container.querySelector(".ss-badge--destructive")?.textContent).toBe("Blocked");
+  });
 });
 
 describe("Spinner", () => {
@@ -82,6 +131,25 @@ describe("Tooltip", () => {
     expect(button?.getAttribute("aria-describedby")).toBeTruthy();
     expect(container.querySelector('[role="tooltip"]')?.textContent).toBe("Helpful text");
   });
+
+  it("merges aria-describedby with existing trigger ids when open", () => {
+    const container = render(
+      <Tooltip content="Helpful text">
+        <Button variant="secondary" aria-describedby="existing-id">
+          Help
+        </Button>
+      </Tooltip>
+    );
+
+    const button = container.querySelector("button");
+    act(() => {
+      button?.focus();
+    });
+
+    const describedBy = button?.getAttribute("aria-describedby") ?? "";
+    expect(describedBy).toContain("existing-id");
+    expect(describedBy.split(/\s+/).filter(Boolean)).toHaveLength(2);
+  });
 });
 
 describe("Checkbox", () => {
@@ -94,6 +162,22 @@ describe("Checkbox", () => {
     expect(ref.current).toBe(field);
     expect(field?.checked).toBe(true);
     expect(field?.className).toContain("ss-checkbox");
+  });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Checkbox disabled />);
+    const field = container.querySelector('input[type="checkbox"]');
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-checkbox");
+  });
+
+  it("renders an inline label wrapper when label prop is set", () => {
+    const container = render(<Checkbox label="Accept terms" />);
+
+    expect(container.querySelector("label.ss-label--inline")).not.toBeNull();
+    expect(container.querySelector('input[type="checkbox"]')).not.toBeNull();
+    expect(container.textContent).toContain("Accept terms");
   });
 });
 
@@ -120,6 +204,14 @@ describe("Switch", () => {
 
     expect(field?.className).toContain("ss-switch");
     expect(field?.checked).toBe(true);
+  });
+
+  it("renders an inline label wrapper when label prop is set", () => {
+    const container = render(<Switch label="Enable notifications" defaultChecked />);
+
+    expect(container.querySelector("label.ss-label--inline")).not.toBeNull();
+    expect(container.querySelector('input[role="switch"]')).not.toBeNull();
+    expect(container.textContent).toContain("Enable notifications");
   });
 });
 
@@ -153,6 +245,30 @@ describe("Alert", () => {
     expect(alert?.querySelector(".ss-alert__title")?.textContent).toBe("Payment failed");
     expect(alert?.textContent).toContain("Update billing details.");
   });
+
+  it("defaults informational variants to status semantics", () => {
+    const container = render(
+      <>
+        <Alert title="Workspace created">Invite teammates when ready.</Alert>
+        <Alert variant="primary" title="Invite sent">
+          Your teammate can join.
+        </Alert>
+      </>
+    );
+
+    expect(container.querySelectorAll('[role="status"]')).toHaveLength(2);
+    expect(container.querySelector('[role="alert"]')).toBeNull();
+  });
+
+  it("allows liveRegion override", () => {
+    const container = render(
+      <Alert variant="primary" liveRegion="alert" title="Critical notice">
+        Immediate attention required.
+      </Alert>
+    );
+
+    expect(container.querySelector('[role="alert"]')).not.toBeNull();
+  });
 });
 
 describe("Label", () => {
@@ -183,6 +299,30 @@ describe("Label", () => {
     expect(label?.className).toContain("ss-label--disabled");
     expect(label?.querySelector(".ss-label__required")?.textContent).toContain("*");
   });
+
+  it("propagates required to a wrapped control", () => {
+    const container = render(
+      <Label required>
+        Email address
+        <Input type="email" />
+      </Label>
+    );
+
+    const field = container.querySelector("input");
+    expect(field?.required).toBe(true);
+    expect(field?.getAttribute("aria-required")).toBe("true");
+  });
+
+  it("propagates disabled to a wrapped control", () => {
+    const container = render(
+      <Label disabled>
+        Unavailable field
+        <Input type="text" />
+      </Label>
+    );
+
+    expect(container.querySelector("input")?.disabled).toBe(true);
+  });
 });
 
 describe("Textarea", () => {
@@ -208,6 +348,19 @@ describe("Textarea", () => {
     expect(field?.className).toContain("ss-textarea--invalid");
     expect(field?.getAttribute("aria-invalid")).toBe("true");
   });
+
+  it("applies invalid styling class for background tint", () => {
+    const container = render(<Textarea invalid defaultValue="Too short" />);
+    expect(container.querySelector(".ss-textarea--invalid")).not.toBeNull();
+  });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Textarea disabled defaultValue="Read only" />);
+    const field = container.querySelector("textarea");
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-textarea");
+  });
 });
 
 describe("Input", () => {
@@ -217,5 +370,109 @@ describe("Input", () => {
 
     expect(field?.className).toContain("ss-input--invalid");
     expect(field?.getAttribute("aria-invalid")).toBe("true");
+  });
+
+  it("applies invalid styling class for background tint", () => {
+    const container = render(<Input invalid defaultValue="Bad value" />);
+    expect(container.querySelector(".ss-input--invalid")).not.toBeNull();
+  });
+
+  it("applies disabled styling and native disabled state", () => {
+    const container = render(<Input disabled defaultValue="Read only" />);
+    const field = container.querySelector("input");
+
+    expect(field?.disabled).toBe(true);
+    expect(field?.className).toContain("ss-input");
+  });
+});
+
+describe("Card", () => {
+  it("renders a bare card surface", () => {
+    const container = render(<Card>Simple content</Card>);
+    const card = container.querySelector(".ss-card");
+
+    expect(card).not.toBeNull();
+    expect(card?.textContent).toBe("Simple content");
+  });
+
+  it("renders composable card parts", () => {
+    const container = render(
+      <Card>
+        <CardHeader>
+          <CardTitle>Account</CardTitle>
+        </CardHeader>
+        <CardBody>Manage your profile settings.</CardBody>
+        <CardFooter>
+          <Button size="sm">Save</Button>
+        </CardFooter>
+      </Card>
+    );
+
+    expect(container.querySelector(".ss-card__header")).not.toBeNull();
+    expect(container.querySelector(".ss-card__title")?.textContent).toBe("Account");
+    expect(container.querySelector(".ss-card__body")?.textContent).toContain("profile settings");
+    expect(container.querySelector(".ss-card__footer")).not.toBeNull();
+  });
+});
+
+describe("ThemeProvider", () => {
+  it("uses defaultMode when persistence is disabled", () => {
+    render(
+      <ThemeProvider defaultMode="dark" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("reads stored preference when persistence is enabled", () => {
+    window.localStorage.setItem("super-system-theme", "dark");
+
+    render(
+      <ThemeProvider defaultMode="light" enablePersistence>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
+  });
+
+  it("clears data-theme for system mode and responds to preference changes", () => {
+    render(
+      <ThemeProvider defaultMode="system" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+
+    act(() => {
+      window.matchMedia("(prefers-color-scheme: dark)").dispatchEvent(new Event("change"));
+    });
+
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
+  });
+
+  it("ignores stored preferences when persistence is disabled", () => {
+    window.localStorage.setItem("super-system-theme", "dark");
+
+    render(
+      <ThemeProvider defaultMode="light" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("light");
+  });
+
+  it("supports the deprecated mode alias as defaultMode", () => {
+    render(
+      <ThemeProvider mode="dark" enablePersistence={false}>
+        <span>App</span>
+      </ThemeProvider>
+    );
+
+    expect(document.documentElement.dataset.theme).toBe("dark");
   });
 });

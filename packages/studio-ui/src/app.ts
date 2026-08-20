@@ -8,7 +8,13 @@ const colorIds = [
   "background",
   "foreground",
   "secondary",
-  "secondaryForeground"
+  "secondaryForeground",
+  "muted",
+  "mutedForeground",
+  "border",
+  "destructive",
+  "destructiveForeground",
+  "focus"
 ] as const;
 
 function $(id: string): HTMLElement {

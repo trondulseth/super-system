@@ -206,6 +206,15 @@ The generated theme supports three modes:
 - `dark` — always dark;
 - `system` — follows the visitor's operating-system preference.
 
+`ThemeProvider` props:
+
+- `defaultMode` — initial mode when no stored preference exists (default `"system"`);
+- `enablePersistence` — read/write `localStorage` using `storageKey` (default `true`);
+- `storageKey` — storage key for the user's theme choice (default `"super-system-theme"`);
+- `mode` — deprecated alias for `defaultMode`.
+
+When `defaultMode="system"`, the provider listens for operating-system color preference changes. The `mode` prop remains supported for compatibility but `defaultMode` is preferred.
+
 ### Vite/React
 
 Wrap your app with `ThemeProvider`:
@@ -218,7 +227,7 @@ import App from "./App";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider mode="system">
+    <ThemeProvider defaultMode="system">
       <App />
     </ThemeProvider>
   </StrictMode>,
@@ -236,7 +245,7 @@ createRoot(document.getElementById("root")!).render(
 import { ThemeProvider } from "@super-system/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider mode="system">{children}</ThemeProvider>;
+  return <ThemeProvider defaultMode="system">{children}</ThemeProvider>;
 }
 ```
 
@@ -310,13 +319,39 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 ### Label
 
+Field labels use **font-weight 600** (`Label`, `RadioGroup` legends). Inline option labels such as `Radio` option text use **font-weight 400** so grouped choices read as secondary to the field label.
+
+**Wrapping pattern** — `required` and `disabled` propagate to a single wrapped control:
+
 ```tsx
-<Label htmlFor="name">Full name</Label>
-<Label htmlFor="bio" required>Bio</Label>
-<Label disabled>Unavailable field</Label>
+<Label required>
+  Email address
+  <Input type="email" />
+</Label>
+
+<Label disabled>
+  Unavailable field
+  <Input type="text" />
+</Label>
 ```
 
-`Label` forwards native label attributes and supports `required` and `disabled` visual states. Wrap an control to stack the label above it:
+When a wrapping label sets `required`, the child receives `required` and `aria-required="true"`. When it sets `disabled`, the child receives `disabled`.
+
+**`htmlFor` pattern** — set native attributes on the associated control yourself:
+
+```tsx
+<Label htmlFor="name" required>
+  Full name
+</Label>
+<Input id="name" required aria-required="true" />
+
+<Label htmlFor="legacy" disabled>
+  Unavailable field
+</Label>
+<Input id="legacy" disabled />
+```
+
+`Label` forwards native label attributes and supports `required` and `disabled` visual states. Wrap a control to stack the label above it:
 
 ```tsx
 <Label>
@@ -337,12 +372,16 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 ### Checkbox
 
 ```tsx
+<Checkbox label="Email me product updates" defaultChecked />
+<Checkbox invalid aria-describedby="terms-error" />
+
 <Label inline>
   <Checkbox defaultChecked />
   Email me product updates
 </Label>
-<Checkbox invalid aria-describedby="terms-error" />
 ```
+
+When `label` is provided, `Checkbox` renders an inline label wrapper and `className` applies to that wrapper. Without `label`, `className` applies to the input.
 
 ### Radio group
 
@@ -358,14 +397,16 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 ### Switch
 
 ```tsx
+<Switch label="Enable notifications" defaultChecked />
+<Switch invalid aria-describedby="switch-error" />
+
 <Label inline>
   <Switch defaultChecked />
   Enable notifications
 </Label>
-<Switch invalid aria-describedby="switch-error" />
 ```
 
-`Switch` uses the native checkbox with `role="switch"`.
+`Switch` uses the native checkbox with `role="switch"`. The `label` prop and `className` placement follow the same rules as `Checkbox`.
 
 ### Select
 
@@ -383,13 +424,22 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 ### Alert
 
 ```tsx
-<Alert title="Invite sent">Your teammate can now join the workspace.</Alert>
+<Alert title="Workspace created">Invite teammates when you are ready.</Alert>
+<Alert variant="primary" title="Invite sent">
+  Your teammate can now join the workspace.
+</Alert>
 <Alert variant="destructive" title="Payment failed">
   Update your billing details to keep access.
 </Alert>
 ```
 
-`Alert` uses `role="alert"` for important status messages.
+`Alert` defaults to `role="status"` for neutral and primary variants, and `role="alert"` for destructive messages. Override with `liveRegion`:
+
+```tsx
+<Alert variant="primary" liveRegion="alert" title="Critical notice">
+  This upgrade requires immediate attention.
+</Alert>
+```
 
 ### Spinner
 
@@ -419,7 +469,7 @@ Skeleton placeholders are marked `aria-hidden` because surrounding content shoul
 </Tooltip>
 ```
 
-Tooltip content appears on hover and focus, links with `aria-describedby`, and closes on Escape.
+Tooltip content appears on hover and focus, merges with any existing `aria-describedby` ids on the trigger, and closes on Escape. Tooltips render inline without a portal, so they may clip inside overflow containers. Use the optional `display` prop (`inline`, `inline-flex`, or `block`) when the wrapper affects layout.
 
 ### Badge
 
@@ -433,9 +483,19 @@ Tooltip content appears on hover and focus, links with `aria-describedby`, and c
 
 ```tsx
 <Card>Any React content can go here.</Card>
+
+<Card>
+  <CardHeader>
+    <CardTitle>Account</CardTitle>
+  </CardHeader>
+  <CardBody>Manage your profile settings.</CardBody>
+  <CardFooter>
+    <Button size="sm">Save</Button>
+  </CardFooter>
+</Card>
 ```
 
-`Card` provides the shared surface, border, radius, foreground, and padding.
+`Card` provides the shared surface, border, and radius. Bare cards keep padding; composable `CardHeader`, `CardTitle`, `CardBody`, and `CardFooter` parts handle structured layouts.
 
 ## Find inconsistent UI with Audit
 
@@ -493,6 +553,21 @@ PASS dark/primary: 7.44:1
 The default theme passes its configured WCAG AA contrast threshold. If any configured pair fails, the command exits with code `1`.
 
 Automated tools can identify many accessibility issues, but no automated tool can certify an entire product as WCAG compliant. Keyboard testing, screen-reader testing, content review, and human judgment are still important.
+
+### Manual verification checklist
+
+After theme or component changes, spot-check Batch 1 controls in both light and dark themes:
+
+| Check | How to verify |
+| --- | --- |
+| Keyboard focus | Tab through Button, Input, Textarea, Checkbox, Radio, Switch, Select, and Tooltip triggers; confirm visible focus rings. |
+| Reduced motion | Enable `prefers-reduced-motion: reduce` in devtools; confirm spinner and skeleton animations stop. |
+| Forced colors | Enable forced-colors / high-contrast mode; confirm inputs, checkbox, radio, switch, and select borders remain visible. |
+| Invalid states | Trigger `invalid` on Input, Textarea, Select, Checkbox, and Switch; confirm border and subtle background tint. |
+| Live regions | Confirm destructive `Alert` uses `role="alert"` and neutral/primary alerts default to `role="status"`. |
+| Zoom | At 200% browser zoom, confirm labels, controls, and Studio previews remain readable and usable. |
+
+Component CSS includes `prefers-reduced-motion` and `forced-colors` fallbacks; zoom and screen-reader behavior still require manual verification in your application layout.
 
 ## CLI reference
 

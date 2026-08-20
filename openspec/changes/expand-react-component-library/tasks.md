@@ -24,18 +24,18 @@
 - [ ] Implement the overlay component batch.
 - [ ] Implement Table primitives and responsive usage guidance.
 - [ ] Implement optional icon-package setup and the normalized Icon wrapper.
-- [ ] Export each component and its public TypeScript types.
+- [x] Export each component and its public TypeScript types for the Batch 1 form and feedback set.
 
 ## Verification
 
-- [ ] Add behavior, keyboard, state, and ref-forwarding tests for every component.
-- [ ] Add light, dark, forced-colors, reduced-motion, and zoom verification where relevant.
-- [ ] Test decorative, labeled, icon-only, and custom icon accessibility behavior.
-- [ ] Measure bundle impact and verify tree-shakable clean-project imports.
-- [ ] Run `pnpm check` successfully.
+- [x] Add behavior, keyboard, state, and ref-forwarding tests for every Batch 1 component.
+- [x] Add reduced-motion and forced-colors CSS coverage for Batch 1 components; document manual zoom and forced-colors checklist in README.
+- [ ] Test decorative, labeled, icon-only, and custom icon accessibility behavior (deferred until Icon wrapper lands).
+- [x] Verify tree-shakable named exports and CSS-only sideEffects on `@super-system/react`.
+- [x] Run `pnpm check` successfully.
 
 ## Documentation and release
 
-- [ ] Add copy-ready examples and accessibility notes for every component.
+- [x] Add copy-ready examples and accessibility notes for every Batch 1 component.
 - [ ] Add migration notes for any expanded token schema.
 - [ ] Publish an opt-in beta and verify installation in fresh React, Next.js, and Vite projects.

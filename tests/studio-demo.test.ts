@@ -31,6 +31,13 @@ describe("studio demo", () => {
     expect(html).toContain("ss-switch");
     expect(html).toContain("ss-select");
     expect(html).toContain("ss-alert--destructive");
+    expect(html).toContain('role="status"');
+    expect(html).toContain("disabled");
+    expect(html).toContain("ss-select-wrap");
+    expect(html).toContain("ss-select--invalid");
+    expect(html).toContain("ss-checkbox--invalid");
+    expect(html).toContain("ss-switch--invalid");
+    expect(html).toContain("preview icons are not rendered yet");
     expect(html).toContain("ss-spinner--md");
     expect(html).toContain("ss-skeleton--block");
     expect(html).toContain("ss-tooltip__content");
