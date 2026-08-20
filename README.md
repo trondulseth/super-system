@@ -334,6 +334,63 @@ Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` f
 
 `Textarea` mirrors `Input`: it forwards native textarea properties, supports ref forwarding, and applies `aria-invalid` when `invalid` is true.
 
+### Checkbox
+
+```tsx
+<Label inline>
+  <Checkbox defaultChecked />
+  Email me product updates
+</Label>
+<Checkbox invalid aria-describedby="terms-error" />
+```
+
+### Radio group
+
+```tsx
+<RadioGroup label="Plan">
+  <Radio name="plan" value="starter" label="Starter" defaultChecked />
+  <Radio name="plan" value="pro" label="Pro" />
+</RadioGroup>
+```
+
+`RadioGroup` renders a semantic fieldset. Each `Radio` associates its visible label with the native radio input.
+
+### Switch
+
+```tsx
+<Label inline>
+  <Switch defaultChecked />
+  Enable notifications
+</Label>
+<Switch invalid aria-describedby="switch-error" />
+```
+
+`Switch` uses the native checkbox with `role="switch"`.
+
+### Select
+
+```tsx
+<Label htmlFor="country">Country</Label>
+<Select id="country" defaultValue="no">
+  <option value="no">Norway</option>
+  <option value="se">Sweden</option>
+</Select>
+<Select invalid aria-describedby="country-error">
+  <option value="">Choose a role</option>
+</Select>
+```
+
+### Alert
+
+```tsx
+<Alert title="Invite sent">Your teammate can now join the workspace.</Alert>
+<Alert variant="destructive" title="Payment failed">
+  Update your billing details to keep access.
+</Alert>
+```
+
+`Alert` uses `role="alert"` for important status messages.
+
 ### Badge
 
 ```tsx

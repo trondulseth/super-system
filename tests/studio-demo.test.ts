@@ -26,6 +26,11 @@ describe("studio demo", () => {
     expect(html).toContain("ss-textarea--invalid");
     expect(html).toContain("ss-label");
     expect(html).toContain("ss-label__required");
+    expect(html).toContain("ss-checkbox");
+    expect(html).toContain("ss-radio-group");
+    expect(html).toContain("ss-switch");
+    expect(html).toContain("ss-select");
+    expect(html).toContain("ss-alert--destructive");
     expect(html).toContain("ss-badge--neutral");
     expect(html).toContain("ss-card");
     expect(html).toContain("ss-spinner");

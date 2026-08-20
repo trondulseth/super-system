@@ -159,6 +159,17 @@ aside select {
   margin: 14px 0 0;
 }
 
+.ss-label--inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ss-space-2, 8px);
+  width: fit-content;
+}
+
+.preview-section .ss-alert + .ss-alert {
+  margin-top: 12px;
+}
+
 .preview-section .ss-label + .ss-label {
   margin-top: 12px;
 }
