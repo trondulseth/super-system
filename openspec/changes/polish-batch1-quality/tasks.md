@@ -11,7 +11,7 @@ Token leaks and missing states that break themes or misrepresent control state.
 - [x] Wire new Studio color inputs through `fill()`, `collect()`, and contrast checks in `app.ts`.
 - [x] Copy updated `components.css` to Studio after React style changes.
 - [x] Add unit tests for disabled Input/Textarea/Checkbox rendering.
-- [ ] Run `pnpm check`.
+- [x] Run `pnpm check`.
 
 ## Phase 2 — Accessibility and Studio preview (PR 2)
 
