@@ -126,7 +126,7 @@ function buildNextSteps(project: ProjectContext, summary: MigrationPlanSummary):
     return steps;
   }
   if (summary.autoFixable > 0) {
-    steps.push("Review planned auto-fixes below. Automated apply support is coming in a later beta.");
+    steps.push("Review proposed diffs with `npx @super-system/cli migrate apply --dry-run`.");
   }
   if (summary.manualReview > 0) {
     steps.push("Resolve manual-review findings by hand or with your AI coding tool using docs/ai-tools.md rules.");
