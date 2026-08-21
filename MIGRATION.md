@@ -1,5 +1,13 @@
 # Migration notes
 
+## 0.1.0-beta.5 (branding + docs polish)
+
+No breaking API or token changes. Safe to upgrade from `beta.4`.
+
+- **Studio branding:** CLI-bundled Studio ships updated logo assets and header layout.
+- **Docs:** README messaging reframed for AI-assisted development teams.
+- **Repo assets:** Optimized `brand/hero.png` and logo PNGs for faster README and Pages loads.
+
 ## 0.1.0-beta.2 (library quality + dashboard components)
 
 ### Accessibility corrections
