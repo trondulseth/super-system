@@ -448,6 +448,15 @@ aside select {
   top: auto;
   margin-top: var(--ss-space-2, 8px);
 }
+.ss-dialog--demo,
+.ss-drawer--demo {
+  position: relative;
+  inset: auto;
+  z-index: 0;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--ss-radius-md, 10px);
+}
 .ss-dialog--demo .ss-dialog__overlay,
 .ss-drawer--demo .ss-drawer__overlay {
   position: relative;
@@ -459,6 +468,7 @@ aside select {
   position: relative;
   top: auto;
   left: auto;
+  right: auto;
   transform: none;
   width: 100%;
   max-height: none;
@@ -477,10 +487,8 @@ aside select {
   transform: translateX(-50%);
   display: block;
 }
-.ss-drawer--demo .ss-drawer__content--left {
-  position: relative;
-  top: auto;
-  left: auto;
+.ss-drawer--demo .ss-drawer__content--left,
+.ss-drawer--demo .ss-drawer__content--right {
   width: 100%;
   height: auto;
   min-height: 12rem;
