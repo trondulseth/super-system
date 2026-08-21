@@ -1,5 +1,11 @@
 # Migration notes
 
+## 0.1.0-beta.14 (Studio sidebar form polish)
+
+No breaking API changes. Studio-only visual fix for sidebar controls.
+
+- **Studio:** Sliders and value readouts now use dedicated shell styling (visible tracks/thumbs, bordered control rows, consistent spacing). Fixes sidebar controls that previously looked like static text.
+
 ## 0.1.0-beta.13 (Google Font preset diversity)
 
 No breaking API changes.

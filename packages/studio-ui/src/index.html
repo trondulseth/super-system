@@ -153,7 +153,7 @@
         </div>
         <h2>Surfaces</h2>
         <p class="field-help">Neutral surfaces blend primary into the background. KPI cards and muted panels use the gradient.</p>
-        <div class="row">
+        <div class="studio-row studio-row--2">
           <label class="slider-field">
             Gradient tint
             <div class="ss-slider-row">
@@ -170,224 +170,242 @@
           </label>
         </div>
         <h2>Typography and shape</h2>
-        <label
-          >Font family<select id="fontFamily">
-            <option value="inter">Inter — neutral UI</option>
-            <option value="space-grotesk">Space Grotesk — tech geometric</option>
-            <option value="lora">Lora — editorial serif</option>
-            <option value="nunito">Nunito — soft rounded</option>
-            <option value="barlow">Barlow — industrial</option>
-            <option value="merriweather">Merriweather — classic serif</option>
-            <option value="archivo">Archivo — grotesque news</option>
-            <option value="fraunces">Fraunces — artisan serif</option>
-            <option value="roboto-slab">Roboto Slab — slab serif</option>
-            <option value="syne">Syne — artistic</option>
-          </select></label
-        >
-        <p class="field-help">Ten curated Google Fonts with distinct personalities — sans, serif, and slab. Loaded automatically in preview and generated <code>.super-system/theme.css</code>.</p>
-        <label class="slider-field">
-          Base size
-          <div class="ss-slider-row">
-            <input class="ss-slider" id="baseSize" type="range" min="12" max="24" step="1" />
-            <output class="ss-slider-value" for="baseSize">16px</output>
+        <div class="studio-stack">
+          <label for="fontFamily">
+            Font family
+            <select id="fontFamily">
+              <option value="inter">Inter — neutral UI</option>
+              <option value="space-grotesk">Space Grotesk — tech geometric</option>
+              <option value="lora">Lora — editorial serif</option>
+              <option value="nunito">Nunito — soft rounded</option>
+              <option value="barlow">Barlow — industrial</option>
+              <option value="merriweather">Merriweather — classic serif</option>
+              <option value="archivo">Archivo — grotesque news</option>
+              <option value="fraunces">Fraunces — artisan serif</option>
+              <option value="roboto-slab">Roboto Slab — slab serif</option>
+              <option value="syne">Syne — artistic</option>
+            </select>
+          </label>
+          <p class="field-help">Ten curated Google Fonts with distinct personalities. Loaded automatically in preview and <code>.super-system/theme.css</code>.</p>
+          <label class="slider-field">
+            Base size
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="baseSize" type="range" min="12" max="24" step="1" />
+              <output class="ss-slider-value" for="baseSize">16px</output>
+            </div>
+          </label>
+          <div class="studio-row studio-row--2">
+            <label class="slider-field">
+              Small radius
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="radiusSm" type="range" min="0" max="24" step="1" />
+                <output class="ss-slider-value" for="radiusSm">6px</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Medium radius
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="radiusMd" type="range" min="0" max="24" step="1" />
+                <output class="ss-slider-value" for="radiusMd">10px</output>
+              </div>
+            </label>
           </div>
-        </label>
-        <div class="row">
           <label class="slider-field">
-            Small radius
+            Large radius
             <div class="ss-slider-row">
-              <input class="ss-slider" id="radiusSm" type="range" min="0" max="24" step="1" />
-              <output class="ss-slider-value" for="radiusSm">6px</output>
+              <input class="ss-slider" id="radiusLg" type="range" min="0" max="24" step="1" />
+              <output class="ss-slider-value" for="radiusLg">14px</output>
             </div>
           </label>
-          <label class="slider-field">
-            Medium radius
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="radiusMd" type="range" min="0" max="24" step="1" />
-              <output class="ss-slider-value" for="radiusMd">10px</output>
-            </div>
+          <label for="radiusFull">
+            Pill radius
+            <input id="radiusFull" />
           </label>
-        </div>
-        <label class="slider-field">
-          Large radius
-          <div class="ss-slider-row">
-            <input class="ss-slider" id="radiusLg" type="range" min="0" max="24" step="1" />
-            <output class="ss-slider-value" for="radiusLg">14px</output>
+          <div class="studio-row studio-row--2">
+            <label class="slider-field">
+              Body line height
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
+                <output class="ss-slider-value" for="lineHeight">1.5</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Heading line height
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="headingLineHeight" type="range" min="1" max="1.6" step="0.05" />
+                <output class="ss-slider-value" for="headingLineHeight">1.25</output>
+              </div>
+            </label>
           </div>
-        </label>
-        <label>Pill radius<input id="radiusFull" /></label>
-        <div class="row">
-          <label class="slider-field">
-            Body line height
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
-              <output class="ss-slider-value" for="lineHeight">1.5</output>
+          <p class="sidebar-subheading">Type scale</p>
+          <div class="studio-stack">
+            <label class="slider-field">
+              Heading 1
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="scaleH1" type="range" min="1.5" max="3.5" step="0.125" />
+                <output class="ss-slider-value" for="scaleH1">2.25rem</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Heading 2
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="scaleH2" type="range" min="1.25" max="3" step="0.125" />
+                <output class="ss-slider-value" for="scaleH2">1.875rem</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Heading 3
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="scaleH3" type="range" min="1" max="2.5" step="0.125" />
+                <output class="ss-slider-value" for="scaleH3">1.5rem</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Heading 4
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="scaleH4" type="range" min="0.875" max="2" step="0.125" />
+                <output class="ss-slider-value" for="scaleH4">1.25rem</output>
+              </div>
+            </label>
+            <div class="studio-row studio-row--2">
+              <label class="slider-field">
+                Lead
+                <div class="ss-slider-row">
+                  <input class="ss-slider" id="scaleLead" type="range" min="1" max="1.5" step="0.0625" />
+                  <output class="ss-slider-value" for="scaleLead">1.125rem</output>
+                </div>
+              </label>
+              <label class="slider-field">
+                Small
+                <div class="ss-slider-row">
+                  <input class="ss-slider" id="scaleSmall" type="range" min="0.625" max="1" step="0.0625" />
+                  <output class="ss-slider-value" for="scaleSmall">0.875rem</output>
+                </div>
+              </label>
             </div>
+          </div>
+          <div class="studio-row studio-row--3">
+            <label for="weightHeading">
+              Heading weight
+              <select id="weightHeading">
+                <option value="600">600</option>
+                <option value="700">700</option>
+                <option value="800">800</option>
+              </select>
+            </label>
+            <label for="weightBody">
+              Body weight
+              <select id="weightBody">
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+              </select>
+            </label>
+            <label for="weightStrong">
+              Strong weight
+              <select id="weightStrong">
+                <option value="500">500</option>
+                <option value="600">600</option>
+                <option value="700">700</option>
+              </select>
+            </label>
+          </div>
+          <label for="fontMono">
+            Monospace font
+            <input id="fontMono" />
           </label>
-          <label class="slider-field">
-            Heading line height
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="headingLineHeight" type="range" min="1" max="1.6" step="0.05" />
-              <output class="ss-slider-value" for="headingLineHeight">1.25</output>
-            </div>
+          <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
+          <div class="studio-row studio-row--2">
+            <label class="slider-field">
+              Spacing unit
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="spacingUnit" type="range" min="2" max="8" step="1" />
+                <output class="ss-slider-value" for="spacingUnit">4</output>
+              </div>
+            </label>
+            <label for="density">
+              Density
+              <select id="density">
+                <option>compact</option>
+                <option>comfortable</option>
+                <option>spacious</option>
+              </select>
+            </label>
+          </div>
+          <label for="icons">
+            Icon library
+            <select id="icons">
+              <option>lucide</option>
+              <option>phosphor</option>
+              <option>heroicons</option>
+              <option>custom</option>
+            </select>
           </label>
+          <p class="field-help">
+            Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
+          </p>
         </div>
-        <h3 class="sidebar-subheading">Type scale</h3>
-        <div class="row">
-          <label class="slider-field">
-            Heading 1
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleH1" type="range" min="1.5" max="3.5" step="0.125" />
-              <output class="ss-slider-value" for="scaleH1">2.25rem</output>
-            </div>
-          </label>
-          <label class="slider-field">
-            Heading 2
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleH2" type="range" min="1.25" max="3" step="0.125" />
-              <output class="ss-slider-value" for="scaleH2">1.875rem</output>
-            </div>
-          </label>
-        </div>
-        <div class="row">
-          <label class="slider-field">
-            Heading 3
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleH3" type="range" min="1" max="2.5" step="0.125" />
-              <output class="ss-slider-value" for="scaleH3">1.5rem</output>
-            </div>
-          </label>
-          <label class="slider-field">
-            Heading 4
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleH4" type="range" min="0.875" max="2" step="0.125" />
-              <output class="ss-slider-value" for="scaleH4">1.25rem</output>
-            </div>
-          </label>
-        </div>
-        <div class="row">
-          <label class="slider-field">
-            Lead
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleLead" type="range" min="1" max="1.5" step="0.0625" />
-              <output class="ss-slider-value" for="scaleLead">1.125rem</output>
-            </div>
-          </label>
-          <label class="slider-field">
-            Small
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="scaleSmall" type="range" min="0.625" max="1" step="0.0625" />
-              <output class="ss-slider-value" for="scaleSmall">0.875rem</output>
-            </div>
-          </label>
-        </div>
-        <div class="row">
-          <label
-            >Heading weight<select id="weightHeading">
-              <option value="600">600</option>
-              <option value="700">700</option>
-              <option value="800">800</option>
-            </select></label
-          >
-          <label
-            >Body weight<select id="weightBody">
-              <option value="300">300</option>
-              <option value="400">400</option>
-              <option value="500">500</option>
-            </select></label
-          >
-          <label
-            >Strong weight<select id="weightStrong">
-              <option value="500">500</option>
-              <option value="600">600</option>
-              <option value="700">700</option>
-            </select></label
-          >
-        </div>
-        <label>Monospace font<input id="fontMono" /></label>
-        <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
-        <div class="row">
-          <label class="slider-field">
-            Spacing unit
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="spacingUnit" type="range" min="2" max="8" step="1" />
-              <output class="ss-slider-value" for="spacingUnit">4</output>
-            </div>
-          </label>
-          <label
-            >Density<select id="density">
-              <option>compact</option>
-              <option>comfortable</option>
-              <option>spacious</option>
-            </select></label
-          >
-        </div>
-        <label
-          >Icon library<select id="icons">
-            <option>lucide</option>
-            <option>phosphor</option>
-            <option>heroicons</option>
-            <option>custom</option>
-          </select></label
-        >
-        <p class="field-help">
-          Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
-        </p>
         <h2>Elevation</h2>
         <p class="field-help">Card shadows and hover lift. Use <code>.ss-elevate</code> or <code>.ss-elevate-on-hover</code> in app markup.</p>
-        <div class="row">
-          <label class="slider-field">
-            Shadow strength
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="shadowStrength" type="range" min="0" max="30" step="1" />
-              <output class="ss-slider-value" for="shadowStrength">6%</output>
-            </div>
-          </label>
-          <label class="slider-field">
-            Hover shadow
-            <div class="ss-slider-row">
-              <input class="ss-slider" id="shadowHoverStrength" type="range" min="0" max="30" step="1" />
-              <output class="ss-slider-value" for="shadowHoverStrength">10%</output>
-            </div>
-          </label>
-        </div>
-        <label class="slider-field">
-          Hover lift
-          <div class="ss-slider-row">
-            <input class="ss-slider" id="lift" type="range" min="0" max="8" step="1" />
-            <output class="ss-slider-value" for="lift">2px</output>
+        <div class="studio-stack">
+          <div class="studio-row studio-row--2">
+            <label class="slider-field">
+              Shadow strength
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="shadowStrength" type="range" min="0" max="30" step="1" />
+                <output class="ss-slider-value" for="shadowStrength">6%</output>
+              </div>
+            </label>
+            <label class="slider-field">
+              Hover shadow
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="shadowHoverStrength" type="range" min="0" max="30" step="1" />
+                <output class="ss-slider-value" for="shadowHoverStrength">10%</output>
+              </div>
+            </label>
           </div>
-        </label>
-        <h2>Accessibility</h2>
-        <div class="row">
-          <label
-            >Contrast<select id="contrast">
-              <option>AA</option>
-              <option>AAA</option>
-            </select></label
-          >
           <label class="slider-field">
-            Minimum target
+            Hover lift
             <div class="ss-slider-row">
-              <input class="ss-slider" id="target" type="range" min="24" max="64" step="1" />
-              <output class="ss-slider-value" for="target">44px</output>
+              <input class="ss-slider" id="lift" type="range" min="0" max="8" step="1" />
+              <output class="ss-slider-value" for="lift">2px</output>
             </div>
           </label>
         </div>
-        <div class="row">
-          <label
-            >Default mode<select id="modeDefault">
-              <option>system</option>
-              <option>light</option>
-              <option>dark</option>
-            </select></label
-          >
-          <label class="ss-label ss-label--inline">
-            <input id="reducedMotion" type="checkbox" />
-            Reduced motion default
-          </label>
+        <h2>Accessibility</h2>
+        <div class="studio-stack">
+          <div class="studio-row studio-row--2">
+            <label for="contrast">
+              Contrast
+              <select id="contrast">
+                <option>AA</option>
+                <option>AAA</option>
+              </select>
+            </label>
+            <label class="slider-field">
+              Minimum target
+              <div class="ss-slider-row">
+                <input class="ss-slider" id="target" type="range" min="24" max="64" step="1" />
+                <output class="ss-slider-value" for="target">44px</output>
+              </div>
+            </label>
+          </div>
+          <div class="studio-row studio-row--2">
+            <label for="modeDefault">
+              Default mode
+              <select id="modeDefault">
+                <option>system</option>
+                <option>light</option>
+                <option>dark</option>
+              </select>
+            </label>
+            <label class="studio-checkbox">
+              <input id="reducedMotion" type="checkbox" />
+              Reduced motion default
+            </label>
+          </div>
+          <p class="field-help">Mode default and reduced motion are saved to config; preview toggle controls the live demo theme.</p>
         </div>
-        <p class="field-help">Mode default and reduced motion are saved to config; preview toggle controls the live demo theme.</p>
       </aside>
       <section class="preview">
         <article class="ss-card preview-theme" id="preview-root" data-theme="light">
