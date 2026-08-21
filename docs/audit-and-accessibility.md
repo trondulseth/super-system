@@ -1,6 +1,6 @@
 # Audit & accessibility
 
-[← Documentation](./README.md) · [Getting started](./getting-started.md) · [Theme](./theme.md) · [CLI](./cli.md)
+[← Documentation](./README.md) · [Getting started](./getting-started.md) · [Migration guide](./migration-guide.md) · [Theme](./theme.md) · [CLI](./cli.md)
 
 ## Find inconsistent UI with Audit
 
@@ -39,9 +39,21 @@ npx @super-system/cli audit --json
 
 Audit exits with code `1` when it finds violations, so it can also be used in CI.
 
-## Plan a migration (read-only)
+## Assisted migration
 
-Before changing an existing project, generate a migration plan:
+Use audit findings as the input to the migration workflow. The full step-by-step guide — manifests, transform selection, verification, backup, and rollback — lives in the **[Migration guide](./migration-guide.md)**.
+
+Quick reference:
+
+```bash
+npx @super-system/cli migrate plan                          # read-only inventory
+npx @super-system/cli migrate plan --out .super-system/migration-plan.json
+npx @super-system/cli migrate apply --dry-run               # preview diffs
+npx @super-system/cli migrate apply --only native-button-to-button
+npx @super-system/cli migrate verify                        # typecheck, test, build, audit
+```
+
+### Plan a migration (read-only)
 
 ```bash
 npx @super-system/cli migrate plan
@@ -71,17 +83,44 @@ For AI coding tools:
 npx @super-system/cli migrate plan --json
 ```
 
-Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`. Use `migrate plan` to prioritize work, preview diffs with `--dry-run`, then apply safe auto-fixes.
+Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`.
 
-## Preview auto-fixes (dry run)
-
-Review the exact diffs for supported auto-fixes before anything is written:
+### Preview auto-fixes (dry run)
 
 ```bash
 npx @super-system/cli migrate apply --dry-run
 ```
 
-Current automated transforms:
+### Apply auto-fixes
+
+```bash
+npx @super-system/cli migrate apply
+```
+
+In git repositories, apply refuses to write when the worktree has uncommitted changes. Commit or stash first, or pass `--allow-dirty` if you accept the risk of mixing migration edits with other local changes.
+
+**Selective apply** — run one transform at a time:
+
+```bash
+npx @super-system/cli migrate apply --only img-add-alt --only native-button-to-button
+npx @super-system/cli migrate apply --skip token-replace-color
+npx @super-system/cli migrate apply --skip-rule raw-input
+```
+
+**Resumable runs** — save and resume progress via `.super-system/migration-plan.json` (see [Manifest format](./migration-guide.md#resumable-manifest) in the migration guide).
+
+**Verify after apply**:
+
+```bash
+npx @super-system/cli migrate apply --verify   # run checks after writing files
+npx @super-system/cli migrate verify           # run checks on current tree
+```
+
+After applying, re-run `npx @super-system/cli audit` (or `migrate verify`) to see remaining manual cleanup work.
+
+### Automated transforms
+
+Current automated transforms (transform id → behavior):
 
 - `img-add-alt` — adds `alt=""` to `<img>` tags missing alt text
 - `native-button-to-button` — replaces native `<button>` with `<Button>` and adds the import when needed
@@ -90,7 +129,7 @@ Current automated transforms:
 - `native-select-to-select` — replaces native `<select>` with `<Select>`
 - `token-replace-color` — replaces hardcoded hex/rgb colors with `var(--ss-color-*)` when the value maps to exactly one theme token
 
-Example output:
+Example dry-run diff:
 
 ```diff
 --- a/src/App.tsx
@@ -100,18 +139,6 @@ Example output:
 -  return <button>Save</button>;
 +  return <Button>Save</Button>;
 ```
-
-## Apply auto-fixes
-
-When the dry-run output looks correct, apply the supported transforms:
-
-```bash
-npx @super-system/cli migrate apply
-```
-
-In git repositories, apply refuses to write when the worktree has uncommitted changes. Commit or stash first, or pass `--allow-dirty` if you accept the risk of mixing migration edits with other local changes.
-
-After applying, re-run `npx @super-system/cli audit` to see remaining manual cleanup work.
 
 ## Check color contrast
 

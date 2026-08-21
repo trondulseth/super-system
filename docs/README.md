@@ -13,6 +13,7 @@ Super System is a lightweight design system for React apps, built for teams ship
 | [Theme](./theme.md) | `super-system.json`, CSS variables, and light/dark mode |
 | [Components](./components.md) | All Batch 1–3 React components with copy-ready examples |
 | [Audit & accessibility](./audit-and-accessibility.md) | UI consistency audit, contrast checks, manual verification |
+| [Migration guide](./migration-guide.md) | Assisted migration workflow, manifests, transform selection, verify |
 | [CLI reference](./cli.md) | Commands, packages, and tokens import |
 | [AI coding tools](./ai-tools.md) | Project rules for Cursor, Copilot, Claude Code, and more |
 | [Troubleshooting](./troubleshooting.md) | Common fixes for styling, theme, and Studio issues |
