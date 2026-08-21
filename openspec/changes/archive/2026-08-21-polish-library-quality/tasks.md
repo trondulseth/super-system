@@ -1,6 +1,6 @@
 # Tasks: Polish Library Quality
 
-> **Status:** Phases 0–5 complete. Phase 6 release verification documented; archive pending user publish request.
+> **Status:** Complete. Archived 2026-08-21 after release verification and spec sync.
 
 ## Phase 0 — Planning
 
@@ -62,11 +62,11 @@
 
 - [x] Reach 80+ automated component tests (84 total).
 - [x] Run `pnpm check` successfully.
-- [ ] Verify fresh install in Vite React, Next.js App Router (manual smoke — see journal).
+- [x] Verify fresh install in Vite React, Next.js App Router (see journal 2026-08-21).
 - [ ] Publish `0.1.0-beta.2` if user requests release.
-- [ ] Sync delta specs to living specs.
-- [ ] Archive `polish-library-quality`.
-- [ ] Archive `expand-react-component-library`.
+- [x] Sync delta specs to living specs.
+- [x] Archive `polish-library-quality`.
+- [x] Archive `expand-react-component-library`.
 
 ## Exit criteria
 
@@ -74,5 +74,5 @@
 - [x] No demo-only CSS in production `@super-system/react` bundle.
 - [x] Studio covers high-impact tokens or documents config-only fields.
 - [x] `pnpm check` green with 80+ component tests.
-- [ ] Fresh-install smoke documented and passing.
-- [ ] Living specs synced; both polish and expand changes archived.
+- [x] Fresh-install smoke documented and passing.
+- [x] Living specs synced; both polish and expand changes archived.
