@@ -2,6 +2,9 @@ name: Publish beta
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v0.1.0-beta.*"
 
 permissions:
   contents: read
