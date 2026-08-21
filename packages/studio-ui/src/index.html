@@ -133,22 +133,54 @@
         </label>
         <h2>Typography and shape</h2>
         <label>Font family<input id="fontSans" /></label>
+        <label class="slider-field">
+          Base size
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="baseSize" type="range" min="12" max="24" step="1" />
+            <output class="ss-slider-value" for="baseSize">16px</output>
+          </div>
+        </label>
         <div class="row">
-          <label>Base size<input id="baseSize" /></label>
-          <label>Medium radius<input id="radiusMd" /></label>
+          <label class="slider-field">
+            Small radius
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="radiusSm" type="range" min="0" max="24" step="1" />
+              <output class="ss-slider-value" for="radiusSm">6px</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Medium radius
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="radiusMd" type="range" min="0" max="24" step="1" />
+              <output class="ss-slider-value" for="radiusMd">10px</output>
+            </div>
+          </label>
         </div>
-        <div class="row">
-          <label>Small radius<input id="radiusSm" /></label>
-          <label>Large radius<input id="radiusLg" /></label>
-        </div>
+        <label class="slider-field">
+          Large radius
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="radiusLg" type="range" min="0" max="24" step="1" />
+            <output class="ss-slider-value" for="radiusLg">14px</output>
+          </div>
+        </label>
         <label>Pill radius<input id="radiusFull" /></label>
-        <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
+        <label class="slider-field">
+          Line height
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
+            <output class="ss-slider-value" for="lineHeight">1.5</output>
+          </div>
+        </label>
         <label>Monospace font<input id="fontMono" /></label>
         <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
         <div class="row">
-          <label
-            >Spacing unit<input id="spacingUnit" type="number" min="2" max="8" step="1"
-          /></label>
+          <label class="slider-field">
+            Spacing unit
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="spacingUnit" type="range" min="2" max="8" step="1" />
+              <output class="ss-slider-value" for="spacingUnit">4</output>
+            </div>
+          </label>
           <label
             >Density<select id="density">
               <option>compact</option>
@@ -176,7 +208,13 @@
               <option>AAA</option>
             </select></label
           >
-          <label>Minimum target<input id="target" type="number" min="24" max="64" /></label>
+          <label class="slider-field">
+            Minimum target
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="target" type="range" min="24" max="64" step="1" />
+              <output class="ss-slider-value" for="target">44px</output>
+            </div>
+          </label>
         </div>
         <div class="row">
           <label
@@ -327,6 +365,18 @@
             <label class="ss-label ss-label--inline">
               <input class="ss-switch ss-switch--invalid" type="checkbox" role="switch" aria-invalid="true" />
               Enable sync (invalid)
+            </label>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Slider</h4>
+            <label class="ss-label">
+              Volume
+              <input class="ss-slider" type="range" min="0" max="100" value="60" />
+            </label>
+            <label class="ss-label">
+              Brightness (invalid)
+              <input class="ss-slider ss-slider--invalid" type="range" min="0" max="100" value="75" aria-invalid="true" />
             </label>
           </section>
 

@@ -148,6 +148,21 @@ aside select {
   color: #111827;
 }
 
+aside input.ss-slider {
+  min-height: unset;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.slider-field {
+  margin: 12px 0;
+}
+
+.slider-field .ss-slider-value {
+  color: #64748b;
+}
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;

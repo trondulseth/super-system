@@ -85,6 +85,7 @@ import {
   RadioGroup,
   Select,
   Skeleton,
+  Slider,
   Spinner,
   Switch,
   Table,
@@ -292,6 +293,35 @@ describe("Switch", () => {
     expect(container.querySelector("label.ss-label--inline")).not.toBeNull();
     expect(container.querySelector('input[role="switch"]')).not.toBeNull();
     expect(container.textContent).toContain("Enable notifications");
+  });
+});
+
+describe("Slider", () => {
+  it("forwards refs and native range attributes", () => {
+    const ref = createRef<HTMLInputElement>();
+    const container = render(<Slider ref={ref} defaultValue={50} min={0} max={100} />);
+    const field = container.querySelector('input[type="range"]');
+
+    expect(field).not.toBeNull();
+    expect(ref.current).toBe(field);
+    expect(field?.value).toBe("50");
+    expect(field?.className).toContain("ss-slider");
+  });
+
+  it("renders a label wrapper when label prop is set", () => {
+    const container = render(<Slider label="Volume" defaultValue={40} min={0} max={100} />);
+
+    expect(container.querySelector("label.ss-label")).not.toBeNull();
+    expect(container.querySelector('input[type="range"]')).not.toBeNull();
+    expect(container.textContent).toContain("Volume");
+  });
+
+  it("applies invalid styling", () => {
+    const container = render(<Slider invalid defaultValue={10} />);
+    const field = container.querySelector('input[type="range"]');
+
+    expect(field?.className).toContain("ss-slider--invalid");
+    expect(field?.getAttribute("aria-invalid")).toBe("true");
   });
 });
 

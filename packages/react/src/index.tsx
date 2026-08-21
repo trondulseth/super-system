@@ -5,6 +5,7 @@ export { Label, type LabelProps } from "./label.js";
 export { Checkbox, type CheckboxProps } from "./checkbox.js";
 export { RadioGroup, Radio, type RadioGroupProps, type RadioProps } from "./radio-group.js";
 export { Switch, type SwitchProps } from "./switch.js";
+export { Slider, type SliderProps } from "./slider.js";
 export { Select, type SelectProps } from "./select.js";
 export { Alert, type AlertProps } from "./alert.js";
 export { Spinner, type SpinnerProps } from "./spinner.js";

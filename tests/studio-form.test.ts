@@ -6,6 +6,7 @@ import { defaultTheme } from "../packages/tokens/src/index.js";
 import {
   applyConfigToForm,
   readConfigFromForm,
+  syncSliderDisplays,
   validateStudioForm
 } from "../packages/studio-ui/src/studio-form.js";
 
@@ -42,17 +43,24 @@ function createFormFixture(): HTMLElement {
     <input id="focusHex" type="text" value="#1d4ed8" />
     <input id="fontSans" value="Inter" />
     <input id="fontMono" value="monospace" />
-    <input id="baseSize" value="16px" />
-    <input id="lineHeight" type="number" value="1.5" />
-    <input id="radiusSm" value="6px" />
-    <input id="radiusMd" value="10px" />
-    <input id="radiusLg" value="14px" />
+    <input id="baseSize" class="ss-slider" type="range" min="12" max="24" value="16" />
+    <output for="baseSize"></output>
+    <input id="lineHeight" class="ss-slider" type="range" step="0.05" value="1.5" />
+    <output for="lineHeight"></output>
+    <input id="radiusSm" class="ss-slider" type="range" value="6" />
+    <output for="radiusSm"></output>
+    <input id="radiusMd" class="ss-slider" type="range" value="10" />
+    <output for="radiusMd"></output>
+    <input id="radiusLg" class="ss-slider" type="range" value="14" />
+    <output for="radiusLg"></output>
     <input id="radiusFull" value="9999px" />
-    <input id="spacingUnit" type="number" value="4" />
+    <input id="spacingUnit" class="ss-slider" type="range" value="4" />
+    <output for="spacingUnit"></output>
     <select id="density"><option>comfortable</option></select>
     <select id="icons"><option>lucide</option></select>
     <select id="contrast"><option>AA</option></select>
-    <input id="target" type="number" value="44" />
+    <input id="target" class="ss-slider" type="range" value="44" />
+    <output for="target"></output>
     <select id="modeDefault"><option>system</option></select>
     <input id="reducedMotion" type="checkbox" checked />
   `;
@@ -74,6 +82,16 @@ describe("studio form", () => {
 
     expect(collected.spacing.unit).toBe(6);
     expect(collected.radius.full).toBe("100px");
+    root.remove();
+  });
+
+  it("syncs slider value displays", () => {
+    const root = createFormFixture();
+
+    (root.querySelector("#target") as HTMLInputElement).value = "48";
+    syncSliderDisplays(root);
+
+    expect(root.querySelector('output[for="target"]')?.textContent).toBe("48px");
     root.remove();
   });
 

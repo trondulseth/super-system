@@ -18,6 +18,7 @@
 .ss-checkbox:focus-visible,
 .ss-radio__input:focus-visible,
 .ss-switch:focus-visible,
+.ss-slider:focus-visible,
 .ss-select:focus-visible,
 .ss-tabs__trigger:focus-visible,
 .ss-accordion__trigger:focus-visible,
@@ -217,6 +218,69 @@
 .ss-switch:checked::after {
   background: var(--ss-color-primary-foreground);
   transform: translateX(1.25rem);
+}
+
+.ss-slider {
+  width: 100%;
+  height: 1.5rem;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  accent-color: var(--ss-color-primary);
+}
+.ss-slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.ss-slider--invalid {
+  accent-color: var(--ss-color-destructive);
+}
+.ss-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: var(--ss-radius-full, 9999px);
+  background: var(--ss-color-muted);
+}
+.ss-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 2px solid var(--ss-color-primary);
+  border-radius: var(--ss-radius-full, 9999px);
+  background: var(--ss-color-background);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-color-border) 40%, transparent);
+}
+.ss-slider--invalid::-webkit-slider-thumb {
+  border-color: var(--ss-color-destructive);
+}
+.ss-slider::-moz-range-track {
+  height: 6px;
+  border-radius: var(--ss-radius-full, 9999px);
+  background: var(--ss-color-muted);
+}
+.ss-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ss-color-primary);
+  border-radius: var(--ss-radius-full, 9999px);
+  background: var(--ss-color-background);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-color-border) 40%, transparent);
+}
+.ss-slider--invalid::-moz-range-thumb {
+  border-color: var(--ss-color-destructive);
+}
+.ss-slider-value {
+  min-width: 3ch;
+  font: 600 0.75rem/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ss-color-muted-foreground);
+  text-align: right;
+}
+.ss-slider-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--ss-space-2, 8px);
+  align-items: center;
 }
 
 .ss-select-wrap {
@@ -1342,6 +1406,7 @@
   .ss-checkbox:focus-visible,
   .ss-radio__input:focus-visible,
   .ss-switch:focus-visible,
+  .ss-slider:focus-visible,
   .ss-select:focus-visible,
   .ss-tabs__trigger:focus-visible,
   .ss-accordion__trigger:focus-visible,

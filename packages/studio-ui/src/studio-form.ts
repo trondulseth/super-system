@@ -19,6 +19,16 @@ export const FORM_COLOR_IDS = [
 
 export type FormColorId = (typeof FORM_COLOR_IDS)[number];
 
+const SLIDER_FIELDS = [
+  { id: "lineHeight", format: (value: string) => value },
+  { id: "spacingUnit", format: (value: string) => value },
+  { id: "target", format: (value: string) => `${value}px` },
+  { id: "baseSize", format: (value: string) => `${value}px` },
+  { id: "radiusSm", format: (value: string) => `${value}px` },
+  { id: "radiusMd", format: (value: string) => `${value}px` },
+  { id: "radiusLg", format: (value: string) => `${value}px` }
+] as const;
+
 function getInput(id: string, root: ParentNode = document): HTMLInputElement {
   const element = root.querySelector<HTMLInputElement>(`#${id}`);
   if (!element) throw new Error(`Missing form control #${id}`);
@@ -29,6 +39,24 @@ function getSelect(id: string, root: ParentNode = document): HTMLSelectElement {
   const element = root.querySelector<HTMLSelectElement>(`#${id}`);
   if (!element) throw new Error(`Missing form control #${id}`);
   return element;
+}
+
+export function parsePx(value: string): number {
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)px$/);
+  return match ? Number(match[1]) : Number(value);
+}
+
+export function formatPx(value: number): string {
+  return `${value}px`;
+}
+
+export function syncSliderDisplays(root: ParentNode = document): void {
+  for (const field of SLIDER_FIELDS) {
+    const slider = root.querySelector<HTMLInputElement>(`#${field.id}`);
+    const output = root.querySelector<HTMLOutputElement>(`output[for="${field.id}"]`);
+    if (!slider || !output) continue;
+    output.textContent = field.format(slider.value);
+  }
 }
 
 export function applyConfigToForm(
@@ -46,11 +74,11 @@ export function applyConfigToForm(
 
   getInput("fontSans", root).value = config.typography.fontSans;
   getInput("fontMono", root).value = config.typography.fontMono;
-  getInput("baseSize", root).value = config.typography.baseSize;
+  getInput("baseSize", root).value = String(parsePx(config.typography.baseSize));
   getInput("lineHeight", root).value = String(config.typography.lineHeight);
-  getInput("radiusSm", root).value = config.radius.sm;
-  getInput("radiusMd", root).value = config.radius.md;
-  getInput("radiusLg", root).value = config.radius.lg;
+  getInput("radiusSm", root).value = String(parsePx(config.radius.sm));
+  getInput("radiusMd", root).value = String(parsePx(config.radius.md));
+  getInput("radiusLg", root).value = String(parsePx(config.radius.lg));
   getInput("radiusFull", root).value = config.radius.full;
   getInput("spacingUnit", root).value = String(config.spacing.unit);
   getSelect("density", root).value = config.spacing.density;
@@ -59,6 +87,8 @@ export function applyConfigToForm(
   getInput("target", root).value = String(config.accessibility.minimumTargetSize);
   getSelect("modeDefault", root).value = config.mode.default;
   getInput("reducedMotion", root).checked = config.accessibility.reducedMotion;
+
+  syncSliderDisplays(root);
 }
 
 export function readConfigFromForm(
@@ -77,11 +107,11 @@ export function readConfigFromForm(
 
   next.typography.fontSans = getInput("fontSans", root).value;
   next.typography.fontMono = getInput("fontMono", root).value;
-  next.typography.baseSize = getInput("baseSize", root).value;
+  next.typography.baseSize = formatPx(Number(getInput("baseSize", root).value));
   next.typography.lineHeight = Number(getInput("lineHeight", root).value);
-  next.radius.sm = getInput("radiusSm", root).value;
-  next.radius.md = getInput("radiusMd", root).value;
-  next.radius.lg = getInput("radiusLg", root).value;
+  next.radius.sm = formatPx(Number(getInput("radiusSm", root).value));
+  next.radius.md = formatPx(Number(getInput("radiusMd", root).value));
+  next.radius.lg = formatPx(Number(getInput("radiusLg", root).value));
   next.radius.full = getInput("radiusFull", root).value;
   next.spacing.unit = Number(getInput("spacingUnit", root).value);
   next.spacing.density = getSelect("density", root).value as SuperSystemConfig["spacing"]["density"];
@@ -90,6 +120,8 @@ export function readConfigFromForm(
   next.accessibility.minimumTargetSize = Number(getInput("target", root).value);
   next.mode.default = getSelect("modeDefault", root).value as SuperSystemConfig["mode"]["default"];
   next.accessibility.reducedMotion = getInput("reducedMotion", root).checked;
+
+  syncSliderDisplays(root);
 
   return next;
 }
@@ -108,6 +140,18 @@ export function validateStudioForm(root: ParentNode = document): string | null {
   const unit = Number(getInput("spacingUnit", root).value);
   if (!Number.isFinite(unit) || unit < 2 || unit > 8) {
     return "Spacing unit must be between 2 and 8.";
+  }
+
+  const baseSize = Number(getInput("baseSize", root).value);
+  if (!Number.isFinite(baseSize) || baseSize < 12 || baseSize > 24) {
+    return "Base size must be between 12 and 24 px.";
+  }
+
+  for (const id of ["radiusSm", "radiusMd", "radiusLg"] as const) {
+    const radius = Number(getInput(id, root).value);
+    if (!Number.isFinite(radius) || radius < 0 || radius > 24) {
+      return "Radius values must be between 0 and 24 px.";
+    }
   }
 
   for (const id of FORM_COLOR_IDS) {
