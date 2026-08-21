@@ -85,6 +85,7 @@ Current automated transforms:
 
 - `img-add-alt` — adds `alt=""` to `<img>` tags missing alt text
 - `native-button-to-button` — replaces native `<button>` with `<Button>` and adds the import when needed
+- `token-replace-color` — replaces hardcoded hex/rgb colors with `var(--ss-color-*)` when the value maps to exactly one theme token
 
 Example output:
 
