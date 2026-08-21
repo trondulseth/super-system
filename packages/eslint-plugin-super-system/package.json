@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-super-system",
-  "version": "0.1.0-beta.16",
+  "version": "0.1.0-beta.17",
   "description": "ESLint rules aligned with Super System CLI audit.",
   "type": "module",
   "license": "MIT",

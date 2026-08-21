@@ -1,9 +1,6 @@
 import type { Rule } from "eslint";
 import { getAuditRule } from "@super-system/rules";
-
-type JsxOpeningElement = Rule.Node & {
-  name: { type: string; name?: string };
-};
+import type { JsxOpeningElement } from "../jsx-utils.js";
 
 export const rawButtonRule: Rule.RuleModule = {
   meta: {
@@ -11,15 +8,7 @@ export const rawButtonRule: Rule.RuleModule = {
     docs: {
       description: "Disallow native <button> elements; use Super System Button instead."
     },
-    schema: [
-      {
-        type: "object",
-        properties: {
-          ignoreComments: { type: "boolean" }
-        },
-        additionalProperties: false
-      }
-    ],
+    schema: [],
     messages: {
       useButton: getAuditRule("raw-button")?.message ?? "Use the shared Button component."
     }

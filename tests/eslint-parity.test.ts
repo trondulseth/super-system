@@ -29,15 +29,66 @@ describe("eslint-plugin-super-system", () => {
     });
   });
 
-  it("agrees with CLI audit on raw-button in JSX files", async () => {
+  it("flags text-like native inputs but not specialized types", () => {
+    ruleTester.run("raw-input", plugin.rules!["raw-input"]!, {
+      valid: [
+        "export function App() { return <Input />; }",
+        'export function App() { return <input type="checkbox" />; }',
+        'export function App() { return <input type="radio" />; }',
+        'export function App() { return <input type={mode} />; }'
+      ],
+      invalid: [
+        {
+          code: "export function App() { return <input />; }",
+          errors: [{ messageId: "useInput" }]
+        },
+        {
+          code: 'export function App() { return <input type="email" />; }',
+          errors: [{ messageId: "useInput" }]
+        }
+      ]
+    });
+  });
+
+  it("flags img elements without alt", () => {
+    ruleTester.run("image-alt", plugin.rules!["image-alt"]!, {
+      valid: [
+        'export function App() { return <img alt="" src="/logo.png" />; }',
+        'export function App() { return <img alt="Logo" src="/logo.png" />; }',
+        'export function App() { return <img alt={"Logo"} src="/logo.png" />; }',
+        'export function App() { return <img {...props} />; }'
+      ],
+      invalid: [
+        {
+          code: 'export function App() { return <img src="/logo.png" />; }',
+          errors: [{ messageId: "missingAlt" }]
+        }
+      ]
+    });
+  });
+
+  it("agrees with CLI audit on shared JSX violations", async () => {
     const directory = await mkdtemp(path.join(tmpdir(), "super-system-eslint-parity-"));
     await mkdir(path.join(directory, "src"));
     await writeFile(
       path.join(directory, "src", "App.tsx"),
-      'export default function App() {\n  return <button>Save</button>;\n}\n'
+      [
+        "export default function App() {",
+        "  return (",
+        "    <>",
+        "      <button>Save</button>",
+        '      <input type="email" />',
+        '      <img src="/logo.png" />',
+        "    </>",
+        "  );",
+        "}",
+        ""
+      ].join("\n")
     );
 
     const findings = await auditProject(directory);
     expect(findings.some((entry) => entry.rule === "raw-button")).toBe(true);
+    expect(findings.some((entry) => entry.rule === "raw-input")).toBe(true);
+    expect(findings.some((entry) => entry.rule === "image-alt")).toBe(true);
   });
 });
