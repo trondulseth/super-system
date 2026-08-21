@@ -1,4 +1,5 @@
 import type { SuperSystemConfig } from "@super-system/tokens";
+import { initPreviewInteractions } from "./preview-interactions.js";
 import { updatePreviewTheme } from "./preview-theme.js";
 import {
   applyConfigToForm,
@@ -170,6 +171,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   fill();
   await render();
   initPageShellPreview();
+  initPreviewInteractions();
 
   document.querySelectorAll("aside input,aside select").forEach((element) => {
     element.addEventListener("input", () => {
