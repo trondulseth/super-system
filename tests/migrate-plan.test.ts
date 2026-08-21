@@ -2,6 +2,7 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { defaultTheme } from "../packages/tokens/src/index.js";
 import { createMigrationPlan, formatMigrationPlan } from "../packages/cli/src/migration.js";
 
 describe("migrate plan", () => {
@@ -34,6 +35,26 @@ describe("migrate plan", () => {
     expect(formatted).toContain("migration plan (read-only)");
     expect(formatted).toContain("Planned auto-fixes");
     expect(formatted).toContain("Manual review");
+  });
+
+  it("classifies unambiguous hardcoded colors as auto-fixable", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-tokens-"));
+    await mkdir(path.join(directory, "src"));
+    await writeFile(path.join(directory, "super-system.json"), `${JSON.stringify(defaultTheme, null, 2)}\n`);
+    await writeFile(
+      path.join(directory, "package.json"),
+      JSON.stringify({ dependencies: { "@super-system/react": "beta" } })
+    );
+    await writeFile(
+      path.join(directory, "src", "Card.css"),
+      ".card {\n  color: #2563eb;\n}\n"
+    );
+
+    const plan = await createMigrationPlan(directory);
+    const colorItem = plan.items.find((item) => item.rule === "hardcoded-color");
+    expect(colorItem?.mode).toBe("auto");
+    expect(colorItem?.transformId).toBe("token-replace-color");
+    expect(colorItem?.tokenReplacements?.[0]?.cssVar).toBe("var(--ss-color-primary)");
   });
 
   it("reports a clean plan when no findings exist", async () => {

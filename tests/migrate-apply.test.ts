@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vitest";
+import { defaultTheme } from "../packages/tokens/src/index.js";
 import { DirtyWorktreeError } from "../packages/cli/src/git-worktree.js";
 import {
   applyMigration,
@@ -59,6 +60,20 @@ describe("migrate apply dry-run", () => {
     expect(result.summary.transformsApplied).toBe(3);
     expect(result.changes[0]?.diff).toContain('alt=""');
     expect(result.changes[0]?.diff).toContain("<Button>Go</Button>");
+  });
+
+  it("applies token replacement for unambiguous theme colors", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-token-"));
+    await mkdir(path.join(directory, "src"));
+    await writeFile(path.join(directory, "super-system.json"), `${JSON.stringify(defaultTheme, null, 2)}\n`);
+    await writeFile(
+      path.join(directory, "src", "Card.css"),
+      ".card {\n  color: #2563eb;\n}\n"
+    );
+
+    const result = await applyMigrationDryRun(directory);
+    expect(result.summary.transformsApplied).toBe(1);
+    expect(result.changes[0]?.diff).toContain("var(--ss-color-primary)");
   });
 
   it("is idempotent for img alt transforms", () => {

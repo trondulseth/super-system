@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.9 (token replacement transforms)
+
+No breaking changes. Safe to upgrade from `beta.8`.
+
+- **CLI:** `migrate apply` now replaces unambiguous hardcoded colors with semantic CSS variables (for example `#2563eb` → `var(--ss-color-primary)`) when the literal maps to exactly one token in `super-system.json`.
+- **Safety:** Ambiguous colors (shared by multiple tokens) and unknown literals remain manual review items.
+
 ## 0.1.0-beta.8 (migrate apply write mode)
 
 No breaking changes. Safe to upgrade from `beta.7`.

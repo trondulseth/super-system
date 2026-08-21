@@ -1,4 +1,5 @@
 import type { MigrationPlanItem } from "./migration.js";
+import { applyColorTokenReplacements } from "./migration-tokens.js";
 
 export interface TransformResult {
   content: string;
@@ -70,12 +71,31 @@ export function transformNativeButtonToButton(content: string, item: MigrationPl
   };
 }
 
+export function transformTokenReplaceColor(content: string, item: MigrationPlanItem): TransformResult | null {
+  if (!item.tokenReplacements?.length) return null;
+
+  const { eol, lines } = splitLines(content);
+  const index = item.line - 1;
+  const line = lines[index];
+  if (!line) return null;
+
+  const updated = applyColorTokenReplacements(line, item.tokenReplacements);
+  if (updated === line) return null;
+
+  lines[index] = updated;
+  return {
+    content: joinLines(lines, eol),
+    description: `Replaced ${item.tokenReplacements.map((replacement) => replacement.literal).join(", ")} with semantic token variable(s)`
+  };
+}
+
 export function finalizeButtonImport(content: string): string {
   return ensureButtonImport(content);
 }
 
 export const transforms: Record<string, TransformFn> = {
   "img-add-alt": transformImgAddAlt,
+  "token-replace-color": transformTokenReplaceColor,
   "native-button-to-button": transformNativeButtonToButton
 };
 

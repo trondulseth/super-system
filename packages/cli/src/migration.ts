@@ -6,6 +6,7 @@ import {
   type MigrationConfidence,
   type MigrationMode
 } from "./migration-rules.js";
+import { findColorLiterals, loadColorTokenIndex, resolveTokenReplacements } from "./migration-tokens.js";
 
 export const MIGRATION_MANIFEST_VERSION = 1 as const;
 
@@ -22,6 +23,7 @@ export interface MigrationPlanItem extends Finding {
   transformId?: string;
   plannedAction: string;
   assumption?: string;
+  tokenReplacements?: Array<{ literal: string; token: string; cssVar: string }>;
 }
 
 export interface MigrationPlanSummary {
@@ -44,9 +46,13 @@ function makeFindingId(finding: Finding): string {
   return `${finding.rule}:${finding.file}:${finding.line}`;
 }
 
-function enrichFinding(finding: Finding): MigrationPlanItem {
+function enrichFinding(
+  finding: Finding,
+  lineContent: string,
+  tokenIndex: Map<string, string>
+): MigrationPlanItem {
   const rule = getMigrationRule(finding.rule);
-  return {
+  const item: MigrationPlanItem = {
     ...finding,
     id: makeFindingId(finding),
     confidence: rule?.confidence ?? "low",
@@ -55,6 +61,30 @@ function enrichFinding(finding: Finding): MigrationPlanItem {
     plannedAction: rule?.plannedAction ?? "Review manually; no automated transform is available yet.",
     assumption: rule?.assumption
   };
+
+  if (finding.rule !== "hardcoded-color") return item;
+
+  const replacements = resolveTokenReplacements(lineContent, tokenIndex);
+  if (replacements.length === 0) return item;
+
+  const literals = replacements.map((replacement) => replacement.literal);
+  item.mode = "auto";
+  item.transformId = "token-replace-color";
+  item.confidence = replacements.length === findColorLiterals(lineContent).length ? "high" : "medium";
+  item.tokenReplacements = replacements;
+  item.plannedAction = `Replace ${literals.join(", ")} with ${replacements.map((replacement) => replacement.cssVar).join(", ")}.`;
+  item.assumption = "Each literal matches exactly one semantic token in the active theme.";
+  return item;
+}
+
+async function readSourceLine(cwd: string, file: string, line: number, cache: Map<string, string[]>): Promise<string> {
+  let lines = cache.get(file);
+  if (!lines) {
+    const content = await readFile(path.join(cwd, file), "utf8");
+    lines = content.split(/\r?\n/);
+    cache.set(file, lines);
+  }
+  return lines[line - 1] ?? "";
 }
 
 async function pathExists(target: string): Promise<boolean> {
@@ -138,7 +168,14 @@ function buildNextSteps(project: ProjectContext, summary: MigrationPlanSummary):
 
 export async function createMigrationPlan(cwd: string): Promise<MigrationPlan> {
   const findings = await auditProject(cwd);
-  const items = findings.map(enrichFinding);
+  const tokenIndex = await loadColorTokenIndex(cwd);
+  const lineCache = new Map<string, string[]>();
+  const items = await Promise.all(
+    findings.map(async (finding) => {
+      const lineContent = await readSourceLine(cwd, finding.file, finding.line, lineCache);
+      return enrichFinding(finding, lineContent, tokenIndex);
+    })
+  );
   const project = await detectProjectContext(cwd);
   const summary = buildSummary(items);
 

@@ -94,8 +94,11 @@ async function applyAutoTransformsToFile(
   const applied: AppliedTransform[] = [];
 
   const ordered = [...items].sort((left, right) => {
-    const order = (item: MigrationPlanItem) =>
-      item.transformId === "native-button-to-button" ? 1 : 0;
+    const order = (item: MigrationPlanItem) => {
+      if (item.transformId === "native-button-to-button") return 2;
+      if (item.transformId === "token-replace-color") return 1;
+      return 0;
+    };
     return order(left) - order(right) || left.line - right.line;
   });
 
