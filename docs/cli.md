@@ -17,6 +17,9 @@
 | `npx @super-system/cli migrate plan --json` | Prints the migration manifest as JSON for AI tools. |
 | `npx @super-system/cli migrate apply --dry-run` | Shows proposed auto-fix diffs without writing files. |
 | `npx @super-system/cli migrate apply --dry-run --json` | Prints the dry-run result as JSON. |
+| `npx @super-system/cli migrate apply` | Applies supported auto-fixes and writes changed files. |
+| `npx @super-system/cli migrate apply --allow-dirty` | Applies auto-fixes even when the git worktree has uncommitted changes. |
+| `npx @super-system/cli migrate apply --json` | Prints the apply result as JSON. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
 | `npx @super-system/cli icons setup` | Prints install guidance for the configured icon library. |

@@ -71,7 +71,7 @@ For AI coding tools:
 npx @super-system/cli migrate plan --json
 ```
 
-Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`. Automated apply is not available yet; use the plan to prioritize manual or AI-assisted cleanup.
+Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`. Use `migrate plan` to prioritize work, preview diffs with `--dry-run`, then apply safe auto-fixes.
 
 ## Preview auto-fixes (dry run)
 
@@ -97,7 +97,17 @@ Example output:
 +  return <Button>Save</Button>;
 ```
 
-Writing changes to disk is not enabled in this beta. Use the diff for manual edits or AI-assisted cleanup.
+## Apply auto-fixes
+
+When the dry-run output looks correct, apply the supported transforms:
+
+```bash
+npx @super-system/cli migrate apply
+```
+
+In git repositories, apply refuses to write when the worktree has uncommitted changes. Commit or stash first, or pass `--allow-dirty` if you accept the risk of mixing migration edits with other local changes.
+
+After applying, re-run `npx @super-system/cli audit` to see remaining manual cleanup work.
 
 ## Check color contrast
 

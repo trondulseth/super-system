@@ -1,5 +1,6 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { assertSafeToWrite } from "./git-worktree.js";
 import { createMigrationPlan, type MigrationPlanItem } from "./migration.js";
 import { applyTransform, finalizeButtonImport } from "./migration-transforms.js";
 
@@ -21,6 +22,8 @@ export interface SkippedTransform {
 
 export interface FileChange {
   file: string;
+  before: string;
+  after: string;
   diff: string;
   applied: AppliedTransform[];
 }
@@ -30,15 +33,22 @@ export interface MigrationApplySummary {
   transformsApplied: number;
   transformsSkipped: number;
   manualRemaining: number;
+  filesWritten: number;
 }
 
 export interface MigrationApplyResult {
-  dryRun: true;
+  dryRun: boolean;
   summary: MigrationApplySummary;
   changes: FileChange[];
   applied: AppliedTransform[];
   skipped: SkippedTransform[];
   manualItems: MigrationPlanItem[];
+  writtenFiles: string[];
+}
+
+export interface MigrationApplyOptions {
+  dryRun?: boolean;
+  allowDirty?: boolean;
 }
 
 function createUnifiedDiff(relativePath: string, before: string, after: string): string {
@@ -122,12 +132,19 @@ async function applyAutoTransformsToFile(
   if (content === original || applied.length === 0) return null;
   return {
     file,
+    before: original,
+    after: content,
     diff: createUnifiedDiff(file, original, content),
     applied
   };
 }
 
-export async function applyMigrationDryRun(cwd: string): Promise<MigrationApplyResult> {
+async function computeMigrationChanges(cwd: string): Promise<{
+  changes: FileChange[];
+  applied: AppliedTransform[];
+  skipped: SkippedTransform[];
+  manualItems: MigrationPlanItem[];
+}> {
   const plan = await createMigrationPlan(cwd);
   const autoItems = plan.items.filter((item) => item.mode === "auto" && item.transformId);
   const manualItems = plan.items.filter((item) => item.mode !== "auto");
@@ -162,38 +179,86 @@ export async function applyMigrationDryRun(cwd: string): Promise<MigrationApplyR
     }
   }
 
+  return { changes, applied, skipped, manualItems };
+}
+
+function buildSummary(
+  changes: FileChange[],
+  applied: AppliedTransform[],
+  skipped: SkippedTransform[],
+  manualItems: MigrationPlanItem[],
+  filesWritten: number
+): MigrationApplySummary {
   return {
-    dryRun: true,
-    summary: {
-      filesChanged: changes.length,
-      transformsApplied: applied.length,
-      transformsSkipped: skipped.length,
-      manualRemaining: manualItems.length
-    },
+    filesChanged: changes.length,
+    transformsApplied: applied.length,
+    transformsSkipped: skipped.length,
+    manualRemaining: manualItems.length,
+    filesWritten
+  };
+}
+
+export async function applyMigration(
+  cwd: string,
+  options: MigrationApplyOptions = {}
+): Promise<MigrationApplyResult> {
+  const dryRun = options.dryRun ?? false;
+  const { changes, applied, skipped, manualItems } = await computeMigrationChanges(cwd);
+
+  if (!dryRun) {
+    await assertSafeToWrite(cwd, options.allowDirty ?? false);
+  }
+
+  const writtenFiles: string[] = [];
+  if (!dryRun) {
+    for (const change of changes) {
+      await writeFile(path.join(cwd, change.file), change.after, "utf8");
+      writtenFiles.push(change.file);
+    }
+  }
+
+  return {
+    dryRun,
+    summary: buildSummary(changes, applied, skipped, manualItems, writtenFiles.length),
     changes,
     applied,
     skipped,
-    manualItems
+    manualItems,
+    writtenFiles
   };
+}
+
+export async function applyMigrationDryRun(cwd: string): Promise<MigrationApplyResult> {
+  return applyMigration(cwd, { dryRun: true });
 }
 
 export function formatMigrationApplyResult(result: MigrationApplyResult): string {
   const lines = [
-    "Super System migration apply (dry run — no files written)",
+    result.dryRun
+      ? "Super System migration apply (dry run — no files written)"
+      : "Super System migration apply",
     "",
-    `Summary: ${result.summary.transformsApplied} transform(s) across ${result.summary.filesChanged} file(s); ${result.summary.transformsSkipped} skipped; ${result.summary.manualRemaining} manual item(s) remain`,
+    result.dryRun
+      ? `Summary: ${result.summary.transformsApplied} transform(s) across ${result.summary.filesChanged} file(s); ${result.summary.transformsSkipped} skipped; ${result.summary.manualRemaining} manual item(s) remain`
+      : `Summary: wrote ${result.summary.filesWritten} file(s); ${result.summary.transformsApplied} transform(s); ${result.summary.transformsSkipped} skipped; ${result.summary.manualRemaining} manual item(s) remain`,
     ""
   ];
 
   if (result.changes.length === 0) {
-    lines.push("No automated diffs to show.");
-  } else {
+    lines.push(result.dryRun ? "No automated diffs to show." : "No files were changed.");
+  } else if (result.dryRun) {
     lines.push("Proposed changes:");
     lines.push("");
     for (const change of result.changes) {
       lines.push(change.diff);
       lines.push("");
     }
+  } else {
+    lines.push("Written files:");
+    for (const file of result.writtenFiles) {
+      lines.push(`  ${file}`);
+    }
+    lines.push("");
   }
 
   if (result.skipped.length > 0) {
@@ -209,6 +274,11 @@ export function formatMigrationApplyResult(result: MigrationApplyResult): string
     for (const item of result.manualItems) {
       lines.push(`  ${item.file}:${item.line}  ${item.rule}  ${item.plannedAction}`);
     }
+    lines.push("");
+  }
+
+  if (!result.dryRun && result.summary.filesWritten > 0) {
+    lines.push("Next step: run `npx @super-system/cli audit` to see remaining cleanup work.");
   }
 
   return lines.join("\n");
