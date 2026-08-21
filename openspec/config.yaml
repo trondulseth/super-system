@@ -5,7 +5,7 @@ context: |
   Repository: https://github.com/trondulseth/super-system
   Runtime: Node.js 20+, TypeScript, React 18+, npm packages in a pnpm workspace.
   Packages: @super-system/tokens, @super-system/react, @super-system/cli, and @super-system/studio-ui.
-  Current release: 0.1.0-beta.2, published publicly under the beta tag.
+  Current release: 0.1.0-beta.5, published publicly under the beta tag.
   Styling: portable CSS custom properties generated from super-system.json.
   Quality gates: strict TypeScript, Vitest, package builds, clean-package smoke tests, and GitHub Actions (`pnpm check`).
   Release: npm Trusted Publishing through GitHub Actions with OIDC; no long-lived publish token.
