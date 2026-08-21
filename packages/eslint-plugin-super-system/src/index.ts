@@ -1,13 +1,11 @@
 import type { ESLint } from "eslint";
 import { getAuditRule } from "@super-system/rules";
-import { imageAltRule } from "./rules/image-alt.js";
-import { rawButtonRule } from "./rules/raw-button.js";
-import { rawInputRule } from "./rules/raw-input.js";
+import { imageAltRule, rawButtonRule, rawInputRule } from "./rules/shared-jsx-rule.js";
 
 const plugin: ESLint.Plugin = {
   meta: {
     name: "eslint-plugin-super-system",
-    version: "0.1.0-beta.17"
+    version: "0.1.0-beta.18"
   },
   rules: {
     "raw-button": rawButtonRule,
