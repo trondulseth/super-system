@@ -12,7 +12,7 @@
 - [x] Add dry-run diff generation.
 - [x] Add clean-worktree protection and explicit override behavior.
 - [x] Implement token replacement transforms for unambiguous values.
-- [ ] Implement selected native-to-Super-System component transforms.
+- [x] Implement selected native-to-Super-System component transforms.
 - [ ] Add transform selection, per-rule opt-out, and resumable manifests.
 
 ## Verification

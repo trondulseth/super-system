@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.10 (form component transforms)
+
+No breaking changes. Safe to upgrade from `beta.9`.
+
+- **CLI:** `migrate apply` now replaces native `<input>`, `<textarea>`, and `<select>` with `Input`, `Textarea`, and `Select` when safe.
+- **Safety:** Checkbox, radio, file, hidden, and submit inputs remain manual review items.
+
 ## 0.1.0-beta.9 (token replacement transforms)
 
 No breaking changes. Safe to upgrade from `beta.8`.

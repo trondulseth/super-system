@@ -12,9 +12,12 @@ import {
   formatMigrationApplyResult
 } from "../packages/cli/src/migration-apply.js";
 import {
-  finalizeButtonImport,
+  finalizeComponentImports,
   transformImgAddAlt,
-  transformNativeButtonToButton
+  transformNativeButtonToButton,
+  transformNativeInputToInput,
+  transformNativeSelectToSelect,
+  transformNativeTextareaToTextarea
 } from "../packages/cli/src/migration-transforms.js";
 
 const execFileAsync = promisify(execFile);
@@ -76,6 +79,34 @@ describe("migrate apply dry-run", () => {
     expect(result.changes[0]?.diff).toContain("var(--ss-color-primary)");
   });
 
+  it("applies form control transforms and merges imports", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-form-"));
+    await mkdir(path.join(directory, "src"));
+    await writeFile(
+      path.join(directory, "src", "Form.tsx"),
+      '<input type="email" />\n<textarea />\n<select><option>A</option></select>\n'
+    );
+
+    const result = await applyMigrationDryRun(directory);
+    expect(result.summary.transformsApplied).toBe(4);
+    expect(result.changes[0]?.diff).toContain('<Input type="email" />');
+    expect(result.changes[0]?.diff).toContain("<Textarea />");
+    expect(result.changes[0]?.diff).toContain("<Select><option>A</option></Select>");
+    expect(result.changes[0]?.diff).toContain(
+      'import { Input, Select, Textarea } from "@super-system/react";'
+    );
+  });
+
+  it("skips unsafe checkbox inputs during apply", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-checkbox-"));
+    await mkdir(path.join(directory, "src"));
+    await writeFile(path.join(directory, "src", "Form.tsx"), '<input type="checkbox" />\n');
+
+    const result = await applyMigrationDryRun(directory);
+    expect(result.summary.transformsApplied).toBe(0);
+    expect(result.summary.manualRemaining).toBe(1);
+  });
+
   it("is idempotent for img alt transforms", () => {
     const item = {
       id: "image-alt:src/Hero.tsx:2",
@@ -109,7 +140,33 @@ describe("migrate apply dry-run", () => {
     const content = 'import { Input } from "@super-system/react";\n<button>Save</button>\n';
     const result = transformNativeButtonToButton(content, item);
     expect(result?.content).toContain("<Button>Save</Button>");
-    expect(finalizeButtonImport(result!.content)).toContain('import { Input, Button } from "@super-system/react"');
+    expect(finalizeComponentImports(result!.content, ["Button"])).toContain(
+      'import { Button, Input } from "@super-system/react"'
+    );
+  });
+
+  it("transforms native input, textarea, and select tags", () => {
+    const inputItem = {
+      id: "raw-input:src/Form.tsx:1",
+      rule: "raw-input",
+      file: "src/Form.tsx",
+      line: 1,
+      message: "",
+      confidence: "medium" as const,
+      mode: "auto" as const,
+      transformId: "native-input-to-input",
+      plannedAction: ""
+    };
+    expect(transformNativeInputToInput('<input type="email" />', inputItem)?.content).toBe(
+      '<Input type="email" />'
+    );
+    expect(transformNativeInputToInput('<input type="checkbox" />', inputItem)).toBeNull();
+
+    const textareaItem = { ...inputItem, id: "raw-textarea:src/Form.tsx:1", line: 1, transformId: "native-textarea-to-textarea" };
+    expect(transformNativeTextareaToTextarea("<textarea />", textareaItem)?.content).toBe("<Textarea />");
+
+    const selectItem = { ...inputItem, id: "raw-select:src/Form.tsx:1", line: 1, transformId: "native-select-to-select" };
+    expect(transformNativeSelectToSelect("<select />", selectItem)?.content).toBe("<Select />");
   });
 });
 

@@ -7,6 +7,11 @@ import {
   type MigrationMode
 } from "./migration-rules.js";
 import { findColorLiterals, loadColorTokenIndex, resolveTokenReplacements } from "./migration-tokens.js";
+import {
+  canTransformNativeInput,
+  canTransformNativeSelect,
+  canTransformNativeTextarea
+} from "./migration-form-controls.js";
 
 export const MIGRATION_MANIFEST_VERSION = 1 as const;
 
@@ -62,18 +67,47 @@ function enrichFinding(
     assumption: rule?.assumption
   };
 
-  if (finding.rule !== "hardcoded-color") return item;
+  if (finding.rule === "hardcoded-color") {
+    const replacements = resolveTokenReplacements(lineContent, tokenIndex);
+    if (replacements.length === 0) return item;
 
-  const replacements = resolveTokenReplacements(lineContent, tokenIndex);
-  if (replacements.length === 0) return item;
+    const literals = replacements.map((replacement) => replacement.literal);
+    item.mode = "auto";
+    item.transformId = "token-replace-color";
+    item.confidence = replacements.length === findColorLiterals(lineContent).length ? "high" : "medium";
+    item.tokenReplacements = replacements;
+    item.plannedAction = `Replace ${literals.join(", ")} with ${replacements.map((replacement) => replacement.cssVar).join(", ")}.`;
+    item.assumption = "Each literal matches exactly one semantic token in the active theme.";
+    return item;
+  }
 
-  const literals = replacements.map((replacement) => replacement.literal);
-  item.mode = "auto";
-  item.transformId = "token-replace-color";
-  item.confidence = replacements.length === findColorLiterals(lineContent).length ? "high" : "medium";
-  item.tokenReplacements = replacements;
-  item.plannedAction = `Replace ${literals.join(", ")} with ${replacements.map((replacement) => replacement.cssVar).join(", ")}.`;
-  item.assumption = "Each literal matches exactly one semantic token in the active theme.";
+  if (finding.rule === "raw-input" && canTransformNativeInput(lineContent)) {
+    item.mode = "auto";
+    item.transformId = "native-input-to-input";
+    item.confidence = "medium";
+    item.plannedAction = "Replace native <input> with <Input> from @super-system/react.";
+    item.assumption = "The control is a standard text-like input without custom non-DOM behavior.";
+    return item;
+  }
+
+  if (finding.rule === "raw-textarea" && canTransformNativeTextarea(lineContent)) {
+    item.mode = "auto";
+    item.transformId = "native-textarea-to-textarea";
+    item.confidence = "medium";
+    item.plannedAction = "Replace native <textarea> with <Textarea> from @super-system/react.";
+    item.assumption = "The control is a standard textarea without custom non-DOM behavior.";
+    return item;
+  }
+
+  if (finding.rule === "raw-select" && canTransformNativeSelect(lineContent)) {
+    item.mode = "auto";
+    item.transformId = "native-select-to-select";
+    item.confidence = "medium";
+    item.plannedAction = "Replace native <select> with <Select> from @super-system/react.";
+    item.assumption = "The control is a standard select without custom non-DOM behavior.";
+    return item;
+  }
+
   return item;
 }
 

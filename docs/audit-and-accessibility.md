@@ -85,6 +85,9 @@ Current automated transforms:
 
 - `img-add-alt` — adds `alt=""` to `<img>` tags missing alt text
 - `native-button-to-button` — replaces native `<button>` with `<Button>` and adds the import when needed
+- `native-input-to-input` — replaces text-like `<input>` elements with `<Input>` (skips checkbox, radio, file, hidden, and submit types)
+- `native-textarea-to-textarea` — replaces native `<textarea>` with `<Textarea>`
+- `native-select-to-select` — replaces native `<select>` with `<Select>`
 - `token-replace-color` — replaces hardcoded hex/rgb colors with `var(--ss-color-*)` when the value maps to exactly one theme token
 
 Example output:
