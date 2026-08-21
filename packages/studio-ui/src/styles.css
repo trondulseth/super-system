@@ -219,6 +219,30 @@ aside select {
   font-size: 13px;
 }
 
+.surface-swatch-row {
+  align-items: stretch;
+}
+.surface-swatch {
+  flex: 1;
+  min-height: 4rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  padding: var(--ss-space-3, 12px);
+}
+.surface-swatch--secondary {
+  background: var(--ss-color-secondary);
+  color: var(--ss-color-secondary-foreground);
+}
+.surface-swatch--muted {
+  background: var(--ss-color-muted);
+  color: var(--ss-color-muted-foreground);
+}
+.surface-swatch__label {
+  font: 600 0.8125rem/1.2 var(--ss-font-sans, system-ui);
+}
+
 @media (max-width: 800px) {
   main {
     grid-template-columns: 1fr;

@@ -18,7 +18,7 @@ export const defaultTheme: SuperSystemConfig = {
       foreground: "#111827",
       primary: "#2563eb",
       primaryForeground: "#ffffff",
-      secondary: "#f1f5f9",
+      secondary: "#e2e8f0",
       secondaryForeground: "#172033",
       muted: "#f1f5f9",
       mutedForeground: "#475569",
@@ -27,14 +27,14 @@ export const defaultTheme: SuperSystemConfig = {
       destructiveForeground: "#ffffff",
       success: "#15803d",
       successForeground: "#ffffff",
-      focus: "#2563eb"
+      focus: "#1d4ed8"
     },
     dark: {
       background: "#0b1120",
       foreground: "#f8fafc",
       primary: "#60a5fa",
       primaryForeground: "#08111f",
-      secondary: "#1e293b",
+      secondary: "#334155",
       secondaryForeground: "#f8fafc",
       muted: "#1e293b",
       mutedForeground: "#cbd5e1",

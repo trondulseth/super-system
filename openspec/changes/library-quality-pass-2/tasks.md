@@ -14,23 +14,23 @@
 
 ### CSS bugs and token gaps
 
-- [ ] Add `.ss-line-chart--muted` line and area fill rules in `packages/react/src/styles.css`.
-- [ ] Add `.ss-donut-chart--muted` stroke rule in `styles.css`.
-- [ ] Add `--ss-color-success` and `--ss-color-success-foreground` to theme types, `default-theme.ts`, and `compiler.ts`.
-- [ ] Replace `#15803d` in `.ss-kpi-card__trend--up` with success tokens.
-- [ ] Change drawer `box-shadow` (line ~741) to `var(--ss-overlay-shadow, ...)`.
-- [ ] Change toast `box-shadow` (line ~800) to `var(--ss-overlay-shadow, ...)`.
-- [ ] Replace literal `white` in bar gradient with `var(--ss-color-background)`.
-- [ ] Remove `!important` from horizontal bar height; fix layout via CSS flex/grid.
-- [ ] Add chart transition overrides under `@media (prefers-reduced-motion: reduce)`.
-- [ ] Remove or implement dead CSS: `.ss-popover__content--*`, `.ss-dropdown__content--start/end`.
-- [ ] Stop emitting `ss-kpi-card--default` when variant is default.
+- [x] Add `.ss-line-chart--muted` line and area fill rules in `packages/react/src/styles.css`.
+- [x] Add `.ss-donut-chart--muted` stroke rule in `styles.css`.
+- [x] Add `--ss-color-success` and `--ss-color-success-foreground` to theme types, `default-theme.ts`, and `compiler.ts`.
+- [x] Replace `#15803d` in `.ss-kpi-card__trend--up` with success tokens.
+- [x] Change drawer `box-shadow` (line ~741) to `var(--ss-overlay-shadow, ...)`.
+- [x] Change toast `box-shadow` (line ~800) to `var(--ss-overlay-shadow, ...)`.
+- [x] Replace literal `white` in bar gradient with `var(--ss-color-background)`.
+- [x] Remove `!important` from horizontal bar height; fix layout via CSS flex/grid.
+- [x] Add chart transition overrides under `@media (prefers-reduced-motion: reduce)`.
+- [x] Remove or implement dead CSS: `.ss-popover__content--*`, `.ss-dropdown__content--start/end`.
+- [x] Stop emitting `ss-kpi-card--default` when variant is default.
 
 ### Tests
 
-- [ ] Test LineChart and DonutChart `tone="muted"` render with computed stroke/fill color.
-- [ ] Test KPI trend-up uses success token (CSS custom property assertion or snapshot).
-- [ ] CSS hygiene test: no `#15803d`, no bare `white` in production stylesheet.
+- [x] Test LineChart and DonutChart `tone="muted"` render with computed stroke/fill color.
+- [x] Test KPI trend-up uses success token (CSS custom property assertion or snapshot).
+- [x] CSS hygiene test: no `#15803d`, no bare `white` in production stylesheet.
 
 **Exit:** All chart tones visible in light/dark; zero hardcoded hex in component CSS; all overlays use `--ss-overlay-shadow`.
 

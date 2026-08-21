@@ -14,6 +14,20 @@ describe("theme tokens", () => {
     expect(checkThemeContrast(defaultTheme).every((result) => result.passes)).toBe(true);
   });
 
+  it("uses distinct secondary, muted, focus, and primary values in defaults", () => {
+    const { light, dark } = defaultTheme.themes;
+    expect(light.secondary).not.toBe(light.muted);
+    expect(light.focus).not.toBe(light.primary);
+    expect(dark.secondary).not.toBe(dark.muted);
+    expect(dark.focus).not.toBe(dark.primary);
+  });
+
+  it("checks focus ring contrast against page background", () => {
+    const focusResults = checkThemeContrast(defaultTheme).filter((result) => result.pair === "focus/background");
+    expect(focusResults).toHaveLength(2);
+    expect(focusResults.every((result) => result.passes)).toBe(true);
+  });
+
   it("calculates WCAG contrast", () => {
     expect(contrastRatio("#000000", "#ffffff")).toBeCloseTo(21);
   });

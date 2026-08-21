@@ -31,6 +31,12 @@
 ### Theme tokens
 
 - Compiler emits `--ss-overlay-backdrop` and `--ss-overlay-shadow` for modal/overlay surfaces.
+- **Success tokens:** `success` and `successForeground` are now part of the theme schema (used by KPI trend-up and positive states). Older configs pick up defaults when the theme is compiled.
+- **Default palette refresh:** light `secondary` and `muted` are distinct surfaces; light `focus` is distinct from `primary`. Dark `secondary` and `muted` are also differentiated.
+
+### Typography tokens
+
+- **`fontMono`** is applied to KPI values, table cells with `data-numeric="true"`, and inline `code` inside alert bodies.
 
 ### Package peers
 

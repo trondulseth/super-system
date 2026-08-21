@@ -1349,4 +1349,11 @@ describe("Production CSS hygiene", () => {
     expect(css).toContain(".ss-line-chart--muted");
     expect(css).toContain(".ss-donut-chart--muted");
   });
+
+  it("uses monospace tokens for KPI values and alert code", () => {
+    const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
+    expect(css).toMatch(/\.ss-kpi-card__value[\s\S]*var\(--ss-font-mono/);
+    expect(css).toMatch(/\.ss-alert__body code[\s\S]*var\(--ss-font-mono/);
+    expect(css).toMatch(/\.ss-table__cell\[data-numeric="true"\][\s\S]*var\(--ss-font-mono/);
+  });
 });

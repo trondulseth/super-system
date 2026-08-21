@@ -273,6 +273,13 @@
   font: 400 var(--ss-font-size-base, 16px)/var(--ss-line-height, 1.5) var(--ss-font-sans, system-ui);
   color: var(--ss-color-muted-foreground);
 }
+.ss-alert__body code {
+  padding: 0.1em 0.35em;
+  border-radius: calc(var(--ss-radius-sm, 6px) - 1px);
+  background: color-mix(in srgb, var(--ss-color-foreground) 6%, transparent);
+  font: 500 0.875em/1.4 var(--ss-font-mono, ui-monospace, monospace);
+  color: var(--ss-color-foreground);
+}
 .ss-alert--primary {
   background: color-mix(in srgb, var(--ss-color-primary) 12%, var(--ss-color-background));
   border-color: color-mix(in srgb, var(--ss-color-primary) 35%, var(--ss-color-border));
@@ -864,6 +871,10 @@
   background: var(--ss-color-muted);
   color: var(--ss-color-foreground);
 }
+.ss-table__cell[data-numeric="true"] {
+  font-family: var(--ss-font-mono, ui-monospace, monospace);
+  font-variant-numeric: tabular-nums;
+}
 .ss-table__body .ss-table__row:last-child .ss-table__cell {
   border-bottom: 0;
 }
@@ -1066,7 +1077,8 @@
 }
 .ss-kpi-card__value {
   margin: 0;
-  font: 700 clamp(1.5rem, 2vw, 2rem)/1.1 var(--ss-font-sans, system-ui);
+  font: 700 clamp(1.5rem, 2vw, 2rem)/1.1 var(--ss-font-mono, ui-monospace, monospace);
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
 .ss-kpi-card__trend {

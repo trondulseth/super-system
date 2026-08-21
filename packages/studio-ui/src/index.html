@@ -53,6 +53,7 @@
         </div>
         <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
         <label>Monospace font<input id="fontMono" /></label>
+        <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
         <div class="row">
           <label
             >Density<select id="density">
@@ -122,6 +123,18 @@
                 <span class="ss-spinner" aria-hidden="true"></span>
                 <span>Saving</span>
               </button>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Semantic surfaces</h4>
+            <div class="demo-row surface-swatch-row">
+              <div class="surface-swatch surface-swatch--secondary">
+                <span class="surface-swatch__label">Secondary</span>
+              </div>
+              <div class="surface-swatch surface-swatch--muted">
+                <span class="surface-swatch__label">Muted</span>
+              </div>
             </div>
           </section>
 
@@ -243,7 +256,9 @@
             </div>
             <div class="ss-alert ss-alert--primary" role="status">
               <p class="ss-alert__title">Invite sent</p>
-              <div class="ss-alert__body">Your teammate can now join the workspace.</div>
+              <div class="ss-alert__body">
+                Your teammate can join with token <code>ss_inv_8f2a</code>.
+              </div>
             </div>
             <div class="ss-alert ss-alert--destructive" role="alert">
               <p class="ss-alert__title">Payment failed</p>
@@ -450,16 +465,19 @@
                 <thead class="ss-table__header">
                   <tr class="ss-table__row">
                     <th scope="col" class="ss-table__head">Name</th>
+                    <th scope="col" class="ss-table__head">Sessions</th>
                     <th scope="col" class="ss-table__head">Role</th>
                   </tr>
                 </thead>
                 <tbody class="ss-table__body">
                   <tr class="ss-table__row">
                     <td class="ss-table__cell">Ada Lovelace</td>
+                    <td class="ss-table__cell" data-numeric="true">1,284</td>
                     <td class="ss-table__cell">Admin</td>
                   </tr>
                   <tr class="ss-table__row">
                     <td class="ss-table__cell">Grace Hopper</td>
+                    <td class="ss-table__cell" data-numeric="true">892</td>
                     <td class="ss-table__cell">Editor</td>
                   </tr>
                 </tbody>
