@@ -580,7 +580,7 @@
             </div>
           </section>
 
-          <section class="preview-section">
+          <section class="preview-section preview-section--popover">
             <h4 class="preview-label">Popover</h4>
             <div class="demo-row">
               <span class="ss-popover ss-popover--demo ss-popover--demo-top">
@@ -799,46 +799,86 @@
             </div>
           </section>
 
-          <section class="preview-section">
+          <section class="preview-section preview-section--page-shell">
             <h4 class="preview-label">Page shell</h4>
-            <div class="ss-app-shell ss-app-shell--preview">
-              <aside class="ss-sidebar">
-                <div class="ss-sidebar__brand">Acme</div>
-                <nav aria-label="Sidebar" class="ss-sidebar__nav">
-                  <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Dashboard</a>
-                  <a href="#" class="ss-sidebar__link">Reports</a>
-                  <a href="#" class="ss-sidebar__link">Settings</a>
-                </nav>
-              </aside>
-              <div class="ss-app-shell__body">
-                <header class="ss-top-bar">
-                  <div class="ss-top-bar__brand">Acme Dashboard</div>
-                  <div class="ss-top-bar__actions">
-                    <button class="ss-button ss-button--ghost ss-button--sm ss-hamburger-menu__trigger" type="button" aria-label="Open menu">
-                      <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
-                    </button>
-                    <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
-                  </div>
-                </header>
-                <main class="ss-main">
-                  <header class="ss-page-header">
-                    <div class="ss-page-header__content">
-                      <h1 class="ss-page-header__title">Overview</h1>
-                      <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
+            <div class="preview-device-toolbar">
+              <div class="preview-device-switch" role="group" aria-label="Preview device size">
+                <button type="button" class="preview-device-switch__btn is-active" data-preview-device="desktop" aria-pressed="true">Desktop</button>
+                <button type="button" class="preview-device-switch__btn" data-preview-device="tablet" aria-pressed="false">Pad</button>
+                <button type="button" class="preview-device-switch__btn" data-preview-device="mobile" aria-pressed="false">Mobile</button>
+              </div>
+              <p class="preview-device-hint" id="page-shell-hint">Full-width layout with persistent sidebar.</p>
+            </div>
+            <div class="preview-device-frame" id="page-shell-frame" data-device="desktop">
+              <div class="ss-app-shell ss-app-shell--preview">
+                <aside class="ss-sidebar preview-shell-sidebar">
+                  <div class="ss-sidebar__brand">Acme</div>
+                  <nav aria-label="Sidebar" class="ss-sidebar__nav">
+                    <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Dashboard</a>
+                    <a href="#" class="ss-sidebar__link">Reports</a>
+                    <a href="#" class="ss-sidebar__link">Settings</a>
+                  </nav>
+                </aside>
+                <div class="ss-app-shell__body">
+                  <header class="ss-top-bar">
+                    <div class="ss-top-bar__brand">Acme Dashboard</div>
+                    <div class="ss-top-bar__actions">
+                      <button
+                        class="ss-button ss-button--ghost ss-button--sm ss-hamburger-menu__trigger preview-shell-hamburger"
+                        id="preview-hamburger"
+                        type="button"
+                        aria-label="Open menu"
+                        aria-expanded="false"
+                        aria-controls="preview-shell-drawer"
+                        hidden
+                      >
+                        <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+                      </button>
+                      <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
                     </div>
                   </header>
-                  <div class="ss-row ss-box--gap-md preview-layout-row">
-                    <div class="ss-kpi-card ss-kpi-card--muted preview-layout-card">
-                      <p class="ss-kpi-card__title">Active projects</p>
-                      <p class="ss-kpi-card__value">18</p>
+                  <main class="ss-main">
+                    <header class="ss-page-header">
+                      <div class="ss-page-header__content">
+                        <h1 class="ss-page-header__title">Overview</h1>
+                        <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
+                      </div>
+                    </header>
+                    <div class="ss-row ss-box--gap-md preview-layout-row">
+                      <div class="ss-kpi-card ss-kpi-card--muted preview-layout-card">
+                        <p class="ss-kpi-card__title">Active projects</p>
+                        <p class="ss-kpi-card__value">18</p>
+                      </div>
+                      <div class="ss-kpi-card preview-layout-card">
+                        <p class="ss-kpi-card__title">Open tasks</p>
+                        <p class="ss-kpi-card__value">42</p>
+                      </div>
                     </div>
-                    <div class="ss-kpi-card preview-layout-card">
-                      <p class="ss-kpi-card__title">Open tasks</p>
-                      <p class="ss-kpi-card__value">42</p>
-                    </div>
+                  </main>
+                  <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
+                </div>
+              </div>
+              <div id="preview-shell-drawer" class="preview-shell-drawer" aria-hidden="true">
+                <button type="button" class="preview-shell-drawer__overlay" aria-label="Close menu" tabindex="-1"></button>
+                <div
+                  id="preview-shell-drawer-panel"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="preview-shell-menu-title"
+                  class="preview-shell-drawer__panel ss-drawer__content ss-drawer__content--left ss-hamburger-menu__panel"
+                >
+                  <button type="button" class="ss-drawer__close" id="preview-shell-close" aria-label="Close">×</button>
+                  <div class="ss-drawer__header">
+                    <h2 id="preview-shell-menu-title" class="ss-drawer__title">Menu</h2>
                   </div>
-                </main>
-                <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
+                  <div class="ss-drawer__body">
+                    <nav aria-label="Mobile navigation" class="ss-hamburger-menu__nav">
+                      <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Dashboard</a>
+                      <a href="#" class="ss-sidebar__link">Reports</a>
+                      <a href="#" class="ss-sidebar__link">Settings</a>
+                    </nav>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

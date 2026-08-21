@@ -33,6 +33,87 @@ function formatModeDefault(mode: SuperSystemConfig["mode"]["default"]): string {
   return mode.charAt(0).toUpperCase() + mode.slice(1);
 }
 
+const DEVICE_HINTS: Record<"desktop" | "tablet" | "mobile", string> = {
+  desktop: "Full-width layout with persistent sidebar.",
+  tablet: "Pad width — sidebar hidden; use the menu button.",
+  mobile: "Mobile width — sidebar hidden; use the menu button."
+};
+
+function initPageShellPreview(): void {
+  const frame = document.getElementById("page-shell-frame");
+  const drawer = document.getElementById("preview-shell-drawer");
+  const trigger = document.getElementById("preview-hamburger") as HTMLButtonElement | null;
+  const closeButton = document.getElementById("preview-shell-close");
+  const hint = document.getElementById("page-shell-hint");
+  const switches = document.querySelectorAll<HTMLButtonElement>("[data-preview-device]");
+
+  if (!frame || !drawer || !trigger) return;
+
+  const shellFrame = frame;
+  const shellDrawer = drawer;
+  const shellTrigger = trigger;
+  const shellOverlay = shellDrawer.querySelector(".preview-shell-drawer__overlay");
+
+  function closeDrawer(): void {
+    shellDrawer.classList.remove("is-open");
+    shellDrawer.setAttribute("aria-hidden", "true");
+    shellTrigger.setAttribute("aria-expanded", "false");
+    shellOverlay?.setAttribute("tabindex", "-1");
+  }
+
+  function openDrawer(): void {
+    shellDrawer.classList.add("is-open");
+    shellDrawer.setAttribute("aria-hidden", "false");
+    shellTrigger.setAttribute("aria-expanded", "true");
+    shellOverlay?.setAttribute("tabindex", "0");
+  }
+
+  function toggleDrawer(): void {
+    if (shellDrawer.classList.contains("is-open")) closeDrawer();
+    else openDrawer();
+  }
+
+  function setDevice(device: "desktop" | "tablet" | "mobile"): void {
+    shellFrame.dataset.device = device;
+    switches.forEach((button) => {
+      const active = button.dataset.previewDevice === device;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    if (hint) hint.textContent = DEVICE_HINTS[device];
+    shellTrigger.hidden = device === "desktop";
+    closeDrawer();
+  }
+
+  switches.forEach((button) => {
+    button.addEventListener("click", () => {
+      const device = button.dataset.previewDevice as "desktop" | "tablet" | "mobile" | undefined;
+      if (device) setDevice(device);
+    });
+  });
+
+  shellTrigger.addEventListener("click", () => {
+    if (shellFrame.dataset.device === "desktop") return;
+    toggleDrawer();
+  });
+
+  closeButton?.addEventListener("click", closeDrawer);
+  shellOverlay?.addEventListener("click", closeDrawer);
+
+  shellDrawer.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeDrawer();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && shellDrawer.classList.contains("is-open")) closeDrawer();
+  });
+
+  setDevice("desktop");
+}
+
 export async function initStudio(backend: StudioBackend, options: StudioOptions = {}): Promise<void> {
   let config: SuperSystemConfig;
   let preview: "light" | "dark" = "light";
@@ -87,6 +168,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   config = await backend.loadConfig();
   fill();
   await render();
+  initPageShellPreview();
 
   document.querySelectorAll("aside input,aside select").forEach((element) => {
     element.addEventListener("input", () => {
