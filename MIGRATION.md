@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.12 (Studio surface/elevation/typography controls)
+
+No breaking API changes. Studio-only release.
+
+- **Studio:** Sidebar controls for surface gradient tint/angle, elevation shadow strength/hover/lift, typography scale (h1–h4, lead, small), heading line height, font weights, and link colors.
+- **Preview:** Live demo card with `.ss-prose`, `.ss-elevate-on-hover`, and themed links.
+
 ## 0.1.0-beta.11 (surfaces, elevation, typography utilities)
 
 No breaking API changes. Regenerate theme CSS after upgrading.

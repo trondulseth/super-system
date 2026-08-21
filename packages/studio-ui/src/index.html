@@ -135,6 +135,40 @@
             <input id="focusHex" type="text" spellcheck="false" autocomplete="off" />
           </div>
         </label>
+        <div class="row">
+          <label class="color-field">
+            Link
+            <div class="color-input-row">
+              <input id="link" type="color" />
+              <input id="linkHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Link hover
+            <div class="color-input-row">
+              <input id="linkHover" type="color" />
+              <input id="linkHoverHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+        </div>
+        <h2>Surfaces</h2>
+        <p class="field-help">Neutral surfaces blend primary into the background. KPI cards and muted panels use the gradient.</p>
+        <div class="row">
+          <label class="slider-field">
+            Gradient tint
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="gradientTint" type="range" min="0" max="15" step="1" />
+              <output class="ss-slider-value" for="gradientTint">5%</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Gradient angle
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="gradientAngle" type="range" min="0" max="360" step="5" />
+              <output class="ss-slider-value" for="gradientAngle">145°</output>
+            </div>
+          </label>
+        </div>
         <h2>Typography and shape</h2>
         <label>Font family<input id="fontSans" /></label>
         <label class="slider-field">
@@ -168,13 +202,94 @@
           </div>
         </label>
         <label>Pill radius<input id="radiusFull" /></label>
-        <label class="slider-field">
-          Line height
-          <div class="ss-slider-row">
-            <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
-            <output class="ss-slider-value" for="lineHeight">1.5</output>
-          </div>
-        </label>
+        <div class="row">
+          <label class="slider-field">
+            Body line height
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
+              <output class="ss-slider-value" for="lineHeight">1.5</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Heading line height
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="headingLineHeight" type="range" min="1" max="1.6" step="0.05" />
+              <output class="ss-slider-value" for="headingLineHeight">1.25</output>
+            </div>
+          </label>
+        </div>
+        <h3 class="sidebar-subheading">Type scale</h3>
+        <div class="row">
+          <label class="slider-field">
+            Heading 1
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleH1" type="range" min="1.5" max="3.5" step="0.125" />
+              <output class="ss-slider-value" for="scaleH1">2.25rem</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Heading 2
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleH2" type="range" min="1.25" max="3" step="0.125" />
+              <output class="ss-slider-value" for="scaleH2">1.875rem</output>
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <label class="slider-field">
+            Heading 3
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleH3" type="range" min="1" max="2.5" step="0.125" />
+              <output class="ss-slider-value" for="scaleH3">1.5rem</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Heading 4
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleH4" type="range" min="0.875" max="2" step="0.125" />
+              <output class="ss-slider-value" for="scaleH4">1.25rem</output>
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <label class="slider-field">
+            Lead
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleLead" type="range" min="1" max="1.5" step="0.0625" />
+              <output class="ss-slider-value" for="scaleLead">1.125rem</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Small
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="scaleSmall" type="range" min="0.625" max="1" step="0.0625" />
+              <output class="ss-slider-value" for="scaleSmall">0.875rem</output>
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <label
+            >Heading weight<select id="weightHeading">
+              <option value="600">600</option>
+              <option value="700">700</option>
+              <option value="800">800</option>
+            </select></label
+          >
+          <label
+            >Body weight<select id="weightBody">
+              <option value="300">300</option>
+              <option value="400">400</option>
+              <option value="500">500</option>
+            </select></label
+          >
+          <label
+            >Strong weight<select id="weightStrong">
+              <option value="500">500</option>
+              <option value="600">600</option>
+              <option value="700">700</option>
+            </select></label
+          >
+        </div>
         <label>Monospace font<input id="fontMono" /></label>
         <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
         <div class="row">
@@ -204,6 +319,31 @@
         <p class="field-help">
           Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
         </p>
+        <h2>Elevation</h2>
+        <p class="field-help">Card shadows and hover lift. Use <code>.ss-elevate</code> or <code>.ss-elevate-on-hover</code> in app markup.</p>
+        <div class="row">
+          <label class="slider-field">
+            Shadow strength
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="shadowStrength" type="range" min="0" max="30" step="1" />
+              <output class="ss-slider-value" for="shadowStrength">6%</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Hover shadow
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="shadowHoverStrength" type="range" min="0" max="30" step="1" />
+              <output class="ss-slider-value" for="shadowHoverStrength">10%</output>
+            </div>
+          </label>
+        </div>
+        <label class="slider-field">
+          Hover lift
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="lift" type="range" min="0" max="8" step="1" />
+            <output class="ss-slider-value" for="lift">2px</output>
+          </div>
+        </label>
         <h2>Accessibility</h2>
         <div class="row">
           <label
@@ -283,6 +423,17 @@
                 <span class="surface-swatch__label">Muted</span>
               </div>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Typography &amp; elevation</h4>
+            <article class="ss-card ss-elevate-on-hover preview-elevate-card">
+              <div class="ss-prose">
+                <h1 class="ss-heading-1">Heading one</h1>
+                <p class="ss-text-lead">Lead paragraph with <a class="ss-link" href="#">themed link</a>.</p>
+                <p class="ss-text-body">Body text with <strong>strong emphasis</strong> and <span class="ss-text-small ss-text-muted">small caption</span>.</p>
+              </div>
+            </article>
           </section>
 
           <section class="preview-section">
