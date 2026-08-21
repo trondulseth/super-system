@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/logo.svg" alt="Super System logo" width="220" />
+  <img src="brand/logo.svg" alt="Super System logo" width="280" />
 </p>
 
 <p align="center">
