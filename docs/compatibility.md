@@ -33,9 +33,12 @@ Release tags must match coordinated package versions. CI runs:
 ```bash
 node scripts/verify-release.mjs v0.1.0-beta.N
 pnpm check
+node scripts/publish-packages.mjs
 ```
 
 Tarball installation is smoke-tested in CI to catch missing `files` entries before publish.
+
+If publish fails for a **new** package, see [First-time npm packages](../CONTRIBUTING.md#first-time-npm-packages) in CONTRIBUTING.md. Re-run the Publish beta workflow after setup; already-published versions are skipped automatically.
 
 ## Semantic versioning (target for 1.0)
 
