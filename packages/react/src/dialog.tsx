@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OverlayPortal, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
+import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
 import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DialogContextValue {
@@ -125,12 +125,23 @@ export function DialogContent({
   className,
   children,
   onKeyDown,
+  "aria-label": ariaLabel,
   ...props
 }: DialogContentProps) {
   const { open, setOpen, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDialogContext("DialogContent");
 
   useFocusTrap(contentRef, open, triggerRef);
+  useBackgroundInert(open);
+
+  React.useEffect(() => {
+    if (!open || process.env.NODE_ENV === "production") return;
+    if (!hasTitle && !ariaLabel) {
+      console.warn(
+        "[Super System Dialog] DialogContent should include DialogTitle or an aria-label for accessibility."
+      );
+    }
+  }, [ariaLabel, hasTitle, open]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -170,6 +181,7 @@ export function DialogContent({
           aria-modal="true"
           aria-labelledby={hasTitle ? titleId : undefined}
           aria-describedby={hasDescription ? descriptionId : undefined}
+          aria-label={!hasTitle ? ariaLabel : undefined}
           tabIndex={-1}
           className={classes("ss-dialog__content", className)}
           onKeyDown={handleContentKeyDown}
@@ -230,7 +242,7 @@ export function DialogFooter({ className, ...props }: DialogFooterProps) {
 export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
-  function DialogClose({ className, onClick, ...props }, ref) {
+  function DialogClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
     const { setOpen } = useDialogContext("DialogClose");
 
     return (
@@ -238,6 +250,7 @@ export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>
         ref={ref}
         type="button"
         className={classes("ss-dialog__close", className)}
+        aria-label={ariaLabel}
         onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
       />

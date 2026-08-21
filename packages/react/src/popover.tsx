@@ -77,6 +77,7 @@ export function PopoverTrigger({ children }: PopoverTriggerProps) {
   return React.cloneElement(child, {
     ...childProps,
     ref: composeRefs(childRef, triggerRef),
+    "aria-haspopup": "dialog",
     "aria-expanded": open,
     "aria-controls": open ? contentId : undefined,
     onClick: mergeHandlers(childProps.onClick, () => setOpen(!open)),
@@ -129,7 +130,7 @@ export function PopoverContent({
 export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const PopoverClose = React.forwardRef<HTMLButtonElement, PopoverCloseProps>(
-  function PopoverClose({ className, onClick, ...props }, ref) {
+  function PopoverClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
     const { setOpen } = usePopoverContext("PopoverClose");
 
     return (
@@ -137,6 +138,7 @@ export const PopoverClose = React.forwardRef<HTMLButtonElement, PopoverCloseProp
         ref={ref}
         type="button"
         className={classes("ss-popover__close", className)}
+        aria-label={ariaLabel}
         onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
       />

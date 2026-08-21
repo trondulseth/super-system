@@ -78,7 +78,7 @@ export function ToastProvider({ children, duration = 5000 }: ToastProviderProps)
     };
   }, []);
 
-  const viewportLive = toasts.some((entry) => entry.variant === "destructive") ? "assertive" : "polite";
+  const viewportLive = "polite";
 
   return (
     <ToastContext.Provider value={{ toast, dismiss }}>

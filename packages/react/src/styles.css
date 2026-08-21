@@ -384,6 +384,18 @@
   position: relative;
   display: inline-flex;
 }
+.ss-tooltip--disabled-trigger {
+  display: inline-flex;
+}
+.ss-tooltip__trigger-wrap {
+  display: inline-flex;
+  border-radius: var(--ss-radius-md, 10px);
+  outline: none;
+}
+.ss-tooltip__trigger-wrap:focus-visible {
+  outline: 2px solid var(--ss-color-focus, var(--ss-color-primary));
+  outline-offset: 2px;
+}
 .ss-tooltip__content {
   position: absolute;
   z-index: 20;
@@ -626,6 +638,14 @@
   color: var(--ss-color-primary-foreground);
   background: var(--ss-color-primary);
   border-color: var(--ss-color-primary);
+}
+.ss-pagination__link--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.ss-pagination__link--disabled:hover {
+  background: var(--ss-color-background);
 }
 .ss-pagination__previous,
 .ss-pagination__next {
@@ -946,6 +966,21 @@
 }
 
 /* Charts */
+.ss-chart {
+  position: relative;
+  display: inline-block;
+}
+.ss-chart__data-table {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .ss-sparkline__line {
   stroke-width: 2;
   stroke-linecap: round;
@@ -957,6 +992,7 @@
 .ss-sparkline--muted .ss-sparkline__line { stroke: var(--ss-color-border); }
 
 .ss-bar-chart {
+  position: relative;
   display: flex;
   gap: var(--ss-space-2, 8px);
   align-items: end;

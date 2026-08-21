@@ -1,3 +1,13 @@
+const SPARKLINE_TREND_EPSILON = 1e-9;
+
+export function getSparklineTrend(values: number[]): "up" | "down" | "flat" {
+  if (values.length === 0) return "flat";
+  const first = values[0] ?? 0;
+  const last = values[values.length - 1] ?? 0;
+  if (Math.abs(last - first) < SPARKLINE_TREND_EPSILON) return "flat";
+  return last >= first ? "up" : "down";
+}
+
 export function normalizeSeries(values: number[]): number[] {
   if (values.length === 0) return [];
   const min = Math.min(...values);

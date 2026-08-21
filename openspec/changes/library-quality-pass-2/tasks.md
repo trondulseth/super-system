@@ -38,18 +38,18 @@
 
 ## Phase 2 — Default theme prettiness (8 → 10)
 
-- [ ] Differentiate light `secondary` from `muted` in `default-theme.ts`.
-- [ ] Set light `focus` distinct from `primary`; verify dark focus remains distinct.
-- [ ] Add light/dark success + successForeground with contrast validation.
-- [ ] Extend `contrast.ts` pairs for success and focus combinations.
-- [ ] Apply `--ss-font-mono` in component CSS (table numerics, code snippet in alert, or KPI value option).
-- [ ] Update root `super-system.json` template if present.
-- [ ] Document new tokens in `MIGRATION.md`.
+- [x] Differentiate light `secondary` from `muted` in `default-theme.ts`.
+- [x] Set light `focus` distinct from `primary`; verify dark focus remains distinct.
+- [x] Add light/dark success + successForeground with contrast validation.
+- [x] Extend `contrast.ts` pairs for success and focus combinations.
+- [x] Apply `--ss-font-mono` in component CSS (table numerics, code snippet in alert, or KPI value option).
+- [x] Update root `super-system.json` template if present.
+- [x] Document new tokens in `MIGRATION.md`.
 
 ### Tests
 
-- [ ] Contrast tests pass for new success pairs in default theme.
-- [ ] Visual/manual: secondary vs muted surfaces distinguishable in Studio preview.
+- [x] Contrast tests pass for new success pairs in default theme.
+- [x] Visual/manual: secondary vs muted surfaces distinguishable in Studio preview.
 
 **Exit:** Every typography/color token has visible effect; semantic surfaces distinct; focus/success/destructive all contrast-valid.
 
@@ -59,33 +59,33 @@
 
 ### Component fixes
 
-- [ ] Default `aria-label="Close"` on DialogClose, DrawerClose, PopoverClose (overridable).
-- [ ] Add optional `aria-label` on DialogContent/DrawerContent; dev warn when no title and no label.
-- [ ] Implement disabled-trigger tooltip wrapper pattern in `tooltip.tsx` + CSS.
-- [ ] Add ref-counted background inert/`aria-hidden` in `overlay-utils.ts` for modals.
-- [ ] Change vertical `Divider` to `role="separator"` with `aria-orientation="vertical"`.
-- [ ] Add `aria-haspopup` on Popover trigger.
-- [ ] Skip disabled tabs in auto-select (`tabs.tsx`).
-- [ ] Handle controlled tabs orphan value (fallback or warn).
-- [ ] Pagination previous/next unavailable state with `aria-disabled`.
-- [ ] Add optional `dataTable` / accessible data prop on charts (visually hidden table).
-- [ ] Fix sparkline aria-label: "flat" when delta below epsilon.
-- [ ] Refine toast live region: avoid viewport+toast double assertive announcement.
+- [x] Default `aria-label="Close"` on DialogClose, DrawerClose, PopoverClose (overridable).
+- [x] Add optional `aria-label` on DialogContent/DrawerContent; dev warn when no title and no label.
+- [x] Implement disabled-trigger tooltip wrapper pattern in `tooltip.tsx` + CSS.
+- [x] Add ref-counted background inert/`aria-hidden` in `overlay-utils.ts` for modals.
+- [x] Change vertical `Divider` to `role="separator"` with `aria-orientation="vertical"`.
+- [x] Add `aria-haspopup` on Popover trigger.
+- [x] Skip disabled tabs in auto-select (`tabs.tsx`).
+- [x] Handle controlled tabs orphan value (fallback or warn).
+- [x] Pagination previous/next unavailable state with `aria-disabled`.
+- [x] Add optional `dataTable` / accessible data prop on charts (visually hidden table).
+- [x] Fix sparkline aria-label: "flat" when delta below epsilon.
+- [x] Refine toast live region: avoid viewport+toast double assertive announcement.
 
 ### Documentation
 
-- [ ] Document label shallow propagation + recommended `htmlFor` pattern in component docs/README.
-- [ ] Document tooltip-on-disabled pattern.
+- [x] Document label shallow propagation + recommended `htmlFor` pattern in component docs/README.
+- [x] Document tooltip-on-disabled pattern.
 
 ### Tests
 
-- [ ] Close buttons expose accessible name by default.
-- [ ] Tooltip on disabled button shows content (pointer + focus where applicable).
-- [ ] Tabs skip disabled first trigger.
-- [ ] Pagination previous disabled on first page.
-- [ ] Vertical divider has separator role.
-- [ ] Chart dataTable exposes values to a11y tree.
-- [ ] Modal background inert when open (DOM assertion).
+- [x] Close buttons expose accessible name by default.
+- [x] Tooltip on disabled button shows content (pointer + focus where applicable).
+- [x] Tabs skip disabled first trigger.
+- [x] Pagination previous disabled on first page.
+- [x] Vertical divider has separator role.
+- [x] Chart dataTable exposes values to a11y tree.
+- [x] Modal background inert when open (DOM assertion).
 
 **Exit:** All P0/P1 a11y findings covered by automated tests; manual SR checklist documented and passing.
 

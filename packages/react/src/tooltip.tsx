@@ -8,6 +8,14 @@ export interface TooltipProps {
   display?: "inline" | "inline-flex" | "block";
 }
 
+function isDisabledTrigger(props: Record<string, unknown>): boolean {
+  return (
+    Boolean(props.disabled) ||
+    props["aria-disabled"] === true ||
+    props["aria-disabled"] === "true"
+  );
+}
+
 export function Tooltip({
   content,
   children,
@@ -18,35 +26,63 @@ export function Tooltip({
   const tooltipId = React.useId();
 
   const child = React.Children.only(children);
-  const childProps = child.props as React.HTMLAttributes<HTMLElement>;
+  const childProps = child.props as Record<string, unknown> & React.HTMLAttributes<HTMLElement>;
   const describedBy = childProps["aria-describedby"];
   const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+  const disabledTrigger = isDisabledTrigger(childProps);
 
-  const trigger = React.cloneElement(child, {
-    ...childProps,
-    ref: composeRefs(childRef, undefined),
-    "aria-describedby": open ? mergeDescribedBy(describedBy, tooltipId) : describedBy,
-    onMouseEnter: mergeHandlers(childProps.onMouseEnter, () => setOpen(true)),
-    onMouseLeave: mergeHandlers(childProps.onMouseLeave, () => setOpen(false)),
-    onFocus: mergeHandlers(childProps.onFocus, () => setOpen(true)),
-    onBlur: mergeHandlers(childProps.onBlur, () => setOpen(false)),
-    onKeyDown: mergeHandlers(childProps.onKeyDown, (event) => {
+  const openHandlers = {
+    onMouseEnter: () => setOpen(true),
+    onMouseLeave: () => setOpen(false),
+    onFocus: () => setOpen(true),
+    onBlur: () => setOpen(false),
+    onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.key === "Escape") setOpen(false);
-    })
-  } as React.HTMLAttributes<HTMLElement>);
+    }
+  };
+
+  const triggerProps = {
+    ...childProps,
+    ref: composeRefs(childRef),
+    "aria-describedby": open ? mergeDescribedBy(describedBy, tooltipId) : describedBy,
+    ...(disabledTrigger
+      ? { tabIndex: -1 }
+      : {
+          onMouseEnter: mergeHandlers(childProps.onMouseEnter, openHandlers.onMouseEnter),
+          onMouseLeave: mergeHandlers(childProps.onMouseLeave, openHandlers.onMouseLeave),
+          onFocus: mergeHandlers(childProps.onFocus, openHandlers.onFocus),
+          onBlur: mergeHandlers(childProps.onBlur, openHandlers.onBlur),
+          onKeyDown: mergeHandlers(childProps.onKeyDown, openHandlers.onKeyDown)
+        })
+  };
+
+  const trigger = React.cloneElement(child, triggerProps);
+
+  const tooltip = open ? (
+    <span
+      id={tooltipId}
+      role="tooltip"
+      className={classes("ss-tooltip__content", `ss-tooltip__content--${side}`)}
+    >
+      {content}
+    </span>
+  ) : null;
+
+  if (disabledTrigger) {
+    return (
+      <span className={classes("ss-tooltip", "ss-tooltip--disabled-trigger")} style={{ display }}>
+        <span className="ss-tooltip__trigger-wrap" tabIndex={0} {...openHandlers}>
+          {trigger}
+        </span>
+        {tooltip}
+      </span>
+    );
+  }
 
   return (
     <span className="ss-tooltip" style={{ display }}>
       {trigger}
-      {open ? (
-        <span
-          id={tooltipId}
-          role="tooltip"
-          className={classes("ss-tooltip__content", `ss-tooltip__content--${side}`)}
-        >
-          {content}
-        </span>
-      ) : null}
+      {tooltip}
     </span>
   );
 }

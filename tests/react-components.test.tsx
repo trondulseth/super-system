@@ -46,6 +46,7 @@ import {
   Checkbox,
   Dialog,
   DialogBody,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -54,12 +55,14 @@ import {
   DialogTrigger,
   Drawer,
   DrawerBody,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
+  Divider,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -75,6 +78,7 @@ import {
   PaginationNext,
   PaginationPrevious,
   Popover,
+  PopoverClose,
   PopoverContent,
   PopoverTrigger,
   Radio,
@@ -1155,8 +1159,147 @@ describe("Tabs quality", () => {
   });
 });
 
+describe("Accessibility quality", () => {
+  it("exposes default accessible names on overlay close buttons", () => {
+    render(
+      <>
+        <Dialog defaultOpen>
+          <DialogContent aria-label="Settings">
+            <DialogClose />
+          </DialogContent>
+        </Dialog>
+        <Drawer defaultOpen>
+          <DrawerContent aria-label="Filters">
+            <DrawerClose />
+          </DrawerContent>
+        </Drawer>
+        <Popover defaultOpen>
+          <PopoverTrigger>
+            <Button variant="secondary">Open</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverClose />
+          </PopoverContent>
+        </Popover>
+      </>
+    );
+
+    const closeButtons = document.querySelectorAll(
+      ".ss-dialog__close, .ss-drawer__close, .ss-popover__close"
+    );
+    expect(closeButtons.length).toBeGreaterThanOrEqual(3);
+    for (const button of closeButtons) {
+      expect(button.getAttribute("aria-label")).toBe("Close");
+    }
+  });
+
+  it("shows tooltip content for disabled triggers via the focusable wrapper", () => {
+    const container = render(
+      <Tooltip content="Unavailable while syncing">
+        <Button disabled>Sync</Button>
+      </Tooltip>
+    );
+
+    const wrapper = container.querySelector(".ss-tooltip__trigger-wrap");
+    expect(wrapper).not.toBeNull();
+    expect(container.querySelector("button")?.disabled).toBe(true);
+
+    act(() => {
+      wrapper?.focus();
+    });
+
+    expect(container.querySelector('[role="tooltip"]')?.textContent).toBe(
+      "Unavailable while syncing"
+    );
+  });
+
+  it("auto-selects the first enabled tab when the first trigger is disabled", () => {
+    const container = render(
+      <Tabs>
+        <TabsList>
+          <TabsTrigger value="disabled" disabled>
+            Disabled
+          </TabsTrigger>
+          <TabsTrigger value="enabled">Enabled</TabsTrigger>
+        </TabsList>
+        <TabsContent value="disabled">Disabled panel</TabsContent>
+        <TabsContent value="enabled">Enabled panel</TabsContent>
+      </Tabs>
+    );
+
+    const enabledTrigger = container.querySelector('[role="tab"][aria-selected="true"]');
+    expect(enabledTrigger?.textContent).toBe("Enabled");
+  });
+
+  it("marks pagination previous as unavailable on the first page", () => {
+    const container = render(
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious disabled />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              1
+            </PaginationLink>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+
+    const previous = container.querySelector(".ss-pagination__previous");
+    expect(previous?.tagName).toBe("SPAN");
+    expect(previous?.getAttribute("aria-disabled")).toBe("true");
+    expect(previous?.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("renders vertical dividers as separators", () => {
+    const container = render(<Divider orientation="vertical" data-testid="divider" />);
+
+    const divider = container.querySelector('[data-testid="divider"]');
+    expect(divider?.getAttribute("role")).toBe("separator");
+    expect(divider?.getAttribute("aria-orientation")).toBe("vertical");
+  });
+
+  it("exposes chart values through an optional data table", () => {
+    const container = render(
+      <BarChart
+        data={[
+          { label: "Alpha", value: 4 },
+          { label: "Beta", value: 7 }
+        ]}
+        dataTable
+      />
+    );
+
+    const table = container.querySelector(".ss-chart__data-table");
+    expect(table).not.toBeNull();
+    expect(table?.textContent).toContain("Alpha");
+    expect(table?.textContent).toContain("7");
+  });
+
+  it("marks background content inert while a dialog is open", () => {
+    const background = document.createElement("main");
+    background.textContent = "Background content";
+    document.body.appendChild(background);
+
+    render(
+      <Dialog defaultOpen>
+        <DialogContent aria-label="Confirm">
+          <DialogTitle>Confirm</DialogTitle>
+        </DialogContent>
+      </Dialog>
+    );
+
+    act(() => {});
+
+    expect(background.getAttribute("aria-hidden")).toBe("true");
+    expect(document.querySelector("[data-ss-portal-root]")?.getAttribute("aria-hidden")).toBeNull();
+  });
+});
+
 describe("Toast quality", () => {
-  it("uses assertive viewport live region for destructive toasts", () => {
+  it("uses polite viewport live region and alert role on destructive toasts", () => {
     function Demo() {
       const { toast } = useToast();
       return (
@@ -1181,7 +1324,10 @@ describe("Toast quality", () => {
     });
 
     expect(document.body.querySelector(".ss-toast-viewport")?.getAttribute("aria-live")).toBe(
-      "assertive"
+      "polite"
+    );
+    expect(document.body.querySelector(".ss-toast--destructive")?.getAttribute("role")).toBe(
+      "alert"
     );
   });
 });
@@ -1224,6 +1370,14 @@ describe("Charts", () => {
 
     expect(container.querySelector(".ss-sparkline")?.getAttribute("aria-label")).toBe("Weekly trend");
     expect(container.querySelector(".ss-bar-chart")?.getAttribute("aria-label")).toBe("Usage");
+  });
+
+  it("describes flat sparklines when values are unchanged", () => {
+    const container = render(<Sparkline data={[5, 5, 5, 5]} />);
+
+    expect(container.querySelector(".ss-sparkline")?.getAttribute("aria-label")).toBe(
+      "Sparkline chart trending flat"
+    );
   });
 
   it("renders line and donut charts", () => {

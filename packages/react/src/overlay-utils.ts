@@ -85,6 +85,58 @@ export function useFocusTrap(
 let scrollLockCount = 0;
 let savedBodyOverflow: string | null = null;
 
+let backgroundInertCount = 0;
+const backgroundInertState = new Map<Element, string | null>();
+
+function reconcileBackgroundInertCount() {
+  for (const element of backgroundInertState.keys()) {
+    if (!element.isConnected) {
+      backgroundInertState.delete(element);
+    }
+  }
+
+  if (backgroundInertState.size === 0 && backgroundInertCount > 0) {
+    backgroundInertCount = 0;
+  }
+}
+
+function setBackgroundInert(active: boolean) {
+  if (active) {
+    reconcileBackgroundInertCount();
+    backgroundInertCount += 1;
+    if (backgroundInertCount !== 1) return;
+
+    const portalRoot = document.querySelector("[data-ss-portal-root]");
+    for (const child of Array.from(document.body.children)) {
+      if (child === portalRoot) continue;
+      backgroundInertState.set(child, child.getAttribute("aria-hidden"));
+      child.setAttribute("aria-hidden", "true");
+    }
+    return;
+  }
+
+  backgroundInertCount = Math.max(0, backgroundInertCount - 1);
+  if (backgroundInertCount !== 0) return;
+
+  for (const [element, previous] of backgroundInertState.entries()) {
+    if (previous === null) {
+      element.removeAttribute("aria-hidden");
+    } else {
+      element.setAttribute("aria-hidden", previous);
+    }
+  }
+  backgroundInertState.clear();
+}
+
+export function useBackgroundInert(active: boolean) {
+  React.useEffect(() => {
+    if (!active) return;
+
+    setBackgroundInert(true);
+    return () => setBackgroundInert(false);
+  }, [active]);
+}
+
 export function useBodyScrollLock(active: boolean) {
   React.useEffect(() => {
     if (!active) return;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OverlayPortal, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
+import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
 import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DrawerContextValue {
@@ -128,12 +128,23 @@ export function DrawerContent({
   closeOnOverlayClick = true,
   className,
   children,
+  "aria-label": ariaLabel,
   ...props
 }: DrawerContentProps) {
   const { open, setOpen, side, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDrawerContext("DrawerContent");
 
   useFocusTrap(contentRef, open, triggerRef);
+  useBackgroundInert(open);
+
+  React.useEffect(() => {
+    if (!open || process.env.NODE_ENV === "production") return;
+    if (!hasTitle && !ariaLabel) {
+      console.warn(
+        "[Super System Drawer] DrawerContent should include DrawerTitle or an aria-label for accessibility."
+      );
+    }
+  }, [ariaLabel, hasTitle, open]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -169,6 +180,7 @@ export function DrawerContent({
           aria-modal="true"
           aria-labelledby={hasTitle ? titleId : undefined}
           aria-describedby={hasDescription ? descriptionId : undefined}
+          aria-label={!hasTitle ? ariaLabel : undefined}
           tabIndex={-1}
           className={classes("ss-drawer__content", `ss-drawer__content--${side}`, className)}
           {...props}
@@ -228,7 +240,7 @@ export function DrawerFooter({ className, ...props }: DrawerFooterProps) {
 export interface DrawerCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  function DrawerClose({ className, onClick, ...props }, ref) {
+  function DrawerClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
     const { setOpen } = useDrawerContext("DrawerClose");
 
     return (
@@ -236,6 +248,7 @@ export const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>
         ref={ref}
         type="button"
         className={classes("ss-drawer__close", className)}
+        aria-label={ariaLabel}
         onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
       />

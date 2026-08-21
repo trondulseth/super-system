@@ -9,6 +9,8 @@ interface TabsContextValue {
   listRef: React.RefObject<HTMLDivElement | null>;
   autoSelectedRef: React.MutableRefObject<boolean>;
   isControlled: boolean;
+  registerValue: (value: string) => void;
+  unregisterValue: (value: string) => void;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -41,8 +43,26 @@ export function Tabs({
   const baseId = React.useId();
   const listRef = React.useRef<HTMLDivElement>(null);
   const autoSelectedRef = React.useRef(false);
+  const [registeredValues, setRegisteredValues] = React.useState<string[]>([]);
   const value = valueProp ?? uncontrolledValue;
   const isControlled = valueProp !== undefined;
+
+  const registerValue = React.useCallback((next: string) => {
+    setRegisteredValues((current) => (current.includes(next) ? current : [...current, next]));
+  }, []);
+
+  const unregisterValue = React.useCallback((next: string) => {
+    setRegisteredValues((current) => current.filter((entry) => entry !== next));
+  }, []);
+
+  React.useEffect(() => {
+    if (!isControlled || !value || process.env.NODE_ENV === "production") return;
+    if (registeredValues.length > 0 && !registeredValues.includes(value)) {
+      console.warn(
+        `[Super System Tabs] Controlled value "${value}" does not match any TabsTrigger.`
+      );
+    }
+  }, [isControlled, registeredValues, value]);
 
   const setValue = React.useCallback(
     (next: string) => {
@@ -56,7 +76,7 @@ export function Tabs({
 
   return (
     <TabsContext.Provider
-      value={{ value, setValue, baseId, orientation, listRef, autoSelectedRef, isControlled }}
+      value={{ value, setValue, baseId, orientation, listRef, autoSelectedRef, isControlled, registerValue, unregisterValue }}
     >
       <div className={classes("ss-tabs", className)} data-orientation={orientation} {...props}>
         {children}
@@ -125,17 +145,29 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
   { value, className, disabled, onClick, ...props },
   ref
 ) {
-  const { value: activeValue, setValue, baseId, autoSelectedRef, isControlled } =
+  const { value: activeValue, setValue, baseId, autoSelectedRef, isControlled, listRef, registerValue, unregisterValue } =
     useTabsContext("TabsTrigger");
   const selected = activeValue === value;
   const triggerId = `${baseId}-trigger-${value}`;
   const panelId = `${baseId}-panel-${value}`;
 
-  React.useLayoutEffect(() => {
-    if (isControlled || autoSelectedRef.current || activeValue !== "") return;
+  React.useEffect(() => {
+    registerValue(value);
+    return () => unregisterValue(value);
+  }, [registerValue, unregisterValue, value]);
+
+  React.useEffect(() => {
+    if (isControlled || autoSelectedRef.current || activeValue !== "" || disabled) return;
+
+    const triggers = Array.from(
+      listRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []
+    );
+    const firstEnabled = triggers.find((trigger) => !trigger.disabled);
+    if (!firstEnabled || firstEnabled.id !== triggerId) return;
+
     autoSelectedRef.current = true;
     setValue(value);
-  }, [activeValue, autoSelectedRef, isControlled, setValue, value]);
+  }, [activeValue, autoSelectedRef, disabled, isControlled, listRef, setValue, triggerId, value]);
 
   return (
     <button

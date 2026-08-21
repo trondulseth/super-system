@@ -477,6 +477,16 @@ Skeleton placeholders are marked `aria-hidden` because surrounding content shoul
 
 Tooltip content appears on hover and focus, merges with any existing `aria-describedby` ids on the trigger, and closes on Escape. Tooltips render inline without a portal, so they may clip inside overflow containers. Use the optional `display` prop (`inline`, `inline-flex`, or `block`) when the wrapper affects layout.
 
+**Disabled triggers** — native disabled buttons do not receive pointer or keyboard events. Wrap them in a focusable container so the tooltip still opens:
+
+```tsx
+<Tooltip content="Sync unavailable while offline">
+  <Button disabled>Sync</Button>
+</Tooltip>
+```
+
+The library detects `disabled` or `aria-disabled` on the trigger and applies this wrapper automatically.
+
 ### Badge
 
 ```tsx

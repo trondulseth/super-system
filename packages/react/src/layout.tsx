@@ -97,15 +97,21 @@ export function Spacer({ size = "md", className, ...props }: SpacerProps) {
   return <div aria-hidden="true" className={classes("ss-spacer", `ss-spacer--${size}`, className)} {...props} />;
 }
 
-export interface DividerProps extends React.HTMLAttributes<HTMLHRElement> {
+export interface DividerProps extends React.HTMLAttributes<HTMLElement> {
   orientation?: "horizontal" | "vertical";
 }
 
 export function Divider({ orientation = "horizontal", className, ...props }: DividerProps) {
-  return (
-    <hr
-      className={classes("ss-divider", `ss-divider--${orientation}`, className)}
-      {...props}
-    />
-  );
+  if (orientation === "vertical") {
+    return (
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        className={classes("ss-divider", "ss-divider--vertical", className)}
+        {...props}
+      />
+    );
+  }
+
+  return <hr className={classes("ss-divider", "ss-divider--horizontal", className)} {...props} />;
 }

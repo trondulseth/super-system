@@ -1,8 +1,35 @@
 import * as React from "react";
-import { buildLinePath, buildSparklinePoints, normalizeSeries } from "./chart-utils.js";
+import { buildLinePath, buildSparklinePoints, getSparklineTrend, normalizeSeries } from "./chart-utils.js";
 import { classes } from "./utils.js";
 
 export type ChartTone = "primary" | "secondary" | "destructive" | "muted";
+
+interface ChartDataTableProps {
+  caption?: string;
+  rows: Array<{ label: string; value: string | number }>;
+}
+
+function ChartDataTable({ caption, rows }: ChartDataTableProps) {
+  return (
+    <table className="ss-chart__data-table">
+      {caption ? <caption>{caption}</caption> : null}
+      <thead>
+        <tr>
+          <th scope="col">Label</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.label}>
+            <th scope="row">{row.label}</th>
+            <td>{row.value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
   data: number[];
@@ -10,6 +37,7 @@ export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
   height?: number;
   tone?: ChartTone;
   label?: string;
+  dataTable?: boolean;
 }
 
 export function Sparkline({
@@ -18,27 +46,41 @@ export function Sparkline({
   height = 36,
   tone = "primary",
   label,
+  dataTable = false,
   className,
   ...props
 }: SparklineProps) {
   const points = buildSparklinePoints(data, width, height);
-  const normalized = normalizeSeries(data);
-  const last = normalized[normalized.length - 1] ?? 0;
-  const first = normalized[0] ?? 0;
-  const trend = last >= first ? "up" : "down";
+  const trend = getSparklineTrend(data);
+  const defaultLabel = `Sparkline chart trending ${trend}`;
 
-  return (
+  const chart = (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       role="img"
-      aria-label={label ?? `Sparkline chart trending ${trend}`}
+      aria-label={label ?? defaultLabel}
       className={classes("ss-sparkline", `ss-sparkline--${tone}`, className)}
       {...props}
     >
       <polyline className="ss-sparkline__line" points={points} fill="none" />
     </svg>
+  );
+
+  if (!dataTable) return chart;
+
+  return (
+    <div className="ss-chart">
+      {chart}
+      <ChartDataTable
+        caption={label ?? defaultLabel}
+        rows={data.map((value, index) => ({
+          label: `Point ${index + 1}`,
+          value
+        }))}
+      />
+    </div>
   );
 }
 
@@ -47,6 +89,7 @@ export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   tone?: ChartTone;
   orientation?: "vertical" | "horizontal";
   label?: string;
+  dataTable?: boolean;
 }
 
 export function BarChart({
@@ -54,15 +97,17 @@ export function BarChart({
   tone = "primary",
   orientation = "vertical",
   label,
+  dataTable = false,
   className,
   ...props
 }: BarChartProps) {
   const max = Math.max(...data.map((entry) => entry.value), 1);
+  const chartLabel = label ?? "Bar chart";
 
   return (
     <div
       role="img"
-      aria-label={label ?? "Bar chart"}
+      aria-label={chartLabel}
       className={classes(
         "ss-bar-chart",
         `ss-bar-chart--${orientation}`,
@@ -84,6 +129,12 @@ export function BarChart({
           <span className="ss-bar-chart__label">{entry.label}</span>
         </div>
       ))}
+      {dataTable ? (
+        <ChartDataTable
+          caption={chartLabel}
+          rows={data.map((entry) => ({ label: entry.label, value: entry.value }))}
+        />
+      ) : null}
     </div>
   );
 }
@@ -95,6 +146,7 @@ export interface LineChartProps extends React.SVGAttributes<SVGSVGElement> {
   tone?: ChartTone;
   showArea?: boolean;
   label?: string;
+  dataTable?: boolean;
 }
 
 export function LineChart({
@@ -104,24 +156,41 @@ export function LineChart({
   tone = "primary",
   showArea = true,
   label,
+  dataTable = false,
   className,
   ...props
 }: LineChartProps) {
   const { line, area } = buildLinePath(data, width, height);
+  const chartLabel = label ?? "Line chart";
 
-  return (
+  const chart = (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       role="img"
-      aria-label={label ?? "Line chart"}
+      aria-label={chartLabel}
       className={classes("ss-line-chart", `ss-line-chart--${tone}`, className)}
       {...props}
     >
       {showArea ? <path className="ss-line-chart__area" d={area} /> : null}
       <path className="ss-line-chart__line" d={line} fill="none" />
     </svg>
+  );
+
+  if (!dataTable) return chart;
+
+  return (
+    <div className="ss-chart">
+      {chart}
+      <ChartDataTable
+        caption={chartLabel}
+        rows={data.map((value, index) => ({
+          label: `Point ${index + 1}`,
+          value
+        }))}
+      />
+    </div>
   );
 }
 
@@ -131,6 +200,7 @@ export interface DonutChartProps extends React.HTMLAttributes<HTMLDivElement> {
   tone?: ChartTone;
   label?: string;
   size?: number;
+  dataTable?: boolean;
 }
 
 export function DonutChart({
@@ -139,19 +209,22 @@ export function DonutChart({
   tone = "primary",
   label,
   size = 72,
+  dataTable = false,
   className,
   ...props
 }: DonutChartProps) {
   const percent = Math.min(Math.max(value / max, 0), 1);
+  const percentLabel = Math.round(percent * 100);
   const stroke = 8;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - percent);
+  const chartLabel = label ?? `Progress ${percentLabel} percent`;
 
   return (
     <div
       role="img"
-      aria-label={label ?? `Progress ${Math.round(percent * 100)} percent`}
+      aria-label={chartLabel}
       className={classes("ss-donut-chart", `ss-donut-chart--${tone}`, className)}
       style={{ width: size, height: size }}
       {...props}
@@ -177,7 +250,17 @@ export function DonutChart({
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>
-      <span className="ss-donut-chart__label">{Math.round(percent * 100)}%</span>
+      <span className="ss-donut-chart__label">{percentLabel}%</span>
+      {dataTable ? (
+        <ChartDataTable
+          caption={chartLabel}
+          rows={[
+            { label: "Value", value },
+            { label: "Maximum", value: max },
+            { label: "Percent", value: `${percentLabel}%` }
+          ]}
+        />
+      ) : null}
     </div>
   );
 }
