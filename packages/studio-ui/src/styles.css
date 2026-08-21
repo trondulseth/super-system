@@ -47,7 +47,8 @@ aside {
 .preview {
   padding: clamp(24px, 5vw, 72px);
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: start;
 }
 
 h1 {
@@ -189,6 +190,7 @@ aside select {
 .preview-theme {
   width: min(860px, 100%);
   box-shadow: 0 18px 60px #0f172a18;
+  overflow: hidden;
 }
 
 .preview-title {
@@ -385,6 +387,7 @@ aside select {
 .preview-drawer-panel {
   flex: 1 1 16rem;
   min-width: 16rem;
+  max-width: 100%;
 }
 
 .preview-toast-stack {
@@ -407,22 +410,6 @@ aside select {
   margin-top: var(--ss-space-2, 8px);
 }
 
-.ss-app-shell--preview {
-  min-height: auto;
-  border: 1px solid var(--ss-color-border);
-  border-radius: var(--ss-radius-md, 10px);
-  overflow: hidden;
-}
-
-.ss-app-shell--preview .ss-sidebar {
-  width: 12rem;
-  min-height: auto;
-}
-
-.ss-app-shell--preview .ss-main {
-  padding: var(--ss-space-4, 16px);
-}
-
 @media (max-width: 800px) {
   main {
     grid-template-columns: 1fr;
@@ -435,62 +422,4 @@ aside select {
   .preview {
     min-height: 600px;
   }
-}
-
-/* Studio-only demo modifiers (not shipped in @super-system/react) */
-.ss-tooltip--demo .ss-tooltip__content {
-  opacity: 1;
-  visibility: visible;
-}
-.ss-dropdown--demo .ss-dropdown__content {
-  position: relative;
-  display: block;
-  top: auto;
-  margin-top: var(--ss-space-2, 8px);
-}
-.ss-dialog--demo,
-.ss-drawer--demo {
-  position: relative;
-  inset: auto;
-  z-index: 0;
-  isolation: isolate;
-  overflow: hidden;
-  border-radius: var(--ss-radius-md, 10px);
-}
-.ss-dialog--demo .ss-dialog__overlay,
-.ss-drawer--demo .ss-drawer__overlay {
-  position: relative;
-  min-height: 12rem;
-  border-radius: var(--ss-radius-md, 10px);
-}
-.ss-dialog--demo .ss-dialog__content,
-.ss-drawer--demo .ss-drawer__content {
-  position: relative;
-  top: auto;
-  left: auto;
-  right: auto;
-  transform: none;
-  width: 100%;
-  max-height: none;
-}
-.ss-popover--demo .ss-popover__content {
-  position: relative;
-  display: block;
-}
-.ss-popover--demo-top {
-  padding-top: 4.5rem;
-}
-.ss-popover--demo-top .ss-popover__content {
-  position: absolute;
-  bottom: calc(100% + var(--ss-space-2, 8px));
-  left: 50%;
-  transform: translateX(-50%);
-  display: block;
-}
-.ss-drawer--demo .ss-drawer__content--left,
-.ss-drawer--demo .ss-drawer__content--right {
-  width: 100%;
-  height: auto;
-  min-height: 12rem;
-  border-radius: var(--ss-radius-md, 10px);
 }

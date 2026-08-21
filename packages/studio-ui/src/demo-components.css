@@ -1,0 +1,122 @@
+/**
+ * Static preview overrides for Studio demos.
+ * MUST load after components.css — production overlay rules (position: fixed,
+ * min-height: 100vh) otherwise win the cascade over single-class --demo hooks.
+ */
+
+/* --- Dialog + drawer mini-viewports --- */
+.ss-dialog.ss-dialog--demo,
+.ss-drawer.ss-drawer--demo {
+  position: relative;
+  inset: auto;
+  z-index: 0;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  height: 14rem;
+  background: var(--ss-color-muted);
+}
+
+.ss-dialog.ss-dialog--demo .ss-dialog__overlay,
+.ss-drawer.ss-drawer--demo .ss-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  border-radius: 0;
+}
+
+.ss-dialog.ss-dialog--demo .ss-dialog__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2rem);
+  max-width: 18rem;
+  max-height: calc(100% - 2rem);
+  overflow: auto;
+}
+
+.ss-drawer.ss-drawer--demo .ss-drawer__content {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  height: 100%;
+  max-height: none;
+  overflow: auto;
+  box-shadow: var(--ss-overlay-shadow, 0 16px 40px color-mix(in srgb, var(--ss-color-foreground) 14%, transparent));
+}
+
+.ss-drawer.ss-drawer--demo .ss-drawer__content--left {
+  left: 0;
+  right: auto;
+  width: min(72%, 13rem);
+  border-radius: 0 var(--ss-radius-md, 10px) var(--ss-radius-md, 10px) 0;
+}
+
+.ss-drawer.ss-drawer--demo .ss-drawer__content--right {
+  right: 0;
+  left: auto;
+  width: min(72%, 13rem);
+  border-radius: var(--ss-radius-md, 10px) 0 0 var(--ss-radius-md, 10px);
+}
+
+/* --- Popover demos --- */
+.ss-popover.ss-popover--demo {
+  position: relative;
+  display: inline-flex;
+}
+
+.ss-popover.ss-popover--demo .ss-popover__content {
+  position: absolute;
+  display: block;
+  z-index: 1;
+}
+
+.ss-popover.ss-popover--demo-top {
+  padding-top: 4.5rem;
+}
+
+.ss-popover.ss-popover--demo-top .ss-popover__content {
+  bottom: calc(100% + var(--ss-space-2, 8px));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ss-popover.ss-popover--demo:not(.ss-popover--demo-top) .ss-popover__content {
+  top: calc(100% + var(--ss-space-2, 8px));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* --- Tooltip demo --- */
+.ss-tooltip.ss-tooltip--demo .ss-tooltip__content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- Dropdown demo --- */
+.ss-dropdown.ss-dropdown--demo .ss-dropdown__content {
+  position: relative;
+  display: block;
+  top: auto;
+  margin-top: var(--ss-space-2, 8px);
+}
+
+/* --- App shell preview --- */
+.ss-app-shell.ss-app-shell--preview {
+  min-height: auto;
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md, 10px);
+  overflow: hidden;
+}
+
+.ss-app-shell.ss-app-shell--preview .ss-sidebar {
+  width: 12rem;
+  min-height: auto;
+}
+
+.ss-app-shell.ss-app-shell--preview .ss-main {
+  padding: var(--ss-space-4, 16px);
+}
