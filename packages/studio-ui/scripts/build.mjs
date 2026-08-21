@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import esbuild from "esbuild";
@@ -7,12 +7,28 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const srcDir = path.join(packageRoot, "src");
 const reactStyles = path.resolve(packageRoot, "../react/src/styles.css");
+const brandDir = path.resolve(packageRoot, "../../brand");
 const demoOnly = process.argv.includes("--demo");
+
+async function copyDir(sourceDir, targetDir) {
+  await mkdir(targetDir, { recursive: true });
+  const entries = await readdir(sourceDir, { withFileTypes: true });
+  for (const entry of entries) {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+    if (entry.isDirectory()) {
+      await copyDir(sourcePath, targetPath);
+    } else {
+      await copyFile(sourcePath, targetPath);
+    }
+  }
+}
 
 async function copySharedAssets(outDir) {
   await copyFile(path.join(srcDir, "styles.css"), path.join(outDir, "styles.css"));
   await copyFile(path.join(srcDir, "demo-components.css"), path.join(outDir, "demo-components.css"));
   await copyFile(reactStyles, path.join(outDir, "components.css"));
+  await copyDir(brandDir, path.join(outDir, "brand"));
 }
 
 async function buildServerBundle() {

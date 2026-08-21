@@ -14,7 +14,8 @@ describe("studio demo", () => {
 
     await expect(access(path.join(demoDir, "index.html"))).resolves.toBeUndefined();
     await expect(access(path.join(demoDir, "app.js"))).resolves.toBeUndefined();
-    await expect(access(path.join(demoDir, "styles.css"))).resolves.toBeUndefined();
+    await expect(access(path.join(demoDir, "brand/logo-mark.svg"))).resolves.toBeUndefined();
+    await expect(access(path.join(demoDir, "brand/logo.svg"))).resolves.toBeUndefined();
 
     const html = await readFile(path.join(demoDir, "index.html"), "utf8");
     expect(html).toContain("Download theme");
@@ -24,7 +25,8 @@ describe("studio demo", () => {
     expect(html).toContain('id="editing-theme"');
     expect(html).toContain('id="mode-default-badge"');
     expect(html).toContain("preview-mono");
-    expect(html).toContain('src="./app.js"');
+    expect(html).toContain("studio-brand");
+    expect(html).toContain("./brand/logo-mark.svg");
     expect(html).toContain("ss-button--destructive");
     expect(html).toContain("ss-button--ghost");
     expect(html).toContain("ss-input--invalid");

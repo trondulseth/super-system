@@ -31,6 +31,34 @@ header {
   z-index: 2;
 }
 
+.studio-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.studio-brand__logo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+}
+
+.studio-brand__text h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.studio-brand__subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
 main {
   display: grid;
   grid-template-columns: minmax(300px, 390px) 1fr;

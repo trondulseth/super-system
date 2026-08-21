@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 80" fill="none" role="img" aria-label="Super System">
+  <defs>
+    <linearGradient id="logo-cape" x1="8" y1="8" x2="56" y2="72" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="64" height="64" rx="16" fill="#eff6ff"/>
+  <path d="M36 18c-8 6-14 6-18 5 2 8 1 16-3 24 4-2 8-3 12-3s8 1 12 3c-4-8-5-16-3-24-4 1-10 1-18-5Z" fill="url(#logo-cape)"/>
+  <path d="M30 42c0-3 2.5-5 6-5s6 2 6 5-2.5 5-6 5-6-2-6-5Z" fill="#ffffff"/>
+  <path d="M32.5 41.5h7v2.2a3.5 3.5 0 0 1-7 0v-2.2Z" fill="#2563eb"/>
+  <text x="88" y="52" fill="#0f172a" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="800" letter-spacing="-0.03em">Super System</text>
+</svg>
