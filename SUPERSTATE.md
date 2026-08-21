@@ -12,4 +12,4 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Objective:** Library quality pass 2 complete — all six review dimensions at 10/10.
 - **Work state:** Phase 7 complete on `cursor/library-quality-pass-2-2c3d`. 107 tests, living specs synced, change archived.
-- **Next handoff:** Optional follow-up — publish `0.1.0-beta.2` or start `harden-release-and-quality`.
+- **Next handoff:** `0.1.0-beta.2` published. Optional follow-up — start `harden-release-and-quality`.
