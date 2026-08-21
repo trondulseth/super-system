@@ -22,9 +22,9 @@
 | `npx @super-system/cli migrate apply --only <transformId>` | Applies only the listed transform(s). Repeatable. |
 | `npx @super-system/cli migrate apply --skip <transformId>` | Skips a transform. Repeatable. |
 | `npx @super-system/cli migrate apply --skip-rule <rule>` | Skips all items for an audit rule. |
-| `npx @super-system/cli migrate apply --verify` | Runs post-migration verification after writing files. |
+| `npx @super-system/cli migrate apply --verify` | Applies auto-fixes, then runs the same checks as `migrate verify`. |
 | `npx @super-system/cli migrate plan --out path` | Saves a resumable migration manifest. |
-| `npx @super-system/cli migrate verify` | Runs configured npm scripts plus audit. |
+| `npx @super-system/cli migrate verify` | Runs `npm run typecheck`, `test`, and `build` when defined, then audit. |
 | `npx @super-system/cli migrate apply --json` | Prints the apply result as JSON. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
