@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="./brand/logo-mark.svg" type="image/svg+xml" />
     <title>Super System Studio</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./components.css" />
@@ -11,7 +12,13 @@
   <body>
     <p id="demo-banner" class="demo-banner" hidden></p>
     <header>
-      <h1>Super System <span style="color: #64748b; font-weight: 500">Studio</span></h1>
+      <div class="studio-brand">
+        <img class="studio-brand__logo" src="./brand/logo-mark.svg" alt="" width="40" height="40" />
+        <div class="studio-brand__text">
+          <h1>Super System</h1>
+          <p class="studio-brand__subtitle">Studio</p>
+        </div>
+      </div>
       <div class="actions">
         <span id="status"></span>
         <button class="theme-toggle" id="toggle" type="button">Dark preview</button>
