@@ -1,29 +1,29 @@
 {
-  "name": "@super-system/react",
+  "name": "eslint-plugin-super-system",
   "version": "0.1.0-beta.16",
-  "description": "Accessible React components for Super System.",
+  "description": "ESLint rules aligned with Super System CLI audit.",
   "type": "module",
   "license": "MIT",
-  "sideEffects": ["**/*.css"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trondulseth/super-system.git",
-    "directory": "packages/react"
+    "directory": "packages/eslint-plugin-super-system"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./styles.css": "./dist/styles.css"
+    }
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm --dts --external react --external react-dom --clean && cp src/styles.css dist/styles.css"
+    "build": "tsup src/index.ts --format esm --dts --clean"
   },
   "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
+    "eslint": ">=9.0.0"
+  },
+  "dependencies": {
+    "@super-system/rules": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

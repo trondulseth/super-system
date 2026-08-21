@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { checkThemeContrast } from "@super-system/tokens";
+import { generateAdapter, formatAdapterResult } from "./adapters.js";
 import { auditProject } from "./audit.js";
 import { DirtyWorktreeError } from "./git-worktree.js";
 import { applyMigration, formatMigrationApplyResult, saveMigrationPlan } from "./migration-apply.js";
@@ -9,6 +10,8 @@ import { createMigrationPlan, formatMigrationPlan } from "./migration.js";
 import { formatMigrationVerification, verifyMigration } from "./migration-verify.js";
 import { setupIcons } from "./icons.js";
 import { initialize, readConfig, writeGeneratedCss } from "./files.js";
+import { checkPolicy, formatPolicyCheckResult } from "./policy-check.js";
+import { defaultPolicy, pathExists, writePolicy } from "./policy.js";
 import { startStudio } from "./studio.js";
 
 const [command = "help", ...args] = process.argv.slice(2);
@@ -26,6 +29,9 @@ Usage:
   super-system migrate apply [--dry-run] [--allow-dirty] [--verify] [--manifest path]
     [--only transformId] [--skip transformId] [--skip-rule rule] [--json] [--cwd path]
   super-system migrate verify [--json] [--cwd path]
+  super-system policy init [--force] [--cwd path]
+  super-system policy check [--json] [--strict] [--cwd path]
+  super-system adapters generate [--target agents-md] [--dry-run] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
   super-system icons setup [--install] [--cwd path]
@@ -110,6 +116,48 @@ async function main(): Promise<void> {
         break;
       }
       help();
+      break;
+    }
+    case "policy": {
+      const subcommand = args[0];
+      if (subcommand === "init") {
+        const target = `${cwd}/super-system.policy.json`;
+        if ((await pathExists(target)) && !args.includes("--force")) {
+          console.error("super-system.policy.json already exists. Use --force to replace it.");
+          process.exitCode = 1;
+          break;
+        }
+        const written = await writePolicy(cwd, defaultPolicy());
+        console.log(`Created ${written}`);
+        break;
+      }
+      if (subcommand === "check") {
+        const result = await checkPolicy(cwd, { strict: args.includes("--strict") });
+        if (args.includes("--json")) console.log(JSON.stringify(result, null, 2));
+        else console.log(formatPolicyCheckResult(result));
+        process.exitCode = result.passed ? 0 : 1;
+        break;
+      }
+      help();
+      break;
+    }
+    case "adapters": {
+      if (args[0] !== "generate") {
+        help();
+        break;
+      }
+      const targetFlag = args.indexOf("--target");
+      const target = targetFlag >= 0 ? args[targetFlag + 1] : "agents-md";
+      if (target !== "agents-md") {
+        console.error(`Unsupported adapter target: ${target}`);
+        process.exitCode = 1;
+        break;
+      }
+      const result = await generateAdapter(cwd, {
+        target: "agents-md",
+        dryRun: args.includes("--dry-run")
+      });
+      console.log(formatAdapterResult(result));
       break;
     }
     case "build-theme": {

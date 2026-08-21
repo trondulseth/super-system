@@ -1,13 +1,13 @@
 {
-  "name": "@super-system/tokens",
+  "name": "@super-system/rules",
   "version": "0.1.0-beta.16",
-  "description": "Portable design tokens, CSS generation, and contrast checks for Super System.",
+  "description": "Shared Super System audit rule catalog for CLI and ESLint.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trondulseth/super-system.git",
-    "directory": "packages/tokens"
+    "directory": "packages/rules"
   },
   "exports": {
     ".": {
