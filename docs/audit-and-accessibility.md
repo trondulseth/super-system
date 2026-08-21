@@ -73,6 +73,32 @@ npx @super-system/cli migrate plan --json
 
 Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`. Automated apply is not available yet; use the plan to prioritize manual or AI-assisted cleanup.
 
+## Preview auto-fixes (dry run)
+
+Review the exact diffs for supported auto-fixes before anything is written:
+
+```bash
+npx @super-system/cli migrate apply --dry-run
+```
+
+Current automated transforms:
+
+- `img-add-alt` — adds `alt=""` to `<img>` tags missing alt text
+- `native-button-to-button` — replaces native `<button>` with `<Button>` and adds the import when needed
+
+Example output:
+
+```diff
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -1,2 +1,3 @@
++import { Button } from "@super-system/react";
+-  return <button>Save</button>;
++  return <Button>Save</Button>;
+```
+
+Writing changes to disk is not enabled in this beta. Use the diff for manual edits or AI-assisted cleanup.
+
 ## Check color contrast
 
 Run:

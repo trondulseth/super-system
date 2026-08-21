@@ -1,5 +1,11 @@
 # Migration notes
 
+## 0.1.0-beta.7 (migrate apply dry-run)
+
+No breaking changes. Safe to upgrade from `beta.6`.
+
+- **CLI:** `migrate apply --dry-run` previews unified diffs for supported auto-fixes (`img-add-alt`, `native-button-to-button`) without writing files.
+
 ## 0.1.0-beta.6 (migrate plan)
 
 No breaking changes. Safe to upgrade from `beta.5`.
