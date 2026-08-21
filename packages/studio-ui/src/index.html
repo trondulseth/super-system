@@ -133,22 +133,54 @@
         </label>
         <h2>Typography and shape</h2>
         <label>Font family<input id="fontSans" /></label>
+        <label class="slider-field">
+          Base size
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="baseSize" type="range" min="12" max="24" step="1" />
+            <output class="ss-slider-value" for="baseSize">16px</output>
+          </div>
+        </label>
         <div class="row">
-          <label>Base size<input id="baseSize" /></label>
-          <label>Medium radius<input id="radiusMd" /></label>
+          <label class="slider-field">
+            Small radius
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="radiusSm" type="range" min="0" max="24" step="1" />
+              <output class="ss-slider-value" for="radiusSm">6px</output>
+            </div>
+          </label>
+          <label class="slider-field">
+            Medium radius
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="radiusMd" type="range" min="0" max="24" step="1" />
+              <output class="ss-slider-value" for="radiusMd">10px</output>
+            </div>
+          </label>
         </div>
-        <div class="row">
-          <label>Small radius<input id="radiusSm" /></label>
-          <label>Large radius<input id="radiusLg" /></label>
-        </div>
+        <label class="slider-field">
+          Large radius
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="radiusLg" type="range" min="0" max="24" step="1" />
+            <output class="ss-slider-value" for="radiusLg">14px</output>
+          </div>
+        </label>
         <label>Pill radius<input id="radiusFull" /></label>
-        <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
+        <label class="slider-field">
+          Line height
+          <div class="ss-slider-row">
+            <input class="ss-slider" id="lineHeight" type="range" min="1.1" max="2" step="0.05" />
+            <output class="ss-slider-value" for="lineHeight">1.5</output>
+          </div>
+        </label>
         <label>Monospace font<input id="fontMono" /></label>
         <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
         <div class="row">
-          <label
-            >Spacing unit<input id="spacingUnit" type="number" min="2" max="8" step="1"
-          /></label>
+          <label class="slider-field">
+            Spacing unit
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="spacingUnit" type="range" min="2" max="8" step="1" />
+              <output class="ss-slider-value" for="spacingUnit">4</output>
+            </div>
+          </label>
           <label
             >Density<select id="density">
               <option>compact</option>
@@ -176,7 +208,13 @@
               <option>AAA</option>
             </select></label
           >
-          <label>Minimum target<input id="target" type="number" min="24" max="64" /></label>
+          <label class="slider-field">
+            Minimum target
+            <div class="ss-slider-row">
+              <input class="ss-slider" id="target" type="range" min="24" max="64" step="1" />
+              <output class="ss-slider-value" for="target">44px</output>
+            </div>
+          </label>
         </div>
         <div class="row">
           <label
@@ -331,6 +369,18 @@
           </section>
 
           <section class="preview-section">
+            <h4 class="preview-label">Slider</h4>
+            <label class="ss-label">
+              Volume
+              <input class="ss-slider" type="range" min="0" max="100" value="60" />
+            </label>
+            <label class="ss-label">
+              Brightness (invalid)
+              <input class="ss-slider ss-slider--invalid" type="range" min="0" max="100" value="75" aria-invalid="true" />
+            </label>
+          </section>
+
+          <section class="preview-section">
             <h4 class="preview-label">Select</h4>
             <label class="ss-label">
               Country
@@ -402,13 +452,13 @@
             <p class="preview-mono">const revenue = 84250;</p>
           </section>
 
-          <section class="preview-section">
+          <section class="preview-section preview-section--tooltip">
             <h4 class="preview-label">Tooltip</h4>
-            <span class="ss-tooltip ss-tooltip--demo">
-              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-describedby="tip-demo">
+            <span class="ss-tooltip ss-tooltip--demo preview-tooltip-demo">
+              <button class="ss-button ss-button--secondary ss-button--md" type="button">
                 Help
               </button>
-              <span role="tooltip" id="tip-demo" class="ss-tooltip__content ss-tooltip__content--top">
+              <span role="tooltip" id="tip-demo" class="ss-tooltip__content ss-tooltip__content--bottom" hidden>
                 Use semantic tokens instead of hard-coded colors.
               </span>
             </span>
@@ -438,36 +488,40 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Tabs</h4>
-            <div class="ss-tabs">
+            <div class="ss-tabs preview-tabs-demo">
               <div role="tablist" aria-orientation="horizontal" class="ss-tabs__list">
-                <button type="button" role="tab" aria-selected="true" class="ss-tabs__trigger ss-tabs__trigger--active">Profile</button>
-                <button type="button" role="tab" aria-selected="false" tabindex="-1" class="ss-tabs__trigger">Billing</button>
+                <button type="button" role="tab" data-tab-value="profile" aria-selected="true" class="ss-tabs__trigger ss-tabs__trigger--active">Profile</button>
+                <button type="button" role="tab" data-tab-value="billing" aria-selected="false" tabindex="-1" class="ss-tabs__trigger">Billing</button>
               </div>
-              <div role="tabpanel" tabindex="0" class="ss-tabs__content">Manage your profile settings.</div>
+              <div role="tabpanel" data-tab-panel="profile" tabindex="0" class="ss-tabs__content">Manage your profile settings.</div>
+              <div role="tabpanel" data-tab-panel="billing" tabindex="0" class="ss-tabs__content" hidden>Update payment methods and invoices.</div>
             </div>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Accordion</h4>
-            <div class="ss-accordion">
-              <div class="ss-accordion__item">
+            <div class="ss-accordion preview-accordion-demo">
+              <div class="ss-accordion__item" data-accordion-item="account">
                 <h3 class="ss-accordion__heading">
                   <button type="button" class="ss-accordion__trigger" aria-expanded="true">
                     <span class="ss-accordion__trigger-label">Account</span>
                     <span class="ss-accordion__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
-                <div role="region" class="ss-accordion__content">
+                <div role="region" data-accordion-panel="account" class="ss-accordion__content">
                   <div class="ss-accordion__content-inner">Update your email and password.</div>
                 </div>
               </div>
-              <div class="ss-accordion__item">
+              <div class="ss-accordion__item" data-accordion-item="notifications">
                 <h3 class="ss-accordion__heading">
                   <button type="button" class="ss-accordion__trigger" aria-expanded="false">
                     <span class="ss-accordion__trigger-label">Notifications</span>
                     <span class="ss-accordion__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
+                <div role="region" data-accordion-panel="notifications" class="ss-accordion__content" hidden>
+                  <div class="ss-accordion__content-inner">Choose which alerts you receive.</div>
+                </div>
               </div>
             </div>
           </section>
@@ -489,9 +543,9 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Dropdown menu</h4>
-            <div class="ss-dropdown ss-dropdown--demo">
-              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-haspopup="menu" aria-expanded="true">Actions</button>
-              <div role="menu" class="ss-dropdown__content ss-dropdown__content--start">
+            <div class="ss-dropdown ss-dropdown--demo preview-dropdown-demo">
+              <button class="ss-button ss-button--secondary ss-button--md" type="button" aria-haspopup="menu" aria-expanded="false">Actions</button>
+              <div role="menu" class="ss-dropdown__content ss-dropdown__content--start" hidden>
                 <button type="button" role="menuitem" class="ss-dropdown__item">Edit</button>
                 <button type="button" role="menuitem" class="ss-dropdown__item">Duplicate</button>
                 <button type="button" role="menuitem" class="ss-dropdown__item">Delete</button>
@@ -584,17 +638,17 @@
             <h4 class="preview-label">Popover</h4>
             <div class="preview-popover-stage">
               <div class="preview-popover-slot preview-popover-slot--top">
-                <span class="ss-popover ss-popover--demo ss-popover--demo-top">
-                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Top</button>
-                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center">
+                <span class="ss-popover ss-popover--demo ss-popover--demo-top preview-popover-demo">
+                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="false">Top</button>
+                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center" hidden>
                     Opens above the trigger.
                   </div>
                 </span>
               </div>
               <div class="preview-popover-slot preview-popover-slot--bottom">
-                <span class="ss-popover ss-popover--demo">
-                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Bottom</button>
-                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
+                <span class="ss-popover ss-popover--demo preview-popover-demo">
+                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="false">Bottom</button>
+                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center" hidden>
                     Opens below the trigger.
                   </div>
                 </span>

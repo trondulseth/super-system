@@ -148,6 +148,21 @@ aside select {
   color: #111827;
 }
 
+aside input.ss-slider {
+  min-height: unset;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.slider-field {
+  margin: 12px 0;
+}
+
+.slider-field .ss-slider-value {
+  color: #64748b;
+}
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -205,10 +220,14 @@ aside select {
 
 .preview-section {
   margin-top: 1.75rem;
-  padding: 1.25rem 1.5rem;
+  padding: 1.375rem 1.625rem;
   border: 1px solid var(--ss-color-border);
   border-radius: var(--ss-radius-lg, 14px);
   background: color-mix(in srgb, var(--ss-color-muted) 28%, var(--ss-color-background));
+}
+
+.preview-section + .preview-section {
+  margin-top: 1.75rem;
 }
 
 .preview-section:first-of-type {

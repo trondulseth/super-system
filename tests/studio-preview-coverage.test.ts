@@ -19,6 +19,7 @@ const PREVIEW_COVERAGE = [
   { exportName: "Checkbox", marker: "ss-checkbox" },
   { exportName: "RadioGroup", marker: "ss-radio-group" },
   { exportName: "Switch", marker: "ss-switch" },
+  { exportName: "Slider", marker: "ss-slider" },
   { exportName: "Select", marker: "ss-select" },
   { exportName: "Alert", marker: "ss-alert" },
   { exportName: "Spinner", marker: "ss-spinner" },

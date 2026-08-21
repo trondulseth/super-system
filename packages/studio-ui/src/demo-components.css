@@ -7,6 +7,7 @@
 /* Allow popovers and overlay demos to extend outside the preview card */
 .ss-card.preview-theme {
   overflow: visible;
+  padding: var(--ss-space-5, 20px) var(--ss-space-6, 24px);
 }
 
 /* --- Dialog + drawer mini-viewports --- */
@@ -115,17 +116,38 @@
 }
 
 /* --- Tooltip demo --- */
-.ss-tooltip.ss-tooltip--demo .ss-tooltip__content {
-  opacity: 1;
-  visibility: visible;
+.ss-tooltip.ss-tooltip--demo .ss-tooltip__content[hidden] {
+  display: none;
+}
+
+.preview-section--tooltip {
+  min-height: 6.5rem;
 }
 
 /* --- Dropdown demo --- */
 .ss-dropdown.ss-dropdown--demo .ss-dropdown__content {
   position: relative;
-  display: block;
   top: auto;
   margin-top: var(--ss-space-2, 8px);
+}
+
+.ss-dropdown.ss-dropdown--demo:not(.is-open) .ss-dropdown__content,
+.ss-dropdown.ss-dropdown--demo .ss-dropdown__content[hidden] {
+  display: none;
+}
+
+.ss-dropdown.ss-dropdown--demo.is-open .ss-dropdown__content {
+  display: block;
+}
+
+/* --- Popover demos --- */
+.ss-popover.ss-popover--demo:not(.is-open) .ss-popover__content,
+.ss-popover.ss-popover--demo .ss-popover__content[hidden] {
+  display: none;
+}
+
+.ss-popover.ss-popover--demo.is-open .ss-popover__content {
+  display: block;
 }
 
 /* --- App shell preview --- */

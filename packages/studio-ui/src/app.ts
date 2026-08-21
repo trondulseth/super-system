@@ -1,4 +1,5 @@
 import type { SuperSystemConfig } from "@super-system/tokens";
+import { initPreviewInteractions } from "./preview-interactions.js";
 import { updatePreviewTheme } from "./preview-theme.js";
 import {
   applyConfigToForm,
@@ -6,6 +7,7 @@ import {
   readConfigFromForm,
   syncColorPickerFromHex,
   syncHexFromColorPicker,
+  syncSliderDisplays,
   validateStudioForm
 } from "./studio-form.js";
 import type { StudioBackend, StudioOptions } from "./types.js";
@@ -169,9 +171,11 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   fill();
   await render();
   initPageShellPreview();
+  initPreviewInteractions();
 
   document.querySelectorAll("aside input,aside select").forEach((element) => {
     element.addEventListener("input", () => {
+      syncSliderDisplays();
       void render();
     });
     element.addEventListener("change", () => {
