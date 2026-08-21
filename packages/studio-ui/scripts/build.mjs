@@ -11,6 +11,7 @@ const demoOnly = process.argv.includes("--demo");
 
 async function copySharedAssets(outDir) {
   await copyFile(path.join(srcDir, "styles.css"), path.join(outDir, "styles.css"));
+  await copyFile(path.join(srcDir, "demo-components.css"), path.join(outDir, "demo-components.css"));
   await copyFile(reactStyles, path.join(outDir, "components.css"));
 }
 

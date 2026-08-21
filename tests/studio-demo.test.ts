@@ -74,11 +74,13 @@ describe("studio demo", () => {
     expect(html).toContain('scope="col"');
     expect(html).toContain("ss-icon--md");
     expect(html).toContain('aria-label="Add item"');
+    expect(html).toContain('href="./demo-components.css"');
+    expect(html.indexOf("./components.css")).toBeLessThan(html.indexOf("./demo-components.css"));
 
-    const styles = await readFile(path.join(demoDir, "styles.css"), "utf8");
-    expect(styles).toContain(".ss-drawer--demo {");
-    expect(styles).toContain("position: relative");
-    expect(styles).toMatch(/\.ss-drawer--demo \.ss-drawer__content--right/);
+    const demoStyles = await readFile(path.join(demoDir, "demo-components.css"), "utf8");
+    expect(demoStyles).toContain(".ss-drawer.ss-drawer--demo");
+    expect(demoStyles).toContain("position: absolute");
+    expect(demoStyles).toContain(".ss-app-shell.ss-app-shell--preview");
   });
 
   it("uses the same contrast logic as the token package", () => {
