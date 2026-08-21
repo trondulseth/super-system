@@ -1237,6 +1237,18 @@ describe("Charts", () => {
     expect(container.querySelector(".ss-line-chart")).not.toBeNull();
     expect(container.querySelector(".ss-donut-chart")?.getAttribute("aria-label")).toContain("72");
   });
+
+  it("applies muted tone classes to line and donut charts", () => {
+    const container = render(
+      <div>
+        <LineChart data={[2, 4, 3, 6, 5]} tone="muted" />
+        <DonutChart value={40} tone="muted" />
+      </div>
+    );
+
+    expect(container.querySelector(".ss-line-chart--muted")).not.toBeNull();
+    expect(container.querySelector(".ss-donut-chart--muted")).not.toBeNull();
+  });
 });
 
 describe("KPI cards", () => {
@@ -1257,6 +1269,13 @@ describe("KPI cards", () => {
     expect(container.querySelector(".ss-kpi-card--primary")).not.toBeNull();
     expect(container.querySelector(".ss-kpi-card__value")?.textContent).toBe("$12,400");
     expect(container.querySelector(".ss-kpi-card__chart .ss-sparkline")).not.toBeNull();
+  });
+
+  it("omits the default variant modifier class", () => {
+    const container = render(<KpiCard>Metric</KpiCard>);
+
+    expect(container.querySelector(".ss-kpi-card")).not.toBeNull();
+    expect(container.querySelector(".ss-kpi-card--default")).toBeNull();
   });
 });
 
@@ -1318,5 +1337,16 @@ describe("Production CSS hygiene", () => {
   it("does not ship demo-only modifier classes", () => {
     const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
     expect(css.includes("--demo")).toBe(false);
+  });
+
+  it("does not ship hardcoded success greens or literal white color mixes", () => {
+    const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
+    expect(css.includes("#15803d")).toBe(false);
+    expect(css.includes(", white)")).toBe(false);
+    expect(css).toContain("var(--ss-color-background)");
+    expect(css.includes("ss-kpi-card__trend--up")).toBe(true);
+    expect(css).toContain("var(--ss-color-success)");
+    expect(css).toContain(".ss-line-chart--muted");
+    expect(css).toContain(".ss-donut-chart--muted");
   });
 });

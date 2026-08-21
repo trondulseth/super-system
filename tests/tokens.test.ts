@@ -5,6 +5,7 @@ describe("theme tokens", () => {
   it("compiles portable light and dark CSS", () => {
     const css = compileTheme(defaultTheme);
     expect(css).toContain("--ss-color-primary: #2563eb");
+    expect(css).toContain("--ss-color-success:");
     expect(css).toContain(':root[data-theme="dark"]');
     expect(css).toContain("prefers-reduced-motion");
   });

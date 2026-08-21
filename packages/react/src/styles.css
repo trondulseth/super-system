@@ -562,10 +562,6 @@
   background: var(--ss-color-background);
   box-shadow: var(--ss-overlay-shadow, 0 16px 40px color-mix(in srgb, var(--ss-color-foreground) 14%, transparent));
 }
-.ss-dropdown__content--start,
-.ss-dropdown__content--end {
-  /* alignment handled by fixed positioning transform */
-}
 .ss-dropdown__item {
   width: 100%;
   min-height: max(36px, var(--ss-target-min, 44px));
@@ -738,7 +734,7 @@
   border: 1px solid var(--ss-color-border);
   background: var(--ss-color-background);
   color: var(--ss-color-foreground);
-  box-shadow: 0 16px 48px color-mix(in srgb, var(--ss-color-foreground) 16%, transparent);
+  box-shadow: var(--ss-overlay-shadow, 0 16px 40px color-mix(in srgb, var(--ss-color-foreground) 14%, transparent));
   overflow: auto;
 }
 .ss-drawer__content--right {
@@ -797,7 +793,7 @@
   border-radius: var(--ss-radius-md, 10px);
   background: var(--ss-color-background);
   color: var(--ss-color-foreground);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--ss-color-foreground) 12%, transparent);
+  box-shadow: var(--ss-overlay-shadow, 0 16px 40px color-mix(in srgb, var(--ss-color-foreground) 14%, transparent));
 }
 .ss-toast--primary {
   border-color: color-mix(in srgb, var(--ss-color-primary) 35%, var(--ss-color-border));
@@ -978,13 +974,14 @@
   border-radius: var(--ss-radius-sm, 6px) var(--ss-radius-sm, 6px) 0 0;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--ss-chart-color, var(--ss-color-primary)) 88%, white),
+    color-mix(in srgb, var(--ss-chart-color, var(--ss-color-primary)) 88%, var(--ss-color-background)),
     var(--ss-chart-color, var(--ss-color-primary))
   );
   transition: height 180ms ease, width 180ms ease;
 }
 .ss-bar-chart--horizontal .ss-bar-chart__bar {
-  height: 1.25rem !important;
+  height: 1.25rem;
+  min-width: 4px;
   border-radius: 0 var(--ss-radius-sm, 6px) var(--ss-radius-sm, 6px) 0;
 }
 .ss-bar-chart--primary { --ss-chart-color: var(--ss-color-primary); }
@@ -1010,6 +1007,8 @@
 .ss-line-chart--secondary .ss-line-chart__area { fill: var(--ss-color-muted-foreground); }
 .ss-line-chart--destructive .ss-line-chart__line { stroke: var(--ss-color-destructive); }
 .ss-line-chart--destructive .ss-line-chart__area { fill: var(--ss-color-destructive); }
+.ss-line-chart--muted .ss-line-chart__line { stroke: var(--ss-color-border); }
+.ss-line-chart--muted .ss-line-chart__area { fill: var(--ss-color-border); }
 
 .ss-donut-chart {
   position: relative;
@@ -1026,6 +1025,7 @@
 .ss-donut-chart--primary .ss-donut-chart__value { stroke: var(--ss-color-primary); }
 .ss-donut-chart--secondary .ss-donut-chart__value { stroke: var(--ss-color-muted-foreground); }
 .ss-donut-chart--destructive .ss-donut-chart__value { stroke: var(--ss-color-destructive); }
+.ss-donut-chart--muted .ss-donut-chart__value { stroke: var(--ss-color-border); }
 .ss-donut-chart__label {
   position: absolute;
   font: 700 0.875rem/1 var(--ss-font-sans, system-ui);
@@ -1078,8 +1078,8 @@
   font: 600 0.75rem/1 var(--ss-font-sans, system-ui);
 }
 .ss-kpi-card__trend--up {
-  color: #15803d;
-  background: color-mix(in srgb, #15803d 12%, transparent);
+  color: var(--ss-color-success);
+  background: color-mix(in srgb, var(--ss-color-success) 12%, transparent);
 }
 .ss-kpi-card__trend--down {
   color: var(--ss-color-destructive);
@@ -1260,7 +1260,9 @@
   .ss-switch,
   .ss-switch::after,
   .ss-tabs__trigger,
-  .ss-accordion__icon {
+  .ss-accordion__icon,
+  .ss-bar-chart__bar,
+  .ss-donut-chart__value {
     transition: none;
   }
 }

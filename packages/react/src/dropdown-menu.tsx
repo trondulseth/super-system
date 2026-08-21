@@ -172,7 +172,7 @@ export function DropdownMenuContent({
           left: position.left,
           transform: position.transform
         }}
-        className={classes("ss-dropdown__content", `ss-dropdown__content--${align}`, className)}
+        className={classes("ss-dropdown__content", className)}
         onKeyDown={handleKeyDown}
         {...props}
       >

@@ -8,7 +8,12 @@ export interface KpiCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function KpiCard({ variant = "default", className, ...props }: KpiCardProps) {
-  return <div className={classes("ss-kpi-card", `ss-kpi-card--${variant}`, className)} {...props} />;
+  return (
+    <div
+      className={classes("ss-kpi-card", variant !== "default" && `ss-kpi-card--${variant}`, className)}
+      {...props}
+    />
+  );
 }
 
 export interface KpiCardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}

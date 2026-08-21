@@ -117,12 +117,7 @@ export function PopoverContent({
           left: position.left,
           transform: position.transform
         }}
-        className={classes(
-          "ss-popover__content",
-          `ss-popover__content--${side}`,
-          `ss-popover__content--${align}`,
-          className
-        )}
+        className={classes("ss-popover__content", className)}
         {...props}
       >
         {children}

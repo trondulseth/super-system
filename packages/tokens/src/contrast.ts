@@ -29,7 +29,8 @@ const pairs: Array<[string, keyof ThemeColors, keyof ThemeColors]> = [
   ["primary", "primaryForeground", "primary"],
   ["secondary", "secondaryForeground", "secondary"],
   ["muted", "mutedForeground", "muted"],
-  ["destructive", "destructiveForeground", "destructive"]
+  ["destructive", "destructiveForeground", "destructive"],
+  ["success", "successForeground", "success"]
 ];
 
 export function checkThemeContrast(config: SuperSystemConfig): ContrastResult[] {

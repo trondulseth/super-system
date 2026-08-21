@@ -5,8 +5,8 @@
 ## Phase 0 — Planning
 
 - [x] Create OpenSpec change `library-quality-pass-2` with proposal, design, tasks, delta specs.
-- [ ] Validate with `openspec validate library-quality-pass-2 --strict`.
-- [ ] Update `SUPERSTATE.md` active handoff to this change.
+- [x] Validate with `openspec validate library-quality-pass-2 --strict`.
+- [x] Update `SUPERSTATE.md` active handoff to this change.
 
 ---
 

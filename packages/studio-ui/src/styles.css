@@ -197,11 +197,11 @@ aside select {
 }
 
 .pass {
-  color: #15803d;
+  color: var(--ss-color-success, #15803d);
 }
 
 .fail {
-  color: #b91c1c;
+  color: var(--ss-color-destructive, #b91c1c);
   font-weight: 800;
 }
 

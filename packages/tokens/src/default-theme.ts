@@ -25,6 +25,8 @@ export const defaultTheme: SuperSystemConfig = {
       border: "#cbd5e1",
       destructive: "#b91c1c",
       destructiveForeground: "#ffffff",
+      success: "#15803d",
+      successForeground: "#ffffff",
       focus: "#2563eb"
     },
     dark: {
@@ -39,6 +41,8 @@ export const defaultTheme: SuperSystemConfig = {
       border: "#475569",
       destructive: "#f87171",
       destructiveForeground: "#1f0808",
+      success: "#4ade80",
+      successForeground: "#052e16",
       focus: "#93c5fd"
     }
   },

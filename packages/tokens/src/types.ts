@@ -14,6 +14,8 @@ export interface ThemeColors {
   border: string;
   destructive: string;
   destructiveForeground: string;
+  success: string;
+  successForeground: string;
   focus: string;
 }
 
