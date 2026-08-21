@@ -2,8 +2,8 @@
 
 > **One theme. One set of components. Zero mystery-meat buttons.**
 
-[![npm CLI](https://img.shields.io/npm/v/%40super-system%2Fcli?label=CLI&color=2563eb)](https://www.npmjs.com/package/@super-system/cli)
-[![npm React](https://img.shields.io/npm/v/%40super-system%2Freact?label=React&color=2563eb)](https://www.npmjs.com/package/@super-system/react)
+[![npm CLI](https://img.shields.io/npm/v/%40super-system%2Fcli/beta?label=CLI&color=2563eb)](https://www.npmjs.com/package/@super-system/cli/v/beta)
+[![npm React](https://img.shields.io/npm/v/%40super-system%2Freact/beta?label=React&color=2563eb)](https://www.npmjs.com/package/@super-system/react/v/beta)
 [![MIT license](https://img.shields.io/badge/license-MIT-16a34a)](./LICENSE)
 
 Super System is a lightweight, AI-independent design system for React apps. It gives your project a shared visual language, accessible components, automatic light/dark themes, a visual theme editor, and a UI consistency audit.
