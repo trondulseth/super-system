@@ -5,6 +5,7 @@ describe("theme tokens", () => {
   it("compiles portable light and dark CSS", () => {
     const css = compileTheme(defaultTheme);
     expect(css).toContain("--ss-color-primary: #2563eb");
+    expect(css).toContain("@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');");
     expect(css).toContain("--ss-color-link:");
     expect(css).toContain("--ss-surface-gradient:");
     expect(css).toContain("--ss-elevation-shadow:");

@@ -5,6 +5,7 @@ export const defaultTheme: SuperSystemConfig = {
   mode: { default: "system", storageKey: "super-system-theme" },
   icons: { library: "lucide" },
   typography: {
+    fontFamily: "inter",
     fontSans: "Inter, ui-sans-serif, system-ui, sans-serif",
     fontMono: "ui-monospace, SFMono-Regular, Menlo, monospace",
     baseSize: "16px",

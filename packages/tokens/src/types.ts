@@ -53,6 +53,7 @@ export interface SuperSystemConfig {
   mode: { default: ColorMode; storageKey: string };
   icons: { library: "lucide" | "phosphor" | "heroicons" | "custom" };
   typography: {
+    fontFamily?: string;
     fontSans: string;
     fontMono: string;
     baseSize: string;
