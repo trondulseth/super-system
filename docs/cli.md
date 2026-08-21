@@ -13,6 +13,8 @@
 | `npx @super-system/cli studio --no-open` | Starts Studio without opening a browser. |
 | `npx @super-system/cli audit` | Reports likely UI consistency problems. |
 | `npx @super-system/cli audit --json` | Prints findings as JSON. |
+| `npx @super-system/cli migrate plan` | Builds a read-only migration plan from audit findings. |
+| `npx @super-system/cli migrate plan --json` | Prints the migration manifest as JSON for AI tools. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
 | `npx @super-system/cli icons setup` | Prints install guidance for the configured icon library. |

@@ -2,10 +2,10 @@
 
 ## Discovery and planning
 
-- [ ] Define a versioned migration manifest and confidence model.
-- [ ] Extend audit findings with stable identifiers and transformation metadata.
-- [ ] Implement a read-only `migrate plan` command with human and JSON output.
-- [ ] Document supported frameworks, file types, and known limitations.
+- [x] Define a versioned migration manifest and confidence model.
+- [x] Extend audit findings with stable identifiers and transformation metadata.
+- [x] Implement a read-only `migrate plan` command with human and JSON output.
+- [x] Document supported frameworks, file types, and known limitations.
 
 ## Safe transformations
 

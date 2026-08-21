@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.6 (migrate plan)
+
+No breaking changes. Safe to upgrade from `beta.5`.
+
+- **CLI:** New read-only `migrate plan` command groups audit findings by confidence and planned transform. Use `--json` for AI coding tools.
+- Automated apply (`migrate apply`) is not available yet.
+
 ## 0.1.0-beta.5 (branding + docs polish)
 
 No breaking API or token changes. Safe to upgrade from `beta.4`.
