@@ -142,22 +142,22 @@
 
 Add static preview sections in `index.html` (use demo modifiers from `styles.css`):
 
-- [ ] Card composable (header/title/body/footer).
-- [ ] LineChart + DonutChart; tone row for all four tones.
-- [ ] Toast neutral + destructive variants.
-- [ ] Focus-visible strip (button + input).
-- [ ] KPI: description, footer, trend down, muted variant.
-- [ ] Layout: Stack, Row, Container (sm/md/lg), Divider, Spacer.
-- [ ] Page shell: AppShell + Sidebar + SidebarNavItem active + HamburgerMenu drawer demo.
-- [ ] Drawer left with close; dialog with close button.
-- [ ] Popover `side="top"` demo.
-- [ ] Table caption + footer.
-- [ ] Replace inline styles in KPI/layout sections with layout primitive classes.
+- [x] Card composable (header/title/body/footer).
+- [x] LineChart + DonutChart; tone row for all four tones.
+- [x] Toast neutral + destructive variants.
+- [x] Focus-visible strip (button + input).
+- [x] KPI: description, footer, trend down, muted variant.
+- [x] Layout: Stack, Row, Container (sm/md/lg), Divider, Spacer.
+- [x] Page shell: AppShell + Sidebar + SidebarNavItem active + HamburgerMenu drawer demo.
+- [x] Drawer left with close; dialog with close button.
+- [x] Popover `side="top"` demo.
+- [x] Table caption + footer.
+- [x] Replace inline styles in KPI/layout sections with layout primitive classes.
 
 ### Verification
 
-- [ ] Checklist: every `index.tsx` export has preview or documented runtime-only exception.
-- [ ] `pnpm check` green including studio demo build.
+- [x] Checklist: every `index.tsx` export has preview or documented runtime-only exception.
+- [x] `pnpm check` green including studio demo build.
 
 **Exit:** Preview checklist 100%; density/unit changes visible in layout sections.
 
@@ -165,12 +165,12 @@ Add static preview sections in `index.html` (use demo modifiers from `styles.css
 
 ## Phase 7 — Release verification
 
-- [ ] Reach 100+ automated tests (estimate +20 from this change).
-- [ ] Run `pnpm check`.
-- [ ] Fresh-install smoke: Vite + Next.js with success token + new close defaults.
-- [ ] Sync delta specs to living specs.
-- [ ] Archive `library-quality-pass-2`.
-- [ ] Journal entry documenting 10/10 checklist completion.
+- [x] Reach 100+ automated tests (estimate +20 from this change).
+- [x] Run `pnpm check`.
+- [x] Fresh-install smoke: Vite + Next.js with success token + new close defaults.
+- [x] Sync delta specs to living specs.
+- [x] Archive `library-quality-pass-2`.
+- [x] Journal entry documenting 10/10 checklist completion.
 
 ---
 

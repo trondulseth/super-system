@@ -5,11 +5,11 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active change:** library-quality-pass-2
+- **Active change:** none (library-quality-pass-2 archived)
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Execute library-quality-pass-2 — remediate all review findings to 10/10 across six dimensions.
-- **Work state:** Phase 5 complete on `cursor/library-quality-pass-2-2c3d`. Full Studio field coverage, hex sync, dual-theme contrast, save validation, 105 tests.
-- **Next handoff:** Start Phase 6 (Studio preview coverage).
+- **Objective:** Library quality pass 2 complete — all six review dimensions at 10/10.
+- **Work state:** Phase 7 complete on `cursor/library-quality-pass-2-2c3d`. 107 tests, living specs synced, change archived.
+- **Next handoff:** Optional follow-up — publish `0.1.0-beta.2` or start `harden-release-and-quality`.
