@@ -5,6 +5,8 @@ export interface GoogleFontPreset {
   label: string;
   googleFamily: string;
   fontSans: string;
+  /** Short Studio hint describing the font personality. */
+  personality: string;
 }
 
 export const GOOGLE_FONT_PRESETS: GoogleFontPreset[] = [
@@ -12,61 +14,71 @@ export const GOOGLE_FONT_PRESETS: GoogleFontPreset[] = [
     id: "inter",
     label: "Inter",
     googleFamily: "Inter",
-    fontSans: "Inter, ui-sans-serif, system-ui, sans-serif"
+    fontSans: "Inter, ui-sans-serif, system-ui, sans-serif",
+    personality: "Neutral UI default"
   },
   {
-    id: "dm-sans",
-    label: "DM Sans",
-    googleFamily: "DM Sans",
-    fontSans: '"DM Sans", ui-sans-serif, system-ui, sans-serif'
+    id: "space-grotesk",
+    label: "Space Grotesk",
+    googleFamily: "Space Grotesk",
+    fontSans: '"Space Grotesk", ui-sans-serif, system-ui, sans-serif',
+    personality: "Tech, geometric, startup"
   },
   {
-    id: "plus-jakarta-sans",
-    label: "Plus Jakarta Sans",
-    googleFamily: "Plus Jakarta Sans",
-    fontSans: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif'
+    id: "lora",
+    label: "Lora",
+    googleFamily: "Lora",
+    fontSans: "Lora, ui-serif, Georgia, serif",
+    personality: "Editorial serif, warm"
   },
   {
-    id: "manrope",
-    label: "Manrope",
-    googleFamily: "Manrope",
-    fontSans: "Manrope, ui-sans-serif, system-ui, sans-serif"
+    id: "nunito",
+    label: "Nunito",
+    googleFamily: "Nunito",
+    fontSans: "Nunito, ui-sans-serif, system-ui, sans-serif",
+    personality: "Soft, rounded, friendly"
   },
   {
-    id: "source-sans-3",
-    label: "Source Sans 3",
-    googleFamily: "Source Sans 3",
-    fontSans: '"Source Sans 3", ui-sans-serif, system-ui, sans-serif'
+    id: "barlow",
+    label: "Barlow",
+    googleFamily: "Barlow",
+    fontSans: "Barlow, ui-sans-serif, system-ui, sans-serif",
+    personality: "Industrial, utilitarian"
   },
   {
-    id: "nunito-sans",
-    label: "Nunito Sans",
-    googleFamily: "Nunito Sans",
-    fontSans: '"Nunito Sans", ui-sans-serif, system-ui, sans-serif'
+    id: "merriweather",
+    label: "Merriweather",
+    googleFamily: "Merriweather",
+    fontSans: "Merriweather, ui-serif, Georgia, serif",
+    personality: "Classic serif, trustworthy"
   },
   {
-    id: "work-sans",
-    label: "Work Sans",
-    googleFamily: "Work Sans",
-    fontSans: '"Work Sans", ui-sans-serif, system-ui, sans-serif'
+    id: "archivo",
+    label: "Archivo",
+    googleFamily: "Archivo",
+    fontSans: "Archivo, ui-sans-serif, system-ui, sans-serif",
+    personality: "Grotesque, newsroom"
   },
   {
-    id: "outfit",
-    label: "Outfit",
-    googleFamily: "Outfit",
-    fontSans: "Outfit, ui-sans-serif, system-ui, sans-serif"
+    id: "fraunces",
+    label: "Fraunces",
+    googleFamily: "Fraunces",
+    fontSans: "Fraunces, ui-serif, Georgia, serif",
+    personality: "Artisan soft serif"
   },
   {
-    id: "lexend",
-    label: "Lexend",
-    googleFamily: "Lexend",
-    fontSans: "Lexend, ui-sans-serif, system-ui, sans-serif"
+    id: "roboto-slab",
+    label: "Roboto Slab",
+    googleFamily: "Roboto Slab",
+    fontSans: '"Roboto Slab", ui-serif, Georgia, serif',
+    personality: "Slab serif, strong"
   },
   {
-    id: "ibm-plex-sans",
-    label: "IBM Plex Sans",
-    googleFamily: "IBM Plex Sans",
-    fontSans: '"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif'
+    id: "syne",
+    label: "Syne",
+    googleFamily: "Syne",
+    fontSans: "Syne, ui-sans-serif, system-ui, sans-serif",
+    personality: "Artistic, avant-garde"
   }
 ];
 
@@ -89,8 +101,9 @@ export function inferFontPresetId(fontSans: string): string {
 }
 
 export function resolveFontPreset(config: SuperSystemConfig): GoogleFontPreset {
-  const id = config.typography.fontFamily ?? inferFontPresetId(config.typography.fontSans);
-  return getFontPreset(id) ?? GOOGLE_FONT_PRESETS[0]!;
+  const inferred = inferFontPresetId(config.typography.fontSans);
+  const id = config.typography.fontFamily ?? inferred;
+  return getFontPreset(id) ?? getFontPreset(inferred) ?? GOOGLE_FONT_PRESETS[0]!;
 }
 
 export function fontWeightsForConfig(config: SuperSystemConfig): number[] {

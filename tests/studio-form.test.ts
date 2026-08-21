@@ -48,7 +48,7 @@ function createFormFixture(): HTMLElement {
     <input id="linkHex" type="text" value="#1d4ed8" />
     <input id="linkHover" type="color" value="#1e40af" />
     <input id="linkHoverHex" type="text" value="#1e40af" />
-    <select id="fontFamily"><option value="inter">Inter</option><option value="work-sans">Work Sans</option></select>
+    <select id="fontFamily"><option value="inter">Inter</option><option value="space-grotesk">Space Grotesk</option></select>
     <input id="fontMono" value="monospace" />
     <input id="baseSize" class="ss-slider" type="range" min="12" max="24" value="16" />
     <output for="baseSize"></output>
@@ -152,12 +152,12 @@ describe("studio form", () => {
     const config = structuredClone(defaultTheme);
 
     applyConfigToForm(config, "light", root);
-    (root.querySelector("#fontFamily") as HTMLSelectElement).value = "work-sans";
+    (root.querySelector("#fontFamily") as HTMLSelectElement).value = "space-grotesk";
 
     const collected = readConfigFromForm(config, "light", root);
 
-    expect(collected.typography.fontFamily).toBe("work-sans");
-    expect(collected.typography.fontSans).toContain("Work Sans");
+    expect(collected.typography.fontFamily).toBe("space-grotesk");
+    expect(collected.typography.fontSans).toContain("Space Grotesk");
     root.remove();
   });
 
