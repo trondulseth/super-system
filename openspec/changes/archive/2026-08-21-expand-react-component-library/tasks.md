@@ -1,12 +1,12 @@
 # Tasks: Expand the React Component Library
 
-> **Status:** Batch 1–3 and the Icon wrapper are complete. Remaining: release verification and change archive.
+> **Status:** Complete. Archived 2026-08-21 after release verification and spec sync.
 
 ## Foundation
 
 - [x] Finalize the component priority order and public API conventions for Batch 1 (see polish archive for label, card, and ThemeProvider conventions).
-- [ ] Add any required semantic tokens with light/dark defaults and validation for Batch 2+ overlays.
-- [ ] Select and document the dependency approach for complex accessible primitives.
+- [x] Add any required semantic tokens with light/dark defaults and validation for Batch 2+ overlays.
+- [x] Select and document the dependency approach for complex accessible primitives (see design.md — in-house primitives, no external overlay library).
 - [x] Select the default icon package and define the normalized icon contract.
 
 ## Implementation
@@ -52,5 +52,5 @@
 - [x] Add copy-ready examples and accessibility notes for every Batch 1 component.
 - [x] Add copy-ready examples and accessibility notes for every Batch 2 component.
 - [x] Add copy-ready examples and accessibility notes for every Batch 3 component.
-- [ ] Add migration notes for any expanded token schema.
-- [ ] Publish an opt-in beta and verify installation in fresh React, Next.js, and Vite projects.
+- [x] Add migration notes for any expanded token schema (see MIGRATION.md).
+- [x] Publish an opt-in beta and verify installation in fresh React, Next.js, and Vite projects (see journal 2026-08-21; npm publish remains at user request).

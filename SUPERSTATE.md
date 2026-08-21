@@ -5,13 +5,13 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active change:** polish-library-quality
+- **Active change:** none (polish + expand archived 2026-08-21)
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Complete release verification and archive `polish-library-quality` + `expand-react-component-library`.
-- **Work state:** Phases 0–5 complete on `cursor/polish-and-dashboard-2c3d`. 84 tests, charts/KPI/layout/page-shell components, Studio controllers, overlay tokens, migration notes.
-- **Recent evidence:** `Sparkline`, `BarChart`, `LineChart`, `DonutChart`, `KpiCard`, flex layout (`Stack`/`Row`/`Box`), `PageHeader`, `HamburgerMenu`, dropdown portal, tabs auto-select, scroll-lock stacking.
-- **Risks and limitations:** Fresh install smoke not yet run in this environment; npm publish remains at user request.
-- **Next handoff:** Manual fresh-install verification, sync specs, archive changes, optional `0.1.0-beta.2` publish.
+- **Objective:** Optional npm publish (`0.1.0-beta.2`) and post-release hardening.
+- **Work state:** Phase 6 complete on `cursor/polish-and-dashboard-2c3d`. 84 tests, fresh-install smoke passing (Vite + Next.js), living specs synced, both OpenSpec changes archived.
+- **Recent evidence:** `react-dom` externalized from published bundle; charts/KPI/layout/page-shell shipped; overlay tokens + MIGRATION.md updated.
+- **Risks and limitations:** npm publish not run; beta tag still at `0.1.0-beta.1`.
+- **Next handoff:** Publish beta.2 on user request; consider dedicated change for release hardening or next component batch.

@@ -31,3 +31,7 @@
 ### Theme tokens
 
 - Compiler emits `--ss-overlay-backdrop` and `--ss-overlay-shadow` for modal/overlay surfaces.
+
+### Package peers
+
+- `@super-system/react` declares `react-dom` as a peer dependency (required for portal-based overlays). The published ESM bundle externalizes both `react` and `react-dom` so Next.js and Vite builds succeed.
