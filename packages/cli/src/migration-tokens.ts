@@ -1,5 +1,13 @@
-import { defaultTheme, type SuperSystemConfig, type ThemeColors } from "@super-system/tokens";
-import { readConfig } from "./files.js";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import {
+  defaultTheme,
+  validateConfig,
+  type SuperSystemConfig,
+  type ThemeColors
+} from "../../tokens/src/index.js";
+
+const configName = "super-system.json";
 
 export interface ColorLiteral {
   raw: string;
@@ -75,7 +83,8 @@ export function buildColorTokenIndex(config: SuperSystemConfig): Map<string, str
 
 export async function loadColorTokenIndex(cwd: string): Promise<Map<string, string>> {
   try {
-    return buildColorTokenIndex(await readConfig(cwd));
+    const raw = await readFile(path.join(cwd, configName), "utf8");
+    return buildColorTokenIndex(validateConfig(JSON.parse(raw)));
   } catch {
     return buildColorTokenIndex(defaultTheme);
   }
