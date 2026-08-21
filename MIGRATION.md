@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.15 (assisted migration completion)
+
+No breaking API changes.
+
+- **CLI:** Transform selection (`--only`, `--skip`, `--skip-rule`), resumable manifests (`.super-system/migration-plan.json`), `migrate verify`, and `migrate apply --verify`.
+- **Docs:** [Migration guide](./docs/migration-guide.md) with backup, rollback, troubleshooting, and AI-neutral follow-up.
+
 ## 0.1.0-beta.14 (Studio sidebar form polish)
 
 No breaking API changes. Studio-only visual fix for sidebar controls.

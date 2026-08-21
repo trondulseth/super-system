@@ -190,7 +190,9 @@ function buildNextSteps(project: ProjectContext, summary: MigrationPlanSummary):
     return steps;
   }
   if (summary.autoFixable > 0) {
-    steps.push("Preview auto-fixes with `npx @super-system/cli migrate apply --dry-run`, then apply with `migrate apply`.");
+    steps.push("Preview auto-fixes with `npx @super-system/cli migrate apply --dry-run`.");
+    steps.push("Save a resumable plan with `migrate plan --out .super-system/migration-plan.json`.");
+    steps.push("Apply selected transforms with `--only`, `--skip`, or `--skip-rule`, then verify with `migrate apply --verify`.");
   }
   if (summary.manualReview > 0) {
     steps.push("Resolve manual-review findings by hand or with your AI coding tool using docs/ai-tools.md rules.");

@@ -2,8 +2,11 @@
 import { checkThemeContrast } from "@super-system/tokens";
 import { auditProject } from "./audit.js";
 import { DirtyWorktreeError } from "./git-worktree.js";
-import { applyMigration, formatMigrationApplyResult } from "./migration-apply.js";
+import { applyMigration, formatMigrationApplyResult, saveMigrationPlan } from "./migration-apply.js";
+import { parseMigrationCliOptions } from "./migration-config.js";
+import { defaultMigrationPlanPath } from "./migration-manifest.js";
 import { createMigrationPlan, formatMigrationPlan } from "./migration.js";
+import { formatMigrationVerification, verifyMigration } from "./migration-verify.js";
 import { setupIcons } from "./icons.js";
 import { initialize, readConfig, writeGeneratedCss } from "./files.js";
 import { startStudio } from "./studio.js";
@@ -19,8 +22,10 @@ Usage:
   super-system init [--force] [--cwd path]
   super-system studio [--port 4173] [--no-open] [--cwd path]
   super-system audit [--json] [--cwd path]
-  super-system migrate plan [--json] [--cwd path]
-  super-system migrate apply [--dry-run] [--allow-dirty] [--json] [--cwd path]
+  super-system migrate plan [--json] [--out path] [--cwd path]
+  super-system migrate apply [--dry-run] [--allow-dirty] [--verify] [--manifest path]
+    [--only transformId] [--skip transformId] [--skip-rule rule] [--json] [--cwd path]
+  super-system migrate verify [--json] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
   super-system icons setup [--install] [--cwd path]
@@ -53,22 +58,47 @@ async function main(): Promise<void> {
     }
     case "migrate": {
       const subcommand = args[0];
+      const options = parseMigrationCliOptions(args.slice(1), { cwd });
       if (subcommand === "plan") {
-        const plan = await createMigrationPlan(cwd);
-        if (args.includes("--json")) console.log(JSON.stringify(plan, null, 2));
+        let plan = await createMigrationPlan(options.cwd);
+        if (options.writeManifest) {
+          const saved = await saveMigrationPlan(options.cwd, options.manifestPath, options.selection);
+          plan = saved.plan;
+          if (!options.json) {
+            console.log(`Saved migration plan to ${saved.path}`);
+            console.log("");
+          }
+        }
+        if (options.json) console.log(JSON.stringify(plan, null, 2));
         else console.log(formatMigrationPlan(plan));
         process.exitCode = plan.summary.findings > 0 ? 1 : 0;
         break;
       }
+      if (subcommand === "verify") {
+        const result = await verifyMigration(options.cwd);
+        if (options.json) console.log(JSON.stringify(result, null, 2));
+        else console.log(formatMigrationVerification(result));
+        process.exitCode = result.passed ? 0 : 1;
+        break;
+      }
       if (subcommand === "apply") {
-        const dryRun = args.includes("--dry-run");
-        const allowDirty = args.includes("--allow-dirty");
         try {
-          const result = await applyMigration(cwd, { dryRun, allowDirty });
-          if (args.includes("--json")) console.log(JSON.stringify(result, null, 2));
+          const result = await applyMigration(options.cwd, {
+            dryRun: options.dryRun,
+            allowDirty: options.allowDirty,
+            manifestPath: options.manifestPath ?? defaultMigrationPlanPath,
+            writeManifest: true,
+            selection: options.selection,
+            verify: options.verify
+          });
+          if (options.json) console.log(JSON.stringify(result, null, 2));
           else console.log(formatMigrationApplyResult(result));
           process.exitCode =
-            result.summary.transformsApplied > 0 || result.summary.manualRemaining > 0 ? 1 : 0;
+            result.verification && !result.verification.passed
+              ? 1
+              : result.summary.transformsApplied > 0 || result.summary.manualRemaining > 0
+                ? 1
+                : 0;
         } catch (error) {
           if (error instanceof DirtyWorktreeError) {
             console.error(error.message);
