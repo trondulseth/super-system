@@ -1,5 +1,11 @@
 # Migration notes
 
+## 0.1.0-beta.13 (Google Font preset diversity)
+
+No breaking API changes.
+
+- **Fonts:** Studio preset list replaced with ten more distinct personalities (sans, serif, slab). Old `fontFamily` ids no longer in the dropdown still resolve from `fontSans` until you re-save in Studio.
+
 ## 0.1.0-beta.12 (Studio surface/elevation/typography controls)
 
 No breaking API changes. Studio-only release.
