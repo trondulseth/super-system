@@ -806,14 +806,26 @@
 .ss-dialog__close,
 .ss-drawer__close,
 .ss-popover__close {
+  justify-self: end;
+  width: max(36px, var(--ss-target-min, 44px));
+  min-width: max(36px, var(--ss-target-min, 44px));
   min-height: max(36px, var(--ss-target-min, 44px));
-  padding: 0 var(--ss-space-3, 12px);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--ss-color-border);
   border-radius: var(--ss-radius-md, 10px);
   background: var(--ss-color-background);
   color: var(--ss-color-foreground);
-  font: 600 var(--ss-font-size-base, 16px)/1 var(--ss-font-sans, system-ui);
+  font-size: 1.25rem;
+  line-height: 1;
   cursor: pointer;
+}
+.ss-dialog__close:hover,
+.ss-drawer__close:hover,
+.ss-popover__close:hover {
+  background: var(--ss-color-muted);
 }
 
 .ss-drawer__content {

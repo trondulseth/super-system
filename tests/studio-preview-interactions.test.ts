@@ -114,3 +114,29 @@ describe("preview interactions", () => {
     expect(toast.hidden).toBe(true);
   });
 });
+
+describe("preview pagination", () => {
+  it("switches pages without navigating", () => {
+    const container = document.createElement("div");
+    container.innerHTML = `
+      <nav class="ss-pagination preview-pagination-demo">
+        <ul class="ss-pagination__content">
+          <li><a href="#" data-pagination-action="previous" class="ss-pagination__link ss-pagination__previous">Previous</a></li>
+          <li><a href="#" data-pagination-page="1" class="ss-pagination__link ss-pagination__link--active" aria-current="page">1</a></li>
+          <li><a href="#" data-pagination-page="2" class="ss-pagination__link">2</a></li>
+          <li><a href="#" data-pagination-action="next" class="ss-pagination__link ss-pagination__next">Next</a></li>
+        </ul>
+      </nav>
+    `;
+    document.body.appendChild(container);
+    initPreviewInteractions();
+
+    const pageTwo = container.querySelector<HTMLAnchorElement>('[data-pagination-page="2"]')!;
+    pageTwo.click();
+
+    expect(pageTwo.classList.contains("ss-pagination__link--active")).toBe(true);
+    expect(container.querySelector('[data-pagination-page="1"]')?.classList.contains("ss-pagination__link--active")).toBe(false);
+
+    container.remove();
+  });
+});

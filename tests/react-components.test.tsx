@@ -1288,6 +1288,7 @@ describe("Accessibility quality", () => {
     expect(closeButtons.length).toBeGreaterThanOrEqual(3);
     for (const button of closeButtons) {
       expect(button.getAttribute("aria-label")).toBe("Close");
+      expect((button as HTMLElement).offsetWidth).toBeLessThanOrEqual(64);
     }
   });
 

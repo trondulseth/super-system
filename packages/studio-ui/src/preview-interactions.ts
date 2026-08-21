@@ -8,6 +8,7 @@ export function initPreviewInteractions(): void {
   initPreviewDropdowns();
   initPreviewTooltips();
   initPreviewPopovers();
+  initPreviewPagination();
   initPreviewToastDismiss();
 }
 
@@ -208,6 +209,65 @@ function initPreviewPopovers(): void {
         popoverTrigger.focus();
       }
     });
+  });
+}
+
+function initPreviewPagination(): void {
+  document.querySelectorAll<HTMLElement>(".preview-pagination-demo").forEach((root) => {
+    const pageLinks = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-pagination-page]"));
+    const previous = root.querySelector<HTMLAnchorElement>('[data-pagination-action="previous"]');
+    const next = root.querySelector<HTMLAnchorElement>('[data-pagination-action="next"]');
+
+    function render(page: number): void {
+      pageLinks.forEach((link) => {
+        const pageNumber = Number(link.dataset.paginationPage);
+        const active = pageNumber === page;
+        link.classList.toggle("ss-pagination__link--active", active);
+        if (active) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+
+      if (previous) {
+        const disabled = page <= 1;
+        previous.classList.toggle("ss-pagination__link--disabled", disabled);
+        previous.setAttribute("aria-disabled", String(disabled));
+        previous.tabIndex = disabled ? -1 : 0;
+      }
+
+      if (next) {
+        const disabled = page >= pageLinks.length;
+        next.classList.toggle("ss-pagination__link--disabled", disabled);
+        next.setAttribute("aria-disabled", String(disabled));
+        next.tabIndex = disabled ? -1 : 0;
+      }
+    }
+
+    root.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target.closest("a") : null;
+      if (!(target instanceof HTMLAnchorElement) || !root.contains(target)) return;
+      event.preventDefault();
+
+      if (target.classList.contains("ss-pagination__link--disabled")) return;
+
+      if (target.dataset.paginationPage) {
+        render(Number(target.dataset.paginationPage));
+        return;
+      }
+
+      const activeLink = pageLinks.find((link) => link.classList.contains("ss-pagination__link--active"));
+      const currentPage = Number(activeLink?.dataset.paginationPage ?? "1");
+
+      if (target.dataset.paginationAction === "previous" && currentPage > 1) {
+        render(currentPage - 1);
+        return;
+      }
+
+      if (target.dataset.paginationAction === "next" && currentPage < pageLinks.length) {
+        render(currentPage + 1);
+      }
+    });
+
+    render(Number(pageLinks.find((link) => link.classList.contains("ss-pagination__link--active"))?.dataset.paginationPage ?? "1"));
   });
 }
 

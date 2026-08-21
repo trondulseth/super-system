@@ -59,7 +59,7 @@ describe("studio demo", () => {
     expect(html).toContain("ss-accordion__trigger");
     expect(html).toContain('aria-label="Breadcrumb"');
     expect(html).toContain("ss-dropdown__content");
-    expect(html).toContain('aria-label="Pagination"');
+    expect(html).toContain("preview-pagination-demo");
     expect(html).toContain("ss-pagination__link--active");
     expect(html).toContain("ss-dialog__content");
     expect(html).toContain('aria-modal="true"');

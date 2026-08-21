@@ -555,25 +555,28 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Pagination</h4>
-            <nav aria-label="Pagination" class="ss-pagination">
+            <nav aria-label="Pagination" class="ss-pagination preview-pagination-demo">
               <ul class="ss-pagination__content">
                 <li class="ss-pagination__item">
-                  <a href="#" class="ss-pagination__link ss-pagination__previous" aria-label="Go to previous page">
+                  <a href="#" data-pagination-action="previous" class="ss-pagination__link ss-pagination__previous" aria-label="Go to previous page">
                     <span class="ss-pagination__chevron" aria-hidden="true"></span>
                     <span>Previous</span>
                   </a>
                 </li>
                 <li class="ss-pagination__item">
-                  <a href="#" class="ss-pagination__link">1</a>
+                  <a href="#" data-pagination-page="1" class="ss-pagination__link">1</a>
                 </li>
                 <li class="ss-pagination__item">
-                  <a href="#" aria-current="page" class="ss-pagination__link ss-pagination__link--active">2</a>
+                  <a href="#" data-pagination-page="2" aria-current="page" class="ss-pagination__link ss-pagination__link--active">2</a>
                 </li>
                 <li class="ss-pagination__item">
-                  <span class="ss-pagination__ellipsis">…<span class="ss-pagination__sr-only">More pages</span></span>
+                  <span class="ss-pagination__ellipsis" aria-hidden="true">
+                    <span aria-hidden="true">…</span>
+                    <span class="ss-pagination__sr-only">More pages</span>
+                  </span>
                 </li>
                 <li class="ss-pagination__item">
-                  <a href="#" class="ss-pagination__link ss-pagination__next" aria-label="Go to next page">
+                  <a href="#" data-pagination-action="next" class="ss-pagination__link ss-pagination__next" aria-label="Go to next page">
                     <span>Next</span>
                     <span class="ss-pagination__chevron ss-pagination__chevron--next" aria-hidden="true"></span>
                   </a>

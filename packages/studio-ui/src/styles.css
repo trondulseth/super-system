@@ -342,6 +342,10 @@ aside input.ss-slider {
   margin-top: 0.875rem;
 }
 
+.preview-pagination-demo .ss-pagination__content {
+  justify-content: center;
+}
+
 /* Device preview toolbar (page shell) */
 .preview-device-toolbar {
   display: flex;
