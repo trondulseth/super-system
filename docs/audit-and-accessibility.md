@@ -39,6 +39,40 @@ npx @super-system/cli audit --json
 
 Audit exits with code `1` when it finds violations, so it can also be used in CI.
 
+## Plan a migration (read-only)
+
+Before changing an existing project, generate a migration plan:
+
+```bash
+npx @super-system/cli migrate plan
+```
+
+The plan groups audit findings by confidence and whether an automated transform is planned. It does **not** modify files.
+
+Example output:
+
+```text
+Super System migration plan (read-only)
+
+Project: vite, no super-system.json
+
+Summary: 5 finding(s) — 2 planned auto-fix, 3 manual review, 0 unsupported
+
+Planned auto-fixes (review before apply):
+  src/App.tsx:1  raw-button  medium  Replace native <button> with <Button> from @super-system/react.
+
+Manual review:
+  src/App.tsx:1  inline-style  low  Move inline styles to tokenized classes or shared components.
+```
+
+For AI coding tools:
+
+```bash
+npx @super-system/cli migrate plan --json
+```
+
+Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`. Automated apply is not available yet; use the plan to prioritize manual or AI-assisted cleanup.
+
 ## Check color contrast
 
 Run:

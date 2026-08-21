@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { checkThemeContrast } from "@super-system/tokens";
 import { auditProject } from "./audit.js";
+import { createMigrationPlan, formatMigrationPlan } from "./migration.js";
 import { setupIcons } from "./icons.js";
 import { initialize, readConfig, writeGeneratedCss } from "./files.js";
 import { startStudio } from "./studio.js";
@@ -16,6 +17,7 @@ Usage:
   super-system init [--force] [--cwd path]
   super-system studio [--port 4173] [--no-open] [--cwd path]
   super-system audit [--json] [--cwd path]
+  super-system migrate plan [--json] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
   super-system icons setup [--install] [--cwd path]
@@ -44,6 +46,17 @@ async function main(): Promise<void> {
         findings.forEach((finding) => console.log(`${finding.file}:${finding.line}  ${finding.rule}  ${finding.message}`));
       }
       process.exitCode = findings.length > 0 ? 1 : 0;
+      break;
+    }
+    case "migrate": {
+      if (args[0] !== "plan") {
+        help();
+        break;
+      }
+      const plan = await createMigrationPlan(cwd);
+      if (args.includes("--json")) console.log(JSON.stringify(plan, null, 2));
+      else console.log(formatMigrationPlan(plan));
+      process.exitCode = plan.summary.findings > 0 ? 1 : 0;
       break;
     }
     case "build-theme": {
