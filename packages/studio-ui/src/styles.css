@@ -215,8 +215,51 @@ aside select {
   margin-top: 1.25rem;
 }
 
+.preview-section--popover,
+.preview-section--overlay {
+  overflow: visible;
+}
+
 .preview-section--popover {
-  padding-bottom: 5.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.preview-popover-stage {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.preview-popover-slot {
+  display: flex;
+  justify-content: center;
+  border: 1px dashed color-mix(in srgb, var(--ss-color-border) 85%, transparent);
+  border-radius: var(--ss-radius-md, 10px);
+  background: color-mix(in srgb, var(--ss-color-muted) 15%, var(--ss-color-background));
+}
+
+.preview-popover-slot--top {
+  align-items: flex-end;
+  min-height: 7.5rem;
+  padding: 1rem 1rem 0.75rem;
+}
+
+.preview-popover-slot--bottom {
+  align-items: flex-start;
+  min-height: 6.5rem;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.preview-overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+.preview-overlay-frame {
+  width: 100%;
+  max-width: 32rem;
+  margin-inline: auto;
 }
 
 .preview-section--page-shell {
@@ -455,9 +498,8 @@ aside select {
 }
 
 .preview-drawer-panel {
-  flex: 1 1 16rem;
-  min-width: 16rem;
-  max-width: 100%;
+  min-width: 0;
+  width: 100%;
 }
 
 .preview-toast-stack {

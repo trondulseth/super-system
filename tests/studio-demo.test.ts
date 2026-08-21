@@ -77,12 +77,16 @@ describe("studio demo", () => {
     expect(html).toContain('href="./demo-components.css"');
     expect(html.indexOf("./components.css")).toBeLessThan(html.indexOf("./demo-components.css"));
 
+    expect(html).toContain("preview-popover-stage");
+    expect(html).toContain("preview-overlay-grid");
     expect(html).toContain("preview-device-frame");
     expect(html).toContain('data-preview-device="tablet"');
     expect(html).toContain("preview-shell-drawer");
     expect(html).toContain('id="preview-hamburger"');
 
     const demoStyles = await readFile(path.join(demoDir, "demo-components.css"), "utf8");
+    expect(demoStyles).toContain(".ss-card.preview-theme");
+    expect(demoStyles).toContain("overflow: visible");
     expect(demoStyles).toContain(".ss-drawer.ss-drawer--demo");
     expect(demoStyles).toContain("position: absolute");
     expect(demoStyles).toContain(".ss-app-shell.ss-app-shell--preview");
