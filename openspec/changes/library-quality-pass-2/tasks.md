@@ -116,23 +116,23 @@
 
 ### New/edited controllers (`app.ts`, `index.html`)
 
-- [ ] Add `spacing.unit` number input; wire fill/collect.
-- [ ] Add `radius.full` text input; wire fill/collect.
-- [ ] Add success color + successForeground color inputs (light/dark via toggle).
-- [ ] Pair hex text inputs with every color picker; sync both ways.
-- [ ] Add static label "Editing: Light theme" / "Editing: Dark theme".
-- [ ] Contrast panel: show both themes (tabs or combined with badge).
-- [ ] Extend contrast pairs: focus, border, success.
-- [ ] Scope reduced-motion preview CSS to `.preview-theme` in `preview-theme.ts`.
-- [ ] Validate lineHeight (1.1–2), target (24–64), unit (2–8) before save.
-- [ ] Move icons field-help outside `.row` grid.
-- [ ] Show saved `mode.default` as read-only badge in preview header.
-- [ ] Wire `fontMono` into preview sample (mono text block).
+- [x] Add `spacing.unit` number input; wire fill/collect.
+- [x] Add `radius.full` text input; wire fill/collect.
+- [x] Add success color + successForeground color inputs (light/dark via toggle).
+- [x] Pair hex text inputs with every color picker; sync both ways.
+- [x] Add static label "Editing: Light theme" / "Editing: Dark theme".
+- [x] Contrast panel: show both themes (tabs or combined with badge).
+- [x] Extend contrast pairs: focus, border, success.
+- [x] Scope reduced-motion preview CSS to `.preview-theme` in `preview-theme.ts`.
+- [x] Validate lineHeight (1.1–2), target (24–64), unit (2–8) before save.
+- [x] Move icons field-help outside `.row` grid.
+- [x] Show saved `mode.default` as read-only badge in preview header.
+- [x] Wire `fontMono` into preview sample (mono text block).
 
 ### Tests
 
-- [ ] Studio unit/integration: collect persists unit and radius.full.
-- [ ] Invalid line height blocked on save.
+- [x] Studio unit/integration: collect persists unit and radius.full.
+- [x] Invalid line height blocked on save.
 
 **Exit:** Every config field has controller or explicit config-only label; no dead controllers; save validation prevents corrupt JSON.
 

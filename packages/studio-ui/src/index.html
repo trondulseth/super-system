@@ -223,6 +223,14 @@
           </section>
 
           <section class="preview-section">
+            <h4 class="preview-label">Focus visible</h4>
+            <div class="demo-row preview-focus-strip">
+              <button class="ss-button ss-button--primary ss-button--md preview-focus-ring" type="button">Focused button</button>
+              <input class="ss-input preview-focus-ring" type="text" value="Focused input" aria-label="Focus visible input demo" />
+            </div>
+          </section>
+
+          <section class="preview-section">
             <h4 class="preview-label">Semantic surfaces</h4>
             <div class="demo-row surface-swatch-row">
               <div class="surface-swatch surface-swatch--secondary">
@@ -374,16 +382,16 @@
           <section class="preview-section">
             <h4 class="preview-label">Skeleton</h4>
             <div class="ss-skeleton ss-skeleton--block"></div>
-            <div class="ss-skeleton-group" style="margin-top: 12px">
+            <div class="ss-skeleton-group preview-skeleton-group">
               <div class="ss-skeleton ss-skeleton--text"></div>
               <div class="ss-skeleton ss-skeleton--text"></div>
               <div class="ss-skeleton ss-skeleton--text ss-skeleton--short"></div>
             </div>
-            <div class="demo-row" style="margin-top: 12px">
+            <div class="demo-row preview-skeleton-row">
               <div class="ss-skeleton ss-skeleton--circle"></div>
-              <div style="flex: 1">
+              <div class="preview-skeleton-copy">
                 <div class="ss-skeleton ss-skeleton--text"></div>
-                <div class="ss-skeleton ss-skeleton--text ss-skeleton--short" style="margin-top: 8px"></div>
+                <div class="ss-skeleton ss-skeleton--text ss-skeleton--short preview-skeleton-gap"></div>
               </div>
             </div>
           </section>
@@ -412,6 +420,19 @@
               <span class="ss-badge ss-badge--primary">Active</span>
               <span class="ss-badge ss-badge--destructive">Blocked</span>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Card</h4>
+            <article class="ss-card">
+              <div class="ss-card__header">
+                <h3 class="ss-card__title">Workspace settings</h3>
+              </div>
+              <div class="ss-card__body">Manage billing, members, and security from one place.</div>
+              <div class="ss-card__footer">
+                <button class="ss-button ss-button--primary ss-button--sm" type="button">Save</button>
+              </div>
+            </article>
           </section>
 
           <section class="preview-section">
@@ -511,6 +532,7 @@
             <div class="ss-dialog ss-dialog--demo">
               <div class="ss-dialog__overlay" aria-hidden="true"></div>
               <div role="dialog" aria-modal="true" aria-labelledby="dialog-demo-title" class="ss-dialog__content">
+                <button type="button" class="ss-dialog__close" aria-label="Close">×</button>
                 <div class="ss-dialog__header">
                   <h2 id="dialog-demo-title" class="ss-dialog__title">Delete account</h2>
                   <p class="ss-dialog__description">This action cannot be undone.</p>
@@ -526,36 +548,71 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Drawer</h4>
-            <div class="ss-drawer ss-drawer--demo">
-              <div class="ss-drawer__overlay" aria-hidden="true"></div>
-              <div role="dialog" aria-modal="true" class="ss-drawer__content ss-drawer__content--right">
-                <div class="ss-drawer__header">
-                  <h2 class="ss-drawer__title">Filters</h2>
-                  <p class="ss-drawer__description">Refine the current view.</p>
+            <div class="demo-row preview-drawer-row">
+              <div class="ss-drawer ss-drawer--demo preview-drawer-panel">
+                <div class="ss-drawer__overlay" aria-hidden="true"></div>
+                <div role="dialog" aria-modal="true" aria-labelledby="drawer-left-title" class="ss-drawer__content ss-drawer__content--left ss-hamburger-menu__panel">
+                  <button type="button" class="ss-drawer__close" aria-label="Close">×</button>
+                  <div class="ss-drawer__header">
+                    <h2 id="drawer-left-title" class="ss-drawer__title">Menu</h2>
+                  </div>
+                  <div class="ss-drawer__body">
+                    <nav aria-label="Mobile navigation" class="ss-hamburger-menu__nav">
+                      <a href="#">Dashboard</a>
+                      <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Reports</a>
+                      <a href="#">Settings</a>
+                    </nav>
+                  </div>
                 </div>
-                <div class="ss-drawer__body">Status, owner, and date filters appear here.</div>
+              </div>
+              <div class="ss-drawer ss-drawer--demo preview-drawer-panel">
+                <div class="ss-drawer__overlay" aria-hidden="true"></div>
+                <div role="dialog" aria-modal="true" class="ss-drawer__content ss-drawer__content--right">
+                  <div class="ss-drawer__header">
+                    <h2 class="ss-drawer__title">Filters</h2>
+                    <p class="ss-drawer__description">Refine the current view.</p>
+                  </div>
+                  <div class="ss-drawer__body">Status, owner, and date filters appear here.</div>
+                </div>
               </div>
             </div>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Popover</h4>
-            <span class="ss-popover ss-popover--demo">
-              <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Details</button>
-              <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
-                Additional context for this item.
-              </div>
-            </span>
+            <div class="demo-row">
+              <span class="ss-popover ss-popover--demo ss-popover--demo-top">
+                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Top</button>
+                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center">
+                  Opens above the trigger.
+                </div>
+              </span>
+              <span class="ss-popover ss-popover--demo">
+                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Bottom</button>
+                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
+                  Opens below the trigger.
+                </div>
+              </span>
+            </div>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Toast</h4>
-            <div class="ss-toast ss-toast--primary" role="status">
-              <div class="ss-toast__content">
-                <p class="ss-toast__title">Saved</p>
-                <p class="ss-toast__description">Your theme changes were stored.</p>
+            <div class="ss-stack ss-box--gap-md preview-toast-stack">
+              <div class="ss-toast" role="status">
+                <div class="ss-toast__content">
+                  <p class="ss-toast__title">Draft saved</p>
+                  <p class="ss-toast__description">Continue editing when ready.</p>
+                </div>
+                <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
               </div>
-              <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
+              <div class="ss-toast ss-toast--destructive" role="alert">
+                <div class="ss-toast__content">
+                  <p class="ss-toast__title">Payment failed</p>
+                  <p class="ss-toast__description">Update billing details to restore access.</p>
+                </div>
+                <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
+              </div>
             </div>
           </section>
 
@@ -563,6 +620,7 @@
             <h4 class="preview-label">Table</h4>
             <div class="ss-table-wrap">
               <table class="ss-table">
+                <caption class="ss-table__caption">Team activity for the current billing period</caption>
                 <thead class="ss-table__header">
                   <tr class="ss-table__row">
                     <th scope="col" class="ss-table__head">Name</th>
@@ -582,6 +640,12 @@
                     <td class="ss-table__cell">Editor</td>
                   </tr>
                 </tbody>
+                <tfoot class="ss-table__footer">
+                  <tr class="ss-table__row">
+                    <td class="ss-table__cell" colspan="2">Total sessions</td>
+                    <td class="ss-table__cell" data-numeric="true">2,176</td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </section>
@@ -611,58 +675,170 @@
 
           <section class="preview-section">
             <h4 class="preview-label">KPI &amp; charts</h4>
-            <div class="demo-row" style="flex-wrap: wrap; align-items: stretch">
-              <article class="ss-kpi-card ss-kpi-card--primary" style="min-width: 14rem; flex: 1">
+            <div class="ss-row ss-box--gap-md preview-kpi-grid">
+              <article class="ss-kpi-card ss-kpi-card--primary preview-kpi-card">
                 <div class="ss-kpi-card__header">
                   <p class="ss-kpi-card__title">Monthly revenue</p>
                   <span class="ss-kpi-card__trend ss-kpi-card__trend--up">+12.4%</span>
                 </div>
                 <p class="ss-kpi-card__value">$84,250</p>
+                <p class="ss-kpi-card__description">Compared to the previous 30 days.</p>
                 <div class="ss-kpi-card__chart">
                   <svg class="ss-sparkline ss-sparkline--primary" width="120" height="36" viewBox="0 0 120 36" role="img" aria-label="Revenue sparkline">
                     <polyline class="ss-sparkline__line" fill="none" points="2,28 22,22 42,24 62,14 82,16 102,8 118,4" />
                   </svg>
                 </div>
+                <div class="ss-kpi-card__footer">
+                  <span>Updated hourly</span>
+                  <button class="ss-button ss-button--ghost ss-button--sm" type="button">View report</button>
+                </div>
               </article>
-              <article class="ss-kpi-card" style="min-width: 14rem; flex: 1">
+              <article class="ss-kpi-card ss-kpi-card--muted preview-kpi-card">
                 <div class="ss-kpi-card__header">
-                  <p class="ss-kpi-card__title">Active users</p>
-                  <span class="ss-kpi-card__trend ss-kpi-card__trend--neutral">+2.1%</span>
+                  <p class="ss-kpi-card__title">Churn rate</p>
+                  <span class="ss-kpi-card__trend ss-kpi-card__trend--down">-3.8%</span>
                 </div>
-                <p class="ss-kpi-card__value">12,480</p>
-                <div class="ss-kpi-card__chart ss-bar-chart ss-bar-chart--primary">
-                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 45%"></div><span class="ss-bar-chart__label">M</span></div>
-                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 72%"></div><span class="ss-bar-chart__label">T</span></div>
-                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 58%"></div><span class="ss-bar-chart__label">W</span></div>
-                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 88%"></div><span class="ss-bar-chart__label">T</span></div>
-                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar" style="height: 64%"></div><span class="ss-bar-chart__label">F</span></div>
+                <p class="ss-kpi-card__value">2.1%</p>
+                <p class="ss-kpi-card__description">Muted variant with downward trend.</p>
+                <div class="ss-kpi-card__chart ss-bar-chart ss-bar-chart--muted">
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-45"></div><span class="ss-bar-chart__label">M</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-72"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-58"></div><span class="ss-bar-chart__label">W</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-88"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-64"></div><span class="ss-bar-chart__label">F</span></div>
                 </div>
               </article>
+            </div>
+            <div class="preview-section preview-section--nested">
+              <h5 class="preview-label">Line chart tones</h5>
+              <div class="demo-row chart-tone-row">
+                <svg class="ss-line-chart ss-line-chart--primary" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Primary line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--secondary" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Secondary line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--destructive" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Destructive line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--muted" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Muted line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="preview-section preview-section--nested">
+              <h5 class="preview-label">Donut chart tones</h5>
+              <div class="demo-row chart-tone-row">
+                <div class="ss-donut-chart ss-donut-chart--primary preview-donut-chart" role="img" aria-label="Primary donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--secondary preview-donut-chart" role="img" aria-label="Secondary donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--destructive preview-donut-chart" role="img" aria-label="Destructive donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--muted preview-donut-chart" role="img" aria-label="Muted donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+              </div>
             </div>
           </section>
 
           <section class="preview-section">
-            <h4 class="preview-label">Layout &amp; page shell</h4>
-            <div class="ss-top-bar">
-              <div class="ss-top-bar__brand">Acme Dashboard</div>
-              <div class="ss-top-bar__actions">
-                <button class="ss-button ss-button--ghost ss-button--sm" type="button" aria-label="Open menu">
-                  <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
-                </button>
-                <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
+            <h4 class="preview-label">Layout</h4>
+            <div class="ss-stack ss-box--gap-md">
+              <div class="ss-row ss-box--gap-sm">
+                <div class="ss-container ss-container--sm preview-layout-block">Container sm</div>
+                <div class="ss-container ss-container--md preview-layout-block">Container md</div>
+                <div class="ss-container ss-container--lg preview-layout-block">Container lg</div>
+              </div>
+              <div class="ss-row ss-box--gap-md preview-layout-row">
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Row + gap md</p>
+                  <p class="ss-kpi-card__value">A</p>
+                </div>
+                <div class="ss-divider ss-divider--vertical" role="separator" aria-orientation="vertical"></div>
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Vertical divider</p>
+                  <p class="ss-kpi-card__value">B</p>
+                </div>
+              </div>
+              <div class="ss-row ss-box--gap-sm preview-layout-row">
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Before spacer</p>
+                </div>
+                <div class="ss-spacer ss-spacer--md" aria-hidden="true"></div>
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">After spacer</p>
+                </div>
+              </div>
+              <hr class="ss-divider ss-divider--horizontal" />
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Page shell</h4>
+            <div class="ss-app-shell ss-app-shell--preview">
+              <aside class="ss-sidebar">
+                <div class="ss-sidebar__brand">Acme</div>
+                <nav aria-label="Sidebar" class="ss-sidebar__nav">
+                  <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Dashboard</a>
+                  <a href="#" class="ss-sidebar__link">Reports</a>
+                  <a href="#" class="ss-sidebar__link">Settings</a>
+                </nav>
+              </aside>
+              <div class="ss-app-shell__body">
+                <header class="ss-top-bar">
+                  <div class="ss-top-bar__brand">Acme Dashboard</div>
+                  <div class="ss-top-bar__actions">
+                    <button class="ss-button ss-button--ghost ss-button--sm ss-hamburger-menu__trigger" type="button" aria-label="Open menu">
+                      <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+                    </button>
+                    <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
+                  </div>
+                </header>
+                <main class="ss-main">
+                  <header class="ss-page-header">
+                    <div class="ss-page-header__content">
+                      <h1 class="ss-page-header__title">Overview</h1>
+                      <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
+                    </div>
+                  </header>
+                  <div class="ss-row ss-box--gap-md preview-layout-row">
+                    <div class="ss-kpi-card ss-kpi-card--muted preview-layout-card">
+                      <p class="ss-kpi-card__title">Active projects</p>
+                      <p class="ss-kpi-card__value">18</p>
+                    </div>
+                    <div class="ss-kpi-card preview-layout-card">
+                      <p class="ss-kpi-card__title">Open tasks</p>
+                      <p class="ss-kpi-card__value">42</p>
+                    </div>
+                  </div>
+                </main>
+                <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
               </div>
             </div>
-            <header class="ss-page-header">
-              <div class="ss-page-header__content">
-                <h1 class="ss-page-header__title">Overview</h1>
-                <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
-              </div>
-            </header>
-            <div class="ss-box ss-box--gap-md" style="display: flex">
-              <div class="ss-kpi-card ss-kpi-card--muted" style="flex: 1"><p class="ss-kpi-card__title">Flex row</p><p class="ss-kpi-card__value">Box</p></div>
-              <div class="ss-kpi-card" style="flex: 1"><p class="ss-kpi-card__title">Gap md</p><p class="ss-kpi-card__value">Stack</p></div>
-            </div>
-            <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
           </section>
 
           <div id="checks"></div>
