@@ -49,6 +49,7 @@ The color names describe purpose, not a specific color:
 - `muted` is a quiet surface;
 - `destructive` is used for dangerous actions;
 - `border` and `focus` provide consistent boundaries and keyboard focus.
+- `link` and `linkHover` control anchor text in `.ss-link` and `.ss-prose a`.
 
 If you edit `super-system.json` manually, regenerate the CSS:
 
@@ -147,3 +148,45 @@ function selectTheme(theme: Theme) {
 ```
 
 Call `selectTheme("light")`, `selectTheme("dark")`, or `selectTheme("system")` from your own menu or buttons, or use `ThemeProvider` with `defaultMode` instead.
+
+## Surfaces, elevation, and typography utilities
+
+Generated theme CSS now includes surface, elevation, and type-scale variables you can tune in `super-system.json`:
+
+```jsonc
+{
+  "surfaces": { "gradientTint": 5, "gradientAngle": 145 },
+  "elevation": {
+    "shadow": "0 1px 2px color-mix(in srgb, var(--ss-color-foreground) 6%, transparent)",
+    "shadowHover": "0 10px 24px color-mix(in srgb, var(--ss-color-foreground) 10%, transparent)",
+    "lift": "2px"
+  },
+  "typography": {
+    "scale": { "h1": "2.25rem", "h2": "1.875rem", "h3": "1.5rem", "h4": "1.25rem", "lead": "1.125rem", "body": "1rem", "small": "0.875rem" },
+    "weight": { "heading": 700, "body": 400, "strong": 600 },
+    "headingLineHeight": 1.25
+  },
+  "themes": {
+    "light": { "link": "#1d4ed8", "linkHover": "#1e40af" }
+  }
+}
+```
+
+Neutral components pick up a very subtle `--ss-surface-gradient` automatically. Add elevation with utility classes from `@super-system/react/styles.css`:
+
+```html
+<div class="ss-card ss-elevate">Static shadow</div>
+<div class="ss-card ss-elevate-on-hover">Lifts on hover</div>
+```
+
+Typography helpers:
+
+```html
+<article class="ss-prose">
+  <h1>Page title</h1>
+  <p class="ss-text-lead">Intro copy</p>
+  <p>Body paragraph with a <a href="/docs">themed link</a>.</p>
+</article>
+```
+
+Or use individual classes: `.ss-heading-1` … `.ss-heading-4`, `.ss-text-body`, `.ss-text-small`, `.ss-text-muted`, `.ss-link`.

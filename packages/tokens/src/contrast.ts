@@ -32,6 +32,7 @@ const pairs: Array<[string, keyof ThemeColors, keyof ThemeColors, number?]> = [
   ["destructive", "destructiveForeground", "destructive"],
   ["success", "successForeground", "success"],
   ["focus/background", "focus", "background"],
+  ["link/background", "link", "background"],
   ["border/background", "border", "background", 3]
 ];
 
