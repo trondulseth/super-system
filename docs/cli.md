@@ -26,6 +26,13 @@
 | `npx @super-system/cli migrate plan --out path` | Saves a resumable migration manifest. |
 | `npx @super-system/cli migrate verify` | Runs `npm run typecheck`, `test`, and `build` when defined, then audit. |
 | `npx @super-system/cli migrate apply --json` | Prints the apply result as JSON. |
+| `npx @super-system/cli policy init` | Creates default `super-system.policy.json`. |
+| `npx @super-system/cli policy init --force` | Replaces an existing policy file. |
+| `npx @super-system/cli policy check` | Runs audit through policy severity and contrast rules. |
+| `npx @super-system/cli policy check --json` | Prints policy check results as JSON. |
+| `npx @super-system/cli policy check --strict` | Treat warnings as failures. |
+| `npx @super-system/cli adapters generate --target agents-md` | Writes a merge-safe Super System section to `AGENTS.md`. |
+| `npx @super-system/cli adapters generate --dry-run` | Previews adapter output without writing files. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
 | `npx @super-system/cli icons setup` | Prints install guidance for the configured icon library. |
@@ -37,9 +44,11 @@ All commands accept `--cwd path` when the target project is not the current fold
 
 | Package | Purpose |
 | --- | --- |
-| [`@super-system/cli`](https://www.npmjs.com/package/@super-system/cli) | Initialize, edit, generate, and audit. |
+| [`@super-system/cli`](https://www.npmjs.com/package/@super-system/cli) | Initialize, edit, generate, audit, migrate, and govern. |
 | [`@super-system/react`](https://www.npmjs.com/package/@super-system/react) | React components and component CSS. |
 | [`@super-system/tokens`](https://www.npmjs.com/package/@super-system/tokens) | Theme types, validation, CSS compilation, and contrast checks. |
+| [`@super-system/rules`](https://www.npmjs.com/package/@super-system/rules) | Shared audit rule catalog for CLI and ESLint. |
+| [`eslint-plugin-super-system`](https://www.npmjs.com/package/eslint-plugin-super-system) | ESLint rules aligned with CLI audit. |
 
 You can use `@super-system/tokens` directly when building another framework adapter:
 

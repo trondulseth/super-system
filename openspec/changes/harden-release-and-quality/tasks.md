@@ -2,14 +2,14 @@
 
 ## Policy and metadata
 
-- [ ] Define supported Node, React, browser, and framework versions.
-- [ ] Add contribution, security, maintenance, deprecation, and semantic-versioning policies.
+- [x] Define supported Node, React, browser, and framework versions.
+- [x] Add contribution, security, maintenance, deprecation, and semantic-versioning policies.
 - [ ] Adopt structured change metadata and generated changelogs.
 - [ ] Define public API and CSS-variable compatibility contracts for `1.0`.
 
 ## Test expansion
 
-- [ ] Add package-tarball tests in clean temporary projects.
+- [x] Add package-tarball tests in clean temporary projects.
 - [ ] Add supported Node and React matrix coverage.
 - [ ] Add Next.js and Vite integration fixtures.
 - [ ] Add automated accessibility checks plus documented manual test checklists.
@@ -19,7 +19,7 @@
 
 ## Release workflow
 
-- [ ] Validate tags, coordinated versions, lockfile, changelog, and clean builds before publication.
+- [x] Validate tags, coordinated versions, lockfile, changelog, and clean builds before publication.
 - [ ] Minimize workflow permissions and verify npm provenance after publication.
 - [ ] Add approval-gated release-candidate and stable channels.
 - [ ] Add npm deprecation, patch-release, and consumer rollback procedures.

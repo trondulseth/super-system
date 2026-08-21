@@ -4,11 +4,10 @@
 
 ## Beta roadmap
 
-Batch 1–3 component batches and **assisted migration** (beta.15) are **shipped**. Next planned work:
+Batch 1–3 component batches and **assisted migration** (beta.15) are **shipped**. **Governance foundation** (beta.16) adds policy, shared rules, and ESLint. Next planned work:
 
-- ESLint rules and deeper framework-aware audits (`add-governance-and-ai-adapters`);
-- release hardening toward 1.0 (`harden-release-and-quality`);
-- optional AI instruction adapters;
+- deeper syntax-aware ESLint/audit rules and vendor adapters (`add-governance-and-ai-adapters`);
+- release matrix, visual regression, and RC workflow (`harden-release-and-quality`);
 - hosted theme sharing in addition to the private local Studio.
 
 The [Studio browser demo](https://trondulseth.github.io/super-system/) is available on GitHub Pages and stays in sync with the local Studio UI through the shared `@super-system/studio-ui` package.

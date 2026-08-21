@@ -1,5 +1,14 @@
 # Migration notes
 
+## 0.1.0-beta.16 (governance foundation + release hardening)
+
+No breaking API changes.
+
+- **Governance:** `super-system.policy.json` schema, `policy init`, `policy check`, and `adapters generate` for merge-safe `AGENTS.md` sections.
+- **Rules:** New `@super-system/rules` shared catalog for CLI audit and ESLint.
+- **ESLint:** `eslint-plugin-super-system` with `raw-button` rule (recommended/strict configs).
+- **Release:** `CONTRIBUTING.md`, `SECURITY.md`, [compatibility policy](./docs/compatibility.md), `scripts/verify-release.mjs`, tarball install smoke test.
+
 ## 0.1.0-beta.15 (assisted migration completion)
 
 No breaking API changes.

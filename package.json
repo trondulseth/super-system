@@ -13,13 +13,14 @@
     "build:studio-demo": "pnpm --filter @super-system/studio-ui build:demo",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "check": "pnpm --filter @super-system/tokens build && pnpm typecheck && pnpm test && pnpm build && pnpm build:studio-demo",
+    "check": "pnpm --filter @super-system/rules build && pnpm --filter @super-system/tokens build && pnpm typecheck && pnpm test && pnpm build && pnpm build:studio-demo",
     "dev:studio": "pnpm --filter @super-system/cli dev studio"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.2.4",
+    "eslint": "^9.28.0",
     "happy-dom": "^17.4.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
