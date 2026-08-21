@@ -528,9 +528,9 @@
             </nav>
           </section>
 
-          <section class="preview-section">
+          <section class="preview-section preview-section--overlay">
             <h4 class="preview-label">Dialog</h4>
-            <div class="ss-dialog ss-dialog--demo">
+            <div class="ss-dialog ss-dialog--demo preview-overlay-frame">
               <div class="ss-dialog__overlay" aria-hidden="true"></div>
               <div role="dialog" aria-modal="true" aria-labelledby="dialog-demo-title" class="ss-dialog__content">
                 <button type="button" class="ss-dialog__close" aria-label="Close">×</button>
@@ -547,9 +547,9 @@
             </div>
           </section>
 
-          <section class="preview-section">
+          <section class="preview-section preview-section--overlay">
             <h4 class="preview-label">Drawer</h4>
-            <div class="demo-row preview-drawer-row">
+            <div class="preview-overlay-grid preview-drawer-row">
               <div class="ss-drawer ss-drawer--demo preview-drawer-panel">
                 <div class="ss-drawer__overlay" aria-hidden="true"></div>
                 <div role="dialog" aria-modal="true" aria-labelledby="drawer-left-title" class="ss-drawer__content ss-drawer__content--left ss-hamburger-menu__panel">
@@ -582,19 +582,23 @@
 
           <section class="preview-section preview-section--popover">
             <h4 class="preview-label">Popover</h4>
-            <div class="demo-row">
-              <span class="ss-popover ss-popover--demo ss-popover--demo-top">
-                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Top</button>
-                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center">
-                  Opens above the trigger.
-                </div>
-              </span>
-              <span class="ss-popover ss-popover--demo">
-                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Bottom</button>
-                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
-                  Opens below the trigger.
-                </div>
-              </span>
+            <div class="preview-popover-stage">
+              <div class="preview-popover-slot preview-popover-slot--top">
+                <span class="ss-popover ss-popover--demo ss-popover--demo-top">
+                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Top</button>
+                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center">
+                    Opens above the trigger.
+                  </div>
+                </span>
+              </div>
+              <div class="preview-popover-slot preview-popover-slot--bottom">
+                <span class="ss-popover ss-popover--demo">
+                  <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Bottom</button>
+                  <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
+                    Opens below the trigger.
+                  </div>
+                </span>
+              </div>
             </div>
           </section>
 
