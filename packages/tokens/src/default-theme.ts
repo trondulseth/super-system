@@ -8,10 +8,34 @@ export const defaultTheme: SuperSystemConfig = {
     fontSans: "Inter, ui-sans-serif, system-ui, sans-serif",
     fontMono: "ui-monospace, SFMono-Regular, Menlo, monospace",
     baseSize: "16px",
-    lineHeight: 1.5
+    lineHeight: 1.5,
+    headingLineHeight: 1.25,
+    scale: {
+      h1: "2.25rem",
+      h2: "1.875rem",
+      h3: "1.5rem",
+      h4: "1.25rem",
+      lead: "1.125rem",
+      body: "1rem",
+      small: "0.875rem"
+    },
+    weight: {
+      heading: 700,
+      body: 400,
+      strong: 600
+    }
   },
   spacing: { unit: 4, density: "comfortable" },
   radius: { sm: "6px", md: "10px", lg: "14px", full: "9999px" },
+  elevation: {
+    shadow: "0 1px 2px color-mix(in srgb, var(--ss-color-foreground) 6%, transparent)",
+    shadowHover: "0 10px 24px color-mix(in srgb, var(--ss-color-foreground) 10%, transparent)",
+    lift: "2px"
+  },
+  surfaces: {
+    gradientTint: 5,
+    gradientAngle: 145
+  },
   themes: {
     light: {
       background: "#ffffff",
@@ -27,7 +51,9 @@ export const defaultTheme: SuperSystemConfig = {
       destructiveForeground: "#ffffff",
       success: "#15803d",
       successForeground: "#ffffff",
-      focus: "#1d4ed8"
+      focus: "#1d4ed8",
+      link: "#1d4ed8",
+      linkHover: "#1e40af"
     },
     dark: {
       background: "#0b1120",
@@ -43,7 +69,9 @@ export const defaultTheme: SuperSystemConfig = {
       destructiveForeground: "#1f0808",
       success: "#4ade80",
       successForeground: "#052e16",
-      focus: "#93c5fd"
+      focus: "#93c5fd",
+      link: "#93c5fd",
+      linkHover: "#bfdbfe"
     }
   },
   accessibility: {

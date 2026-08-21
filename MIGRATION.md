@@ -1,5 +1,14 @@
 # Migration notes
 
+## 0.1.0-beta.11 (surfaces, elevation, typography utilities)
+
+No breaking API changes. Regenerate theme CSS after upgrading.
+
+- **Surfaces:** Neutral components use a subtle token-driven `--ss-surface-gradient` (tint and angle configurable in `super-system.json`).
+- **Elevation:** New `--ss-elevation-*` tokens plus `.ss-elevate` and `.ss-elevate-on-hover` utility classes.
+- **Typography:** Type scale (`h1`–`h4`, `lead`, `body`, `small`), heading weights, and `.ss-heading-*` / `.ss-prose` utilities.
+- **Links:** Theme colors `link` and `linkHover` drive `.ss-link` and prose anchors.
+
 ## 0.1.0-beta.10 (form component transforms)
 
 No breaking changes. Safe to upgrade from `beta.9`.

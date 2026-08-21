@@ -5,9 +5,18 @@ describe("theme tokens", () => {
   it("compiles portable light and dark CSS", () => {
     const css = compileTheme(defaultTheme);
     expect(css).toContain("--ss-color-primary: #2563eb");
-    expect(css).toContain("--ss-color-success:");
+    expect(css).toContain("--ss-color-link:");
+    expect(css).toContain("--ss-surface-gradient:");
+    expect(css).toContain("--ss-elevation-shadow:");
+    expect(css).toContain("--ss-font-size-h1:");
     expect(css).toContain(':root[data-theme="dark"]');
     expect(css).toContain("prefers-reduced-motion");
+  });
+
+  it("passes link contrast against page background", () => {
+    const linkResults = checkThemeContrast(defaultTheme).filter((result) => result.pair === "link/background");
+    expect(linkResults).toHaveLength(2);
+    expect(linkResults.every((result) => result.passes)).toBe(true);
   });
 
   it("passes every default text and semantic contrast pair", () => {
