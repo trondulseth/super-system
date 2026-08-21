@@ -12,6 +12,7 @@ You do not need to understand the entire file before using Super System. These a
     "default": "system"
   },
   "typography": {
+    "fontFamily": "inter",
     "fontSans": "Inter, ui-sans-serif, system-ui, sans-serif",
     "baseSize": "16px"
   },

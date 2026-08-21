@@ -1,4 +1,10 @@
-import { defaultTheme, type SuperSystemConfig } from "@super-system/tokens";
+import {
+  defaultTheme,
+  GOOGLE_FONT_PRESET_IDS,
+  inferFontPresetId,
+  resolveFontPreset,
+  type SuperSystemConfig
+} from "@super-system/tokens";
 
 export const FORM_COLOR_IDS = [
   "primary",
@@ -117,7 +123,7 @@ export function applyConfigToForm(
     getInput(`${id}Hex`, root).value = value;
   }
 
-  getInput("fontSans", root).value = config.typography.fontSans;
+  getSelect("fontFamily", root).value = config.typography.fontFamily ?? inferFontPresetId(config.typography.fontSans);
   getInput("fontMono", root).value = config.typography.fontMono;
   getInput("baseSize", root).value = String(parsePx(config.typography.baseSize));
   getInput("lineHeight", root).value = String(config.typography.lineHeight);
@@ -171,7 +177,15 @@ export function readConfigFromForm(
     getInput(`${id}Hex`, root).value = value;
   }
 
-  next.typography.fontSans = getInput("fontSans", root).value;
+  const preset = resolveFontPreset({
+    ...next,
+    typography: {
+      ...next.typography,
+      fontFamily: getSelect("fontFamily", root).value
+    }
+  });
+  next.typography.fontFamily = preset.id;
+  next.typography.fontSans = preset.fontSans;
   next.typography.fontMono = getInput("fontMono", root).value;
   next.typography.baseSize = formatPx(Number(getInput("baseSize", root).value));
   next.typography.lineHeight = Number(getInput("lineHeight", root).value);
@@ -299,6 +313,10 @@ export function validateStudioForm(root: ParentNode = document): string | null {
     if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
       return `${id} must be a valid hex color.`;
     }
+  }
+
+  if (!GOOGLE_FONT_PRESET_IDS.includes(getSelect("fontFamily", root).value)) {
+    return "Font family must be one of the recommended Google Fonts presets.";
   }
 
   return null;

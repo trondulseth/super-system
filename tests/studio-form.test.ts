@@ -48,7 +48,7 @@ function createFormFixture(): HTMLElement {
     <input id="linkHex" type="text" value="#1d4ed8" />
     <input id="linkHover" type="color" value="#1e40af" />
     <input id="linkHoverHex" type="text" value="#1e40af" />
-    <input id="fontSans" value="Inter" />
+    <select id="fontFamily"><option value="inter">Inter</option><option value="work-sans">Work Sans</option></select>
     <input id="fontMono" value="monospace" />
     <input id="baseSize" class="ss-slider" type="range" min="12" max="24" value="16" />
     <output for="baseSize"></output>
@@ -144,6 +144,20 @@ describe("studio form", () => {
     expect(collected.typography.scale.h1).toBe("2.5rem");
     expect(collected.typography.headingLineHeight).toBe(1.3);
     expect(collected.themes.light.link).toBe("#334155");
+    root.remove();
+  });
+
+  it("persists Google Font preset selection", () => {
+    const root = createFormFixture();
+    const config = structuredClone(defaultTheme);
+
+    applyConfigToForm(config, "light", root);
+    (root.querySelector("#fontFamily") as HTMLSelectElement).value = "work-sans";
+
+    const collected = readConfigFromForm(config, "light", root);
+
+    expect(collected.typography.fontFamily).toBe("work-sans");
+    expect(collected.typography.fontSans).toContain("Work Sans");
     root.remove();
   });
 

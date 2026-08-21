@@ -13,7 +13,7 @@
     "build:studio-demo": "pnpm --filter @super-system/studio-ui build:demo",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "check": "pnpm typecheck && pnpm test && pnpm build && pnpm build:studio-demo",
+    "check": "pnpm --filter @super-system/tokens build && pnpm typecheck && pnpm test && pnpm build && pnpm build:studio-demo",
     "dev:studio": "pnpm --filter @super-system/cli dev studio"
   },
   "devDependencies": {
