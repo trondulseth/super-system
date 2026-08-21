@@ -2,7 +2,7 @@
 
 [← Back to project README](../README.md)
 
-Super System is a lightweight, AI-independent design system for React apps. These guides cover installation, theming, components, auditing, and contributing — everything you need to build consistent UI without mystery-meat buttons.
+Super System is a lightweight design system for React apps, built for teams shipping with AI coding tools. These guides cover installation, theming, components, auditing, and contributing — everything you need to build consistent UI without mystery-meat buttons.
 
 ## Table of contents
 

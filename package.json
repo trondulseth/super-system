@@ -2,7 +2,7 @@
   "name": "super-system-monorepo",
   "private": true,
   "version": "0.1.0",
-  "description": "A lightweight, AI-independent design system toolkit.",
+  "description": "A lightweight design system toolkit for consistent AI-assisted React development.",
   "license": "MIT",
   "packageManager": "pnpm@11.19.0",
   "workspaces": [

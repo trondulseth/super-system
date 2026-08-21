@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  A lightweight, AI-independent design system for React apps — shared visual language, accessible components, automatic light/dark themes, a visual theme editor, and a UI consistency audit.
+  A lightweight design system for React apps, built for teams shipping with AI coding tools — one shared visual language, accessible components, automatic light/dark themes, a visual theme editor, and a UI consistency audit.
 </p>
 
 <p align="center">
