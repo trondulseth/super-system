@@ -1,5 +1,13 @@
 # Migration notes
 
+## 0.1.0-beta.8 (migrate apply write mode)
+
+No breaking changes. Safe to upgrade from `beta.7`.
+
+- **CLI:** `migrate apply` writes supported auto-fixes (`img-add-alt`, `native-button-to-button`) to disk.
+- **Safety:** In git repositories, apply refuses to write when the worktree has uncommitted changes unless you pass `--allow-dirty`.
+- **Workflow:** Preview with `migrate apply --dry-run`, then apply and re-run `audit`.
+
 ## 0.1.0-beta.7 (migrate apply dry-run)
 
 No breaking changes. Safe to upgrade from `beta.6`.
@@ -11,7 +19,6 @@ No breaking changes. Safe to upgrade from `beta.6`.
 No breaking changes. Safe to upgrade from `beta.5`.
 
 - **CLI:** New read-only `migrate plan` command groups audit findings by confidence and planned transform. Use `--json` for AI coding tools.
-- Automated apply (`migrate apply`) is not available yet.
 
 ## 0.1.0-beta.5 (branding + docs polish)
 

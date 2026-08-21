@@ -126,7 +126,7 @@ function buildNextSteps(project: ProjectContext, summary: MigrationPlanSummary):
     return steps;
   }
   if (summary.autoFixable > 0) {
-    steps.push("Review proposed diffs with `npx @super-system/cli migrate apply --dry-run`.");
+    steps.push("Preview auto-fixes with `npx @super-system/cli migrate apply --dry-run`, then apply with `migrate apply`.");
   }
   if (summary.manualReview > 0) {
     steps.push("Resolve manual-review findings by hand or with your AI coding tool using docs/ai-tools.md rules.");

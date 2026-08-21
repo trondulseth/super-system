@@ -1,13 +1,28 @@
-import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
 import { describe, expect, it } from "vitest";
-import { applyMigrationDryRun, formatMigrationApplyResult } from "../packages/cli/src/migration-apply.js";
+import { DirtyWorktreeError } from "../packages/cli/src/git-worktree.js";
+import {
+  applyMigration,
+  applyMigrationDryRun,
+  formatMigrationApplyResult
+} from "../packages/cli/src/migration-apply.js";
 import {
   finalizeButtonImport,
   transformImgAddAlt,
   transformNativeButtonToButton
 } from "../packages/cli/src/migration-transforms.js";
+
+const execFileAsync = promisify(execFile);
+
+async function initGitRepo(directory: string): Promise<void> {
+  await execFileAsync("git", ["init"], { cwd: directory });
+  await execFileAsync("git", ["config", "user.email", "test@example.com"], { cwd: directory });
+  await execFileAsync("git", ["config", "user.name", "Test User"], { cwd: directory });
+}
 
 describe("migrate apply dry-run", () => {
   it("shows unified diffs without writing files", async () => {
@@ -80,5 +95,61 @@ describe("migrate apply dry-run", () => {
     const result = transformNativeButtonToButton(content, item);
     expect(result?.content).toContain("<Button>Save</Button>");
     expect(finalizeButtonImport(result!.content)).toContain('import { Input, Button } from "@super-system/react"');
+  });
+});
+
+describe("migrate apply write mode", () => {
+  it("writes transformed files when not in dry-run mode", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-write-"));
+    await mkdir(path.join(directory, "src"));
+    const filePath = path.join(directory, "src", "App.tsx");
+    await writeFile(filePath, 'export default function App() {\n  return <button>Save</button>;\n}\n');
+
+    const result = await applyMigration(directory, { dryRun: false });
+
+    expect(result.dryRun).toBe(false);
+    expect(result.summary.filesWritten).toBe(1);
+    expect(result.writtenFiles).toEqual(["src/App.tsx"]);
+
+    const written = await readFile(filePath, "utf8");
+    expect(written).toContain('import { Button } from "@super-system/react"');
+    expect(written).toContain("<Button>Save</Button>");
+    expect(written).not.toContain("<button>Save</button>");
+  });
+
+  it("refuses to write when the git worktree has uncommitted changes", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-dirty-"));
+    await initGitRepo(directory);
+    await mkdir(path.join(directory, "src"));
+    await writeFile(
+      path.join(directory, "src", "App.tsx"),
+      'export default function App() {\n  return <button>Save</button>;\n}\n'
+    );
+    await writeFile(path.join(directory, "notes.txt"), "draft\n");
+    await execFileAsync("git", ["add", "."], { cwd: directory });
+    await execFileAsync("git", ["commit", "-m", "initial"], { cwd: directory });
+    await writeFile(path.join(directory, "notes.txt"), "draft edits\n");
+
+    await expect(applyMigration(directory, { dryRun: false })).rejects.toBeInstanceOf(
+      DirtyWorktreeError
+    );
+  });
+
+  it("writes when --allow-dirty is set on a dirty worktree", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-allow-dirty-"));
+    await initGitRepo(directory);
+    await mkdir(path.join(directory, "src"));
+    const filePath = path.join(directory, "src", "App.tsx");
+    await writeFile(filePath, 'export default function App() {\n  return <button>Save</button>;\n}\n');
+    await writeFile(path.join(directory, "notes.txt"), "draft\n");
+    await execFileAsync("git", ["add", "."], { cwd: directory });
+    await execFileAsync("git", ["commit", "-m", "initial"], { cwd: directory });
+    await writeFile(path.join(directory, "notes.txt"), "draft edits\n");
+
+    const result = await applyMigration(directory, { dryRun: false, allowDirty: true });
+
+    expect(result.summary.filesWritten).toBe(1);
+    const written = await readFile(filePath, "utf8");
+    expect(written).toContain("<Button>Save</Button>");
   });
 });

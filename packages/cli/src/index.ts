@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { checkThemeContrast } from "@super-system/tokens";
 import { auditProject } from "./audit.js";
-import { applyMigrationDryRun, formatMigrationApplyResult } from "./migration-apply.js";
+import { DirtyWorktreeError } from "./git-worktree.js";
+import { applyMigration, formatMigrationApplyResult } from "./migration-apply.js";
 import { createMigrationPlan, formatMigrationPlan } from "./migration.js";
 import { setupIcons } from "./icons.js";
 import { initialize, readConfig, writeGeneratedCss } from "./files.js";
@@ -19,7 +20,7 @@ Usage:
   super-system studio [--port 4173] [--no-open] [--cwd path]
   super-system audit [--json] [--cwd path]
   super-system migrate plan [--json] [--cwd path]
-  super-system migrate apply --dry-run [--json] [--cwd path]
+  super-system migrate apply [--dry-run] [--allow-dirty] [--json] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
   super-system icons setup [--install] [--cwd path]
@@ -60,15 +61,22 @@ async function main(): Promise<void> {
         break;
       }
       if (subcommand === "apply") {
-        if (!args.includes("--dry-run")) {
-          console.error("Only migrate apply --dry-run is supported in this beta. No files are written yet.");
-          process.exitCode = 1;
-          break;
+        const dryRun = args.includes("--dry-run");
+        const allowDirty = args.includes("--allow-dirty");
+        try {
+          const result = await applyMigration(cwd, { dryRun, allowDirty });
+          if (args.includes("--json")) console.log(JSON.stringify(result, null, 2));
+          else console.log(formatMigrationApplyResult(result));
+          process.exitCode =
+            result.summary.transformsApplied > 0 || result.summary.manualRemaining > 0 ? 1 : 0;
+        } catch (error) {
+          if (error instanceof DirtyWorktreeError) {
+            console.error(error.message);
+            process.exitCode = 1;
+          } else {
+            throw error;
+          }
         }
-        const result = await applyMigrationDryRun(cwd);
-        if (args.includes("--json")) console.log(JSON.stringify(result, null, 2));
-        else console.log(formatMigrationApplyResult(result));
-        process.exitCode = result.summary.transformsApplied > 0 || result.summary.manualRemaining > 0 ? 1 : 0;
         break;
       }
       help();
