@@ -15,6 +15,23 @@ export interface AuditRuleDefinition {
   defaultSeverity: AuditSeverity;
 }
 
+export const UNSAFE_NATIVE_INPUT_TYPES = new Set([
+  "button",
+  "checkbox",
+  "file",
+  "hidden",
+  "image",
+  "radio",
+  "reset",
+  "submit"
+]);
+
+/** Whether a native lowercase `<input>` with this type can map to Super System Input. */
+export function isTextLikeNativeInputType(type: string | undefined): boolean {
+  if (type === undefined) return true;
+  return !UNSAFE_NATIVE_INPUT_TYPES.has(type.toLowerCase());
+}
+
 export const AUDIT_RULE_CATALOG: AuditRuleDefinition[] = [
   {
     id: "raw-button",
@@ -115,4 +132,4 @@ export function listAuditRuleIds(): string[] {
 
 export const GENERATED_SECTION_BEGIN = "<!-- super-system:generated begin -->";
 export const GENERATED_SECTION_END = "<!-- super-system:generated end -->";
-export const ADAPTER_GENERATOR_VERSION = "0.1.0-beta.16";
+export const ADAPTER_GENERATOR_VERSION = "0.1.0-beta.17";

@@ -10,7 +10,7 @@
 ## Linting and deeper audit
 
 - [x] Extract a shared, versioned rule catalog for CLI and editor integrations.
-- [ ] Add syntax-aware JavaScript and TypeScript analysis for supported rules.
+- [x] Add syntax-aware JavaScript and TypeScript analysis for supported rules.
 - [x] Publish an ESLint plugin with recommended and strict configurations.
 - [ ] Add safe inline suppression syntax with required justification guidance.
 

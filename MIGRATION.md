@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.17 (ESLint image-alt and raw-input)
+
+No breaking API changes.
+
+- **ESLint:** `super-system/image-alt` and `super-system/raw-input` rules with syntax-aware JSX analysis.
+- **Rules:** Shared `isTextLikeNativeInputType()` in `@super-system/rules` for CLI migration and ESLint parity.
+
 ## 0.1.0-beta.16 (governance foundation + release hardening)
 
 No breaking API changes.

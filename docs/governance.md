@@ -30,7 +30,7 @@ Example structure:
   },
   "deprecations": [],
   "adapters": {
-    "generatorVersion": "0.1.0-beta.16"
+    "generatorVersion": "0.1.0-beta.17"
   }
 }
 ```
@@ -97,7 +97,15 @@ export default [
 ];
 ```
 
-Shared rule ids keep ESLint and CLI aligned. Syntax-aware rules (for example `raw-button`) avoid false positives in comments.
+Shared rule ids keep ESLint and CLI aligned. Syntax-aware rules (for example `raw-button`, `raw-input`, `image-alt`) avoid false positives in comments and skip specialized input types that migration leaves manual.
+
+Configured rules in `recommended`:
+
+| Rule | Default | Notes |
+| --- | --- | --- |
+| `super-system/raw-button` | warn | Native `<button>` → `<Button>` |
+| `super-system/raw-input` | warn | Text-like `<input>` only; skips checkbox/radio/file/submit |
+| `super-system/image-alt` | error | Requires `alt` on `<img>`; ignores spread props |
 
 ## Related docs
 
