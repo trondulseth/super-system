@@ -11,5 +11,5 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 ## Active handoff
 
 - **Objective:** Execute library-quality-pass-2 — remediate all review findings to 10/10 across six dimensions.
-- **Work state:** Phase 3 complete on `cursor/library-quality-pass-2-2c3d`. Overlay close labels, background inert, disabled tooltip wrapper, chart dataTable, tabs/pagination/divider fixes, 98 tests.
-- **Next handoff:** Start Phase 4 (code architecture).
+- **Work state:** Phase 4 complete on `cursor/library-quality-pass-2-2c3d`. Scroll-safe floating position, OverlayClose DRY, BarChart keys, AppShell collapse, 101 tests.
+- **Next handoff:** Start Phase 5 (Studio controllers).

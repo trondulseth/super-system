@@ -60,3 +60,4 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(function Lab
     </label>
   );
 });
+Label.displayName = "Label";

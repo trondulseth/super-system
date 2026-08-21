@@ -166,19 +166,61 @@ export interface FloatingPositionOptions {
   side?: "top" | "bottom";
   align?: "start" | "center" | "end";
   gap?: number;
+  flip?: boolean;
+  contentRef?: React.RefObject<HTMLElement | null>;
+}
+
+export interface FloatingPositionResult {
+  top: number;
+  left: number;
+  transform?: string;
+  side: "top" | "bottom";
+}
+
+export function computeFloatingPosition(
+  triggerRect: DOMRect,
+  contentRect: DOMRect | null,
+  options: Required<Pick<FloatingPositionOptions, "side" | "align" | "gap" | "flip">>
+): FloatingPositionResult {
+  const { align, gap, flip } = options;
+  let side = options.side;
+  const contentHeight = contentRect?.height ?? 0;
+
+  if (flip && contentHeight > 0) {
+    const spaceBelow = window.innerHeight - triggerRect.bottom - gap;
+    const spaceAbove = triggerRect.top - gap;
+
+    if (side === "bottom" && contentHeight > spaceBelow && spaceAbove > spaceBelow) {
+      side = "top";
+    } else if (side === "top" && contentHeight > spaceAbove && spaceBelow > spaceAbove) {
+      side = "bottom";
+    }
+  }
+
+  const top = side === "bottom" ? triggerRect.bottom + gap : triggerRect.top - gap;
+  let left = triggerRect.left;
+  let transform: string | undefined;
+
+  if (align === "center") {
+    left = triggerRect.left + triggerRect.width / 2;
+    transform = side === "top" ? "translate(-50%, -100%)" : "translateX(-50%)";
+  } else if (align === "end") {
+    left = triggerRect.right;
+    transform = side === "top" ? "translate(-100%, -100%)" : "translateX(-100%)";
+  } else if (side === "top") {
+    transform = "translateY(-100%)";
+  }
+
+  return { top, left, transform, side };
 }
 
 export function useFloatingPosition(
   open: boolean,
   triggerRef: React.RefObject<HTMLElement | null>,
   options: FloatingPositionOptions = {}
-): { top: number; left: number; transform?: string } | null {
-  const { side = "bottom", align = "start", gap = 8 } = options;
-  const [position, setPosition] = React.useState<{
-    top: number;
-    left: number;
-    transform?: string;
-  } | null>(null);
+): FloatingPositionResult | null {
+  const { side = "bottom", align = "start", gap = 8, flip = true, contentRef } = options;
+  const [position, setPosition] = React.useState<FloatingPositionResult | null>(null);
 
   React.useLayoutEffect(() => {
     if (!open || !triggerRef.current) {
@@ -186,23 +228,41 @@ export function useFloatingPosition(
       return;
     }
 
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const top = side === "bottom" ? triggerRect.bottom + gap : triggerRect.top - gap;
-    let left = triggerRect.left;
-    let transform: string | undefined;
+    const updatePosition = () => {
+      if (!triggerRef.current) return;
 
-    if (align === "center") {
-      left = triggerRect.left + triggerRect.width / 2;
-      transform = side === "top" ? "translate(-50%, -100%)" : "translateX(-50%)";
-    } else if (align === "end") {
-      left = triggerRect.right;
-      transform = side === "top" ? "translate(-100%, -100%)" : "translateX(-100%)";
-    } else if (side === "top") {
-      transform = "translateY(-100%)";
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const contentRect = contentRef?.current?.getBoundingClientRect() ?? null;
+      setPosition(
+        computeFloatingPosition(triggerRect, contentRect, {
+          side,
+          align,
+          gap,
+          flip
+        })
+      );
+    };
+
+    updatePosition();
+
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    const contentElement = contentRef?.current;
+    const resizeObserver =
+      contentElement && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(updatePosition)
+        : null;
+    if (contentElement && resizeObserver) {
+      resizeObserver.observe(contentElement);
     }
 
-    setPosition({ top, left, transform });
-  }, [align, gap, open, side, triggerRef]);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+      resizeObserver?.disconnect();
+    };
+  }, [align, contentRef, flip, gap, open, side, triggerRef]);
 
   return position;
 }

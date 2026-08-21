@@ -85,7 +85,7 @@ export function Sparkline({
 }
 
 export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
-  data: Array<{ label: string; value: number }>;
+  data: Array<{ id?: string; label: string; value: number }>;
   tone?: ChartTone;
   orientation?: "vertical" | "horizontal";
   label?: string;
@@ -116,8 +116,8 @@ export function BarChart({
       )}
       {...props}
     >
-      {data.map((entry) => (
-        <div key={entry.label} className="ss-bar-chart__item">
+      {data.map((entry, index) => (
+        <div key={entry.id ?? `${entry.label}-${index}`} className="ss-bar-chart__item">
           <div
             className="ss-bar-chart__bar"
             style={{

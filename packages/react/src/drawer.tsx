@@ -1,4 +1,5 @@
 import * as React from "react";
+import { OverlayClose } from "./overlay-close.js";
 import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
 import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
@@ -240,17 +241,15 @@ export function DrawerFooter({ className, ...props }: DrawerFooterProps) {
 export interface DrawerCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  function DrawerClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
+  function DrawerClose({ className, ...props }, ref) {
     const { setOpen } = useDrawerContext("DrawerClose");
 
     return (
-      <button
+      <OverlayClose
         ref={ref}
-        type="button"
-        className={classes("ss-drawer__close", className)}
-        aria-label={ariaLabel}
-        onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
+        className={classes("ss-drawer__close", className)}
+        onClose={() => setOpen(false)}
       />
     );
   }

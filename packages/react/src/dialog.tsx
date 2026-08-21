@@ -1,4 +1,5 @@
 import * as React from "react";
+import { OverlayClose } from "./overlay-close.js";
 import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
 import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
@@ -242,17 +243,15 @@ export function DialogFooter({ className, ...props }: DialogFooterProps) {
 export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
-  function DialogClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
+  function DialogClose({ className, ...props }, ref) {
     const { setOpen } = useDialogContext("DialogClose");
 
     return (
-      <button
+      <OverlayClose
         ref={ref}
-        type="button"
-        className={classes("ss-dialog__close", className)}
-        aria-label={ariaLabel}
-        onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
+        className={classes("ss-dialog__close", className)}
+        onClose={() => setOpen(false)}
       />
     );
   }

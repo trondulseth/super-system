@@ -93,20 +93,20 @@
 
 ## Phase 4 — Code architecture (8 → 10)
 
-- [ ] Add scroll/resize listeners to `useFloatingPosition` (window capture); cleanup on close.
-- [ ] Optional viewport flip when floating content would clip (design: flip to opposite side).
-- [ ] BarChart stable keys: `id` field on data or index suffix.
-- [ ] Extract internal `OverlayClose` shared by dialog/drawer/popover (DRY, keep public exports).
-- [ ] Add `Button.displayName` and `Label.displayName`.
-- [ ] Add `.ss-hamburger-menu__panel` CSS or document drawer-left alias.
-- [ ] Accordion `collapsible` JSDoc for multiple mode.
-- [ ] Optional: `AppShell` responsive sidebar collapse prop + CSS (document mobile pattern).
+- [x] Add scroll/resize listeners to `useFloatingPosition` (window capture); cleanup on close.
+- [x] Optional viewport flip when floating content would clip (design: flip to opposite side).
+- [x] BarChart stable keys: `id` field on data or index suffix.
+- [x] Extract internal `OverlayClose` shared by dialog/drawer/popover (DRY, keep public exports).
+- [x] Add `Button.displayName` and `Label.displayName`.
+- [x] Add `.ss-hamburger-menu__panel` CSS or document drawer-left alias.
+- [x] Accordion `collapsible` JSDoc for multiple mode.
+- [x] Optional: `AppShell` responsive sidebar collapse prop + CSS (document mobile pattern).
 
 ### Tests
 
-- [ ] Mock scroll event repositions floating content.
-- [ ] BarChart duplicate labels no React key warnings.
-- [ ] Controlled tabs with invalid value falls back gracefully.
+- [x] Mock scroll event repositions floating content.
+- [x] BarChart duplicate labels no React key warnings.
+- [x] Controlled tabs with invalid value falls back gracefully.
 
 **Exit:** No positioning bugs in manual scroll test; no console warnings in test suite; overlay utilities ref-count inert correctly.
 

@@ -103,7 +103,9 @@ export function DropdownMenuContent({
     useDropdownMenuContext("DropdownMenuContent");
   const position = useFloatingPosition(open, triggerRef, {
     side: "bottom",
-    align: align === "end" ? "end" : "start"
+    align: align === "end" ? "end" : "start",
+    contentRef,
+    flip: true
   });
 
   React.useEffect(() => {

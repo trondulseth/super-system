@@ -44,6 +44,10 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: AccordionValue;
   defaultValue?: AccordionValue;
   onValueChange?: (value: AccordionValue) => void;
+  /**
+   * When `type="single"`, allows the open section to collapse back to none.
+   * Ignored in `type="multiple"` mode — use `onValueChange` to clear selections instead.
+   */
   collapsible?: boolean;
 }
 

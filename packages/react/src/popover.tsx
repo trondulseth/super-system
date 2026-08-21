@@ -1,4 +1,5 @@
 import * as React from "react";
+import { OverlayClose } from "./overlay-close.js";
 import {
   OverlayPortal,
   useDismissOnOutsideClick,
@@ -103,7 +104,7 @@ export function PopoverContent({
   ...props
 }: PopoverContentProps) {
   const { open, contentId, triggerRef, contentRef } = usePopoverContext("PopoverContent");
-  const position = useFloatingPosition(open, triggerRef, { side, align });
+  const position = useFloatingPosition(open, triggerRef, { side, align, contentRef, flip: true });
 
   if (!open || !position) return null;
 
@@ -130,17 +131,15 @@ export function PopoverContent({
 export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const PopoverClose = React.forwardRef<HTMLButtonElement, PopoverCloseProps>(
-  function PopoverClose({ className, onClick, "aria-label": ariaLabel = "Close", ...props }, ref) {
+  function PopoverClose({ className, ...props }, ref) {
     const { setOpen } = usePopoverContext("PopoverClose");
 
     return (
-      <button
+      <OverlayClose
         ref={ref}
-        type="button"
-        className={classes("ss-popover__close", className)}
-        aria-label={ariaLabel}
-        onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
+        className={classes("ss-popover__close", className)}
+        onClose={() => setOpen(false)}
       />
     );
   }

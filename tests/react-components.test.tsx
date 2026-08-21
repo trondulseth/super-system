@@ -979,6 +979,56 @@ describe("Popover", () => {
   });
 });
 
+describe("Floating position quality", () => {
+  it("repositions floating content when the page scrolls", () => {
+    let top = 120;
+    const rect = {
+      top,
+      bottom: top + 40,
+      left: 40,
+      right: 140,
+      width: 100,
+      height: 40,
+      x: 40,
+      y: top,
+      toJSON: () => ({})
+    };
+
+    render(
+      <Popover defaultOpen>
+        <PopoverTrigger>
+          <Button variant="ghost">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent>Scroll with the page</PopoverContent>
+      </Popover>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    trigger.getBoundingClientRect = () =>
+      ({
+        ...rect,
+        top,
+        bottom: top + 40,
+        y: top
+      }) as DOMRect;
+
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+
+    const content = document.body.querySelector(".ss-popover__content") as HTMLElement;
+    expect(content).not.toBeNull();
+    expect(content.style.top).toBe("168px");
+
+    top = 200;
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+
+    expect(content.style.top).toBe("248px");
+  });
+});
+
 describe("Toast", () => {
   it("publishes toasts through ToastProvider", () => {
     function Demo() {
@@ -1156,6 +1206,24 @@ describe("Tabs quality", () => {
     );
 
     expect(container.querySelector('[role="tabpanel"][hidden] input')).not.toBeNull();
+  });
+
+  it("falls back to the first enabled tab when controlled value is invalid", () => {
+    const container = render(
+      <Tabs value="missing">
+        <TabsList>
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>
+    );
+
+    act(() => {});
+
+    expect(container.querySelector('[role="tab"][aria-selected="true"]')?.textContent).toBe("A");
+    expect(container.querySelector('[role="tabpanel"]:not([hidden])')?.textContent).toBe("Panel A");
   });
 });
 
@@ -1402,6 +1470,19 @@ describe("Charts", () => {
 
     expect(container.querySelector(".ss-line-chart--muted")).not.toBeNull();
     expect(container.querySelector(".ss-donut-chart--muted")).not.toBeNull();
+  });
+
+  it("uses stable keys for duplicate bar labels", () => {
+    const container = render(
+      <BarChart
+        data={[
+          { label: "A", value: 4 },
+          { label: "A", value: 7 }
+        ]}
+      />
+    );
+
+    expect(container.querySelectorAll(".ss-bar-chart__item")).toHaveLength(2);
   });
 });
 

@@ -1,6 +1,11 @@
 import * as React from "react";
 import { classes, mergeHandlers } from "./utils.js";
 
+interface RegisteredTrigger {
+  value: string;
+  disabled: boolean;
+}
+
 interface TabsContextValue {
   value: string;
   setValue: (value: string) => void;
@@ -9,7 +14,7 @@ interface TabsContextValue {
   listRef: React.RefObject<HTMLDivElement | null>;
   autoSelectedRef: React.MutableRefObject<boolean>;
   isControlled: boolean;
-  registerValue: (value: string) => void;
+  registerValue: (value: string, disabled?: boolean) => void;
   unregisterValue: (value: string) => void;
 }
 
@@ -43,26 +48,51 @@ export function Tabs({
   const baseId = React.useId();
   const listRef = React.useRef<HTMLDivElement>(null);
   const autoSelectedRef = React.useRef(false);
-  const [registeredValues, setRegisteredValues] = React.useState<string[]>([]);
-  const value = valueProp ?? uncontrolledValue;
+  const [registeredTriggers, setRegisteredTriggers] = React.useState<RegisteredTrigger[]>([]);
+  const uncontrolledValueResolved = valueProp ?? uncontrolledValue;
   const isControlled = valueProp !== undefined;
 
-  const registerValue = React.useCallback((next: string) => {
-    setRegisteredValues((current) => (current.includes(next) ? current : [...current, next]));
+  const registerValue = React.useCallback((next: string, disabled = false) => {
+    setRegisteredTriggers((current) => {
+      const existing = current.find((entry) => entry.value === next);
+      if (existing) {
+        if (existing.disabled === disabled) return current;
+        return current.map((entry) =>
+          entry.value === next ? { ...entry, disabled } : entry
+        );
+      }
+      return [...current, { value: next, disabled }];
+    });
   }, []);
 
   const unregisterValue = React.useCallback((next: string) => {
-    setRegisteredValues((current) => current.filter((entry) => entry !== next));
+    setRegisteredTriggers((current) => current.filter((entry) => entry.value !== next));
   }, []);
 
+  const resolvedValue = React.useMemo(() => {
+    if (
+      !isControlled ||
+      uncontrolledValueResolved === "" ||
+      registeredTriggers.some((entry) => entry.value === uncontrolledValueResolved)
+    ) {
+      return uncontrolledValueResolved;
+    }
+
+    const firstEnabled = registeredTriggers.find((entry) => !entry.disabled);
+    return firstEnabled?.value ?? uncontrolledValueResolved;
+  }, [isControlled, registeredTriggers, uncontrolledValueResolved]);
+
   React.useEffect(() => {
-    if (!isControlled || !value || process.env.NODE_ENV === "production") return;
-    if (registeredValues.length > 0 && !registeredValues.includes(value)) {
+    if (!isControlled || !valueProp || process.env.NODE_ENV === "production") return;
+    if (
+      registeredTriggers.length > 0 &&
+      !registeredTriggers.some((entry) => entry.value === valueProp)
+    ) {
       console.warn(
-        `[Super System Tabs] Controlled value "${value}" does not match any TabsTrigger.`
+        `[Super System Tabs] Controlled value "${valueProp}" does not match any TabsTrigger.`
       );
     }
-  }, [isControlled, registeredValues, value]);
+  }, [isControlled, registeredTriggers, valueProp]);
 
   const setValue = React.useCallback(
     (next: string) => {
@@ -76,7 +106,17 @@ export function Tabs({
 
   return (
     <TabsContext.Provider
-      value={{ value, setValue, baseId, orientation, listRef, autoSelectedRef, isControlled, registerValue, unregisterValue }}
+      value={{
+        value: resolvedValue,
+        setValue,
+        baseId,
+        orientation,
+        listRef,
+        autoSelectedRef,
+        isControlled,
+        registerValue,
+        unregisterValue
+      }}
     >
       <div className={classes("ss-tabs", className)} data-orientation={orientation} {...props}>
         {children}
@@ -152,9 +192,9 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
   const panelId = `${baseId}-panel-${value}`;
 
   React.useEffect(() => {
-    registerValue(value);
+    registerValue(value, Boolean(disabled));
     return () => unregisterValue(value);
-  }, [registerValue, unregisterValue, value]);
+  }, [disabled, registerValue, unregisterValue, value]);
 
   React.useEffect(() => {
     if (isControlled || autoSelectedRef.current || activeValue !== "" || disabled) return;

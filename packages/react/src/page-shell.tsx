@@ -47,11 +47,30 @@ export interface AppShellProps extends React.HTMLAttributes<HTMLDivElement> {
   sidebar?: React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  /**
+   * Hides the desktop sidebar below 768px. Pair with `HamburgerMenu` for mobile navigation.
+   */
+  sidebarCollapsible?: boolean;
 }
 
-export function AppShell({ sidebar, header, footer, className, children, ...props }: AppShellProps) {
+export function AppShell({
+  sidebar,
+  header,
+  footer,
+  sidebarCollapsible = false,
+  className,
+  children,
+  ...props
+}: AppShellProps) {
   return (
-    <div className={classes("ss-app-shell", className)} {...props}>
+    <div
+      className={classes(
+        "ss-app-shell",
+        sidebarCollapsible && "ss-app-shell--sidebar-collapsible",
+        className
+      )}
+      {...props}
+    >
       {sidebar}
       <div className="ss-app-shell__body">
         {header}
