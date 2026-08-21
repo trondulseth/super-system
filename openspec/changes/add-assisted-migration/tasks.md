@@ -26,4 +26,4 @@
 
 - [x] Write a backup, review, rollback, and troubleshooting guide.
 - [x] Provide AI-neutral follow-up instructions for unresolved findings.
-- [ ] Publish as an opt-in beta and collect migration failure examples before stable release.
+- [x] Publish as an opt-in beta and collect migration failure examples before stable release.
