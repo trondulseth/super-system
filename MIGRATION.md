@@ -1,5 +1,12 @@
 # Migration notes
 
+## 0.1.0-beta.18 (syntax-aware CLI audit)
+
+No breaking API changes.
+
+- **CLI audit:** JSX/TS sources now use syntax-aware analysis for `raw-button`, `raw-input`, and `image-alt` — aligned with ESLint (skips checkbox/radio inputs, comments, migrated PascalCase components).
+- **Rules:** Shared `auditJsxOpeningElement()` in `@super-system/rules` powers CLI and ESLint.
+
 ## 0.1.0-beta.17 (ESLint image-alt and raw-input)
 
 No breaking API changes.

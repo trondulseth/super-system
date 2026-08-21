@@ -1,6 +1,6 @@
 {
   "name": "@super-system/cli",
-  "version": "0.1.0-beta.17",
+  "version": "0.1.0-beta.18",
   "description": "Initialize, customize, and audit a consistent design system in React projects.",
   "type": "module",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "dev": "tsx src/index.ts"
   },
   "dependencies": {
+    "@babel/parser": "^7.28.0",
     "@super-system/rules": "workspace:*",
     "@super-system/studio-ui": "workspace:*",
     "@super-system/tokens": "workspace:*"

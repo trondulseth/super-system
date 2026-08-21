@@ -62,14 +62,26 @@ describe("migrate plan", () => {
     await mkdir(path.join(directory, "src"));
     await writeFile(
       path.join(directory, "src", "Form.tsx"),
-      '<input type="email" />\n<textarea />\n<select />\n<input type="checkbox" />\n'
+      [
+        "export function Form() {",
+        "  return (",
+        "    <>",
+        '      <input type="email" />',
+        "      <textarea />",
+        "      <select />",
+        '      <input type="checkbox" />',
+        "    </>",
+        "  );",
+        "}",
+        ""
+      ].join("\n")
     );
 
     const plan = await createMigrationPlan(directory);
     expect(plan.items.find((item) => item.rule === "raw-input" && item.transformId === "native-input-to-input")).toBeTruthy();
     expect(plan.items.find((item) => item.rule === "raw-textarea" && item.transformId === "native-textarea-to-textarea")).toBeTruthy();
     expect(plan.items.find((item) => item.rule === "raw-select" && item.transformId === "native-select-to-select")).toBeTruthy();
-    expect(plan.items.filter((item) => item.rule === "raw-input" && item.mode === "manual")).toHaveLength(1);
+    expect(plan.items.filter((item) => item.rule === "raw-input" && item.mode === "manual")).toHaveLength(0);
   });
 
   it("reports a clean plan when no findings exist", async () => {

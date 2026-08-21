@@ -1,5 +1,6 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { auditJsxFile, isSyntaxJsxRule, supportsSyntaxJsxAudit } from "./audit-jsx.js";
 import { migrationRules } from "./migration-rules.js";
 
 export interface Finding {
@@ -23,23 +24,42 @@ async function collect(directory: string): Promise<string[]> {
   return nested.flat();
 }
 
+function auditLines(content: string, relativePath: string, skipSyntaxJsxRules: boolean): Finding[] {
+  const findings: Finding[] = [];
+  content.split(/\r?\n/).forEach((line, index) => {
+    for (const rule of migrationRules) {
+      if (skipSyntaxJsxRules && isSyntaxJsxRule(rule.rule)) continue;
+      if (rule.pattern.test(line)) {
+        findings.push({
+          rule: rule.rule,
+          file: relativePath,
+          line: index + 1,
+          message: rule.message
+        });
+      }
+    }
+  });
+  return findings;
+}
+
 export async function auditProject(cwd: string): Promise<Finding[]> {
   const files = await collect(cwd);
   const findings: Finding[] = [];
+
   for (const file of files) {
     const content = await readFile(file, "utf8");
-    content.split(/\r?\n/).forEach((line, index) => {
-      for (const rule of migrationRules) {
-        if (rule.pattern.test(line)) {
-          findings.push({
-            rule: rule.rule,
-            file: path.relative(cwd, file),
-            line: index + 1,
-            message: rule.message
-          });
-        }
-      }
-    });
+    const relativePath = path.relative(cwd, file);
+    const useSyntaxJsx = supportsSyntaxJsxAudit(relativePath);
+
+    if (useSyntaxJsx) {
+      const jsxResult = auditJsxFile(content, relativePath);
+      findings.push(...jsxResult.findings);
+      findings.push(...auditLines(content, relativePath, jsxResult.parsed));
+      continue;
+    }
+
+    findings.push(...auditLines(content, relativePath, false));
   }
+
   return findings;
 }

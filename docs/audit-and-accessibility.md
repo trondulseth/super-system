@@ -85,6 +85,8 @@ npx @super-system/cli migrate plan --json
 
 Supported scan targets: `.tsx`, `.jsx`, `.ts`, `.js`, `.css`, `.scss`, `.html`, `.vue`, and `.svelte` files outside `node_modules`, build output, and `.super-system`.
 
+For JavaScript and TypeScript sources, `raw-button`, `raw-input`, and `image-alt` use **syntax-aware JSX analysis** (aligned with `eslint-plugin-super-system`). Other rules still use line-based scanning. CSS and HTML files continue to use line-based rules only.
+
 ### Preview auto-fixes (dry run)
 
 ```bash

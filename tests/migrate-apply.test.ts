@@ -100,11 +100,19 @@ describe("migrate apply dry-run", () => {
   it("skips unsafe checkbox inputs during apply", async () => {
     const directory = await mkdtemp(path.join(tmpdir(), "super-system-migrate-apply-checkbox-"));
     await mkdir(path.join(directory, "src"));
-    await writeFile(path.join(directory, "src", "Form.tsx"), '<input type="checkbox" />\n');
+    await writeFile(
+      path.join(directory, "src", "Form.tsx"),
+      [
+        "export function Form() {",
+        '  return <input type="checkbox" />;',
+        "}",
+        ""
+      ].join("\n")
+    );
 
     const result = await applyMigrationDryRun(directory);
     expect(result.summary.transformsApplied).toBe(0);
-    expect(result.summary.manualRemaining).toBe(1);
+    expect(result.summary.manualRemaining).toBe(0);
   });
 
   it("is idempotent for img alt transforms", () => {
