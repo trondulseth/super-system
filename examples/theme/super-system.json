@@ -12,14 +12,16 @@
   "radius": { "sm": "6px", "md": "10px", "lg": "14px", "full": "9999px" },
   "themes": {
     "light": {
-      "background": "#ffffff", "foreground": "#111827", "primary": "#2563eb", "primaryForeground": "#ffffff",
-      "secondary": "#f1f5f9", "secondaryForeground": "#172033", "muted": "#f1f5f9", "mutedForeground": "#475569",
-      "border": "#cbd5e1", "destructive": "#b91c1c", "destructiveForeground": "#ffffff", "focus": "#2563eb"
+      "background": "#ffffff", "foreground": "#111827",       "primary": "#2563eb", "primaryForeground": "#ffffff",
+      "secondary": "#e2e8f0", "secondaryForeground": "#172033", "muted": "#f1f5f9", "mutedForeground": "#475569",
+      "border": "#cbd5e1", "destructive": "#b91c1c", "destructiveForeground": "#ffffff",
+      "success": "#15803d", "successForeground": "#ffffff", "focus": "#1d4ed8"
     },
     "dark": {
       "background": "#0b1120", "foreground": "#f8fafc", "primary": "#60a5fa", "primaryForeground": "#08111f",
-      "secondary": "#1e293b", "secondaryForeground": "#f8fafc", "muted": "#1e293b", "mutedForeground": "#cbd5e1",
-      "border": "#475569", "destructive": "#f87171", "destructiveForeground": "#1f0808", "focus": "#93c5fd"
+      "secondary": "#334155", "secondaryForeground": "#f8fafc", "muted": "#1e293b", "mutedForeground": "#cbd5e1",
+      "border": "#475569", "destructive": "#f87171", "destructiveForeground": "#1f0808",
+      "success": "#4ade80", "successForeground": "#052e16", "focus": "#93c5fd"
     }
   },
   "accessibility": { "contrast": "AA", "minimumTargetSize": 44, "reducedMotion": true }

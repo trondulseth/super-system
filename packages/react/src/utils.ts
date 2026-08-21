@@ -20,7 +20,17 @@ export function mergeDescribedBy(existing: string | undefined, id: string): stri
   return [...ids].join(" ");
 }
 
-const FORM_CONTROL_NAMES = new Set(["Input", "Textarea", "Checkbox", "Switch", "Select"]);
+export function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): (node: T | null) => void {
+  return (node) => {
+    for (const ref of refs) {
+      if (!ref) continue;
+      if (typeof ref === "function") ref(node);
+      else (ref as React.MutableRefObject<T | null>).current = node;
+    }
+  };
+}
+
+const FORM_CONTROL_NAMES = new Set(["Input", "Textarea", "Checkbox", "Switch", "Select", "Radio"]);
 
 export function isFormControl(element: React.ReactElement): boolean {
   if (typeof element.type === "string") {

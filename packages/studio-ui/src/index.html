@@ -19,28 +19,117 @@
     </header>
     <main>
       <aside>
+        <p id="editing-theme" class="editing-theme">Editing: Light theme</p>
         <h2>Brand</h2>
-        <label>Primary color<input id="primary" type="color" /></label>
-        <label>Primary text<input id="primaryForeground" type="color" /></label>
+        <label class="color-field">
+          Primary color
+          <div class="color-input-row">
+            <input id="primary" type="color" />
+            <input id="primaryHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
+        <label class="color-field">
+          Primary text
+          <div class="color-input-row">
+            <input id="primaryForeground" type="color" />
+            <input id="primaryForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <div class="row">
-          <label>Background<input id="background" type="color" /></label>
-          <label>Text<input id="foreground" type="color" /></label>
+          <label class="color-field">
+            Background
+            <div class="color-input-row">
+              <input id="background" type="color" />
+              <input id="backgroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Text
+            <div class="color-input-row">
+              <input id="foreground" type="color" />
+              <input id="foregroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
         <div class="row">
-          <label>Secondary<input id="secondary" type="color" /></label>
-          <label>Secondary text<input id="secondaryForeground" type="color" /></label>
+          <label class="color-field">
+            Secondary
+            <div class="color-input-row">
+              <input id="secondary" type="color" />
+              <input id="secondaryHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Secondary text
+            <div class="color-input-row">
+              <input id="secondaryForeground" type="color" />
+              <input id="secondaryForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
         <h2>Semantic colors</h2>
         <div class="row">
-          <label>Muted surface<input id="muted" type="color" /></label>
-          <label>Muted text<input id="mutedForeground" type="color" /></label>
+          <label class="color-field">
+            Muted surface
+            <div class="color-input-row">
+              <input id="muted" type="color" />
+              <input id="mutedHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Muted text
+            <div class="color-input-row">
+              <input id="mutedForeground" type="color" />
+              <input id="mutedForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
-        <label>Border<input id="border" type="color" /></label>
+        <label class="color-field">
+          Border
+          <div class="color-input-row">
+            <input id="border" type="color" />
+            <input id="borderHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <div class="row">
-          <label>Destructive<input id="destructive" type="color" /></label>
-          <label>Destructive text<input id="destructiveForeground" type="color" /></label>
+          <label class="color-field">
+            Destructive
+            <div class="color-input-row">
+              <input id="destructive" type="color" />
+              <input id="destructiveHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Destructive text
+            <div class="color-input-row">
+              <input id="destructiveForeground" type="color" />
+              <input id="destructiveForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
-        <label>Focus ring<input id="focus" type="color" /></label>
+        <div class="row">
+          <label class="color-field">
+            Success
+            <div class="color-input-row">
+              <input id="success" type="color" />
+              <input id="successHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Success text
+            <div class="color-input-row">
+              <input id="successForeground" type="color" />
+              <input id="successForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+        </div>
+        <label class="color-field">
+          Focus ring
+          <div class="color-input-row">
+            <input id="focus" type="color" />
+            <input id="focusHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <h2>Typography and shape</h2>
         <label>Font family<input id="fontSans" /></label>
         <div class="row">
@@ -48,6 +137,17 @@
           <label>Medium radius<input id="radiusMd" /></label>
         </div>
         <div class="row">
+          <label>Small radius<input id="radiusSm" /></label>
+          <label>Large radius<input id="radiusLg" /></label>
+        </div>
+        <label>Pill radius<input id="radiusFull" /></label>
+        <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
+        <label>Monospace font<input id="fontMono" /></label>
+        <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
+        <div class="row">
+          <label
+            >Spacing unit<input id="spacingUnit" type="number" min="2" max="8" step="1"
+          /></label>
           <label
             >Density<select id="density">
               <option>compact</option>
@@ -55,18 +155,18 @@
               <option>spacious</option>
             </select></label
           >
-          <label
-            >Icon library<select id="icons">
-              <option>lucide</option>
-              <option>phosphor</option>
-              <option>heroicons</option>
-              <option>custom</option>
-            </select></label
-          >
-          <p class="field-help">
-            Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
-          </p>
         </div>
+        <label
+          >Icon library<select id="icons">
+            <option>lucide</option>
+            <option>phosphor</option>
+            <option>heroicons</option>
+            <option>custom</option>
+          </select></label
+        >
+        <p class="field-help">
+          Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
+        </p>
         <h2>Accessibility</h2>
         <div class="row">
           <label
@@ -77,10 +177,27 @@
           >
           <label>Minimum target<input id="target" type="number" min="24" max="64" /></label>
         </div>
+        <div class="row">
+          <label
+            >Default mode<select id="modeDefault">
+              <option>system</option>
+              <option>light</option>
+              <option>dark</option>
+            </select></label
+          >
+          <label class="ss-label ss-label--inline">
+            <input id="reducedMotion" type="checkbox" />
+            Reduced motion default
+          </label>
+        </div>
+        <p class="field-help">Mode default and reduced motion are saved to config; preview toggle controls the live demo theme.</p>
       </aside>
       <section class="preview">
         <article class="ss-card preview-theme" id="preview-root" data-theme="light">
-          <span class="ss-badge ss-badge--primary">Super powered</span>
+          <div class="preview-header">
+            <span class="ss-badge ss-badge--neutral" id="mode-default-badge">Default mode: System</span>
+            <span class="ss-badge ss-badge--primary">Super powered</span>
+          </div>
           <h3 class="preview-title">Create your account</h3>
           <p class="preview-lead">
             Every component follows the same theme, spacing, and accessibility rules.
@@ -102,6 +219,26 @@
                 <span class="ss-spinner" aria-hidden="true"></span>
                 <span>Saving</span>
               </button>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Focus visible</h4>
+            <div class="demo-row preview-focus-strip">
+              <button class="ss-button ss-button--primary ss-button--md preview-focus-ring" type="button">Focused button</button>
+              <input class="ss-input preview-focus-ring" type="text" value="Focused input" aria-label="Focus visible input demo" />
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Semantic surfaces</h4>
+            <div class="demo-row surface-swatch-row">
+              <div class="surface-swatch surface-swatch--secondary">
+                <span class="surface-swatch__label">Secondary</span>
+              </div>
+              <div class="surface-swatch surface-swatch--muted">
+                <span class="surface-swatch__label">Muted</span>
+              </div>
             </div>
           </section>
 
@@ -223,7 +360,9 @@
             </div>
             <div class="ss-alert ss-alert--primary" role="status">
               <p class="ss-alert__title">Invite sent</p>
-              <div class="ss-alert__body">Your teammate can now join the workspace.</div>
+              <div class="ss-alert__body">
+                Your teammate can join with token <code>ss_inv_8f2a</code>.
+              </div>
             </div>
             <div class="ss-alert ss-alert--destructive" role="alert">
               <p class="ss-alert__title">Payment failed</p>
@@ -243,18 +382,23 @@
           <section class="preview-section">
             <h4 class="preview-label">Skeleton</h4>
             <div class="ss-skeleton ss-skeleton--block"></div>
-            <div class="ss-skeleton-group" style="margin-top: 12px">
+            <div class="ss-skeleton-group preview-skeleton-group">
               <div class="ss-skeleton ss-skeleton--text"></div>
               <div class="ss-skeleton ss-skeleton--text"></div>
               <div class="ss-skeleton ss-skeleton--text ss-skeleton--short"></div>
             </div>
-            <div class="demo-row" style="margin-top: 12px">
+            <div class="demo-row preview-skeleton-row">
               <div class="ss-skeleton ss-skeleton--circle"></div>
-              <div style="flex: 1">
+              <div class="preview-skeleton-copy">
                 <div class="ss-skeleton ss-skeleton--text"></div>
-                <div class="ss-skeleton ss-skeleton--text ss-skeleton--short" style="margin-top: 8px"></div>
+                <div class="ss-skeleton ss-skeleton--text ss-skeleton--short preview-skeleton-gap"></div>
               </div>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Monospace</h4>
+            <p class="preview-mono">const revenue = 84250;</p>
           </section>
 
           <section class="preview-section">
@@ -276,6 +420,19 @@
               <span class="ss-badge ss-badge--primary">Active</span>
               <span class="ss-badge ss-badge--destructive">Blocked</span>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Card</h4>
+            <article class="ss-card">
+              <div class="ss-card__header">
+                <h3 class="ss-card__title">Workspace settings</h3>
+              </div>
+              <div class="ss-card__body">Manage billing, members, and security from one place.</div>
+              <div class="ss-card__footer">
+                <button class="ss-button ss-button--primary ss-button--sm" type="button">Save</button>
+              </div>
+            </article>
           </section>
 
           <section class="preview-section">
@@ -375,6 +532,7 @@
             <div class="ss-dialog ss-dialog--demo">
               <div class="ss-dialog__overlay" aria-hidden="true"></div>
               <div role="dialog" aria-modal="true" aria-labelledby="dialog-demo-title" class="ss-dialog__content">
+                <button type="button" class="ss-dialog__close" aria-label="Close">×</button>
                 <div class="ss-dialog__header">
                   <h2 id="dialog-demo-title" class="ss-dialog__title">Delete account</h2>
                   <p class="ss-dialog__description">This action cannot be undone.</p>
@@ -390,36 +548,71 @@
 
           <section class="preview-section">
             <h4 class="preview-label">Drawer</h4>
-            <div class="ss-drawer ss-drawer--demo">
-              <div class="ss-drawer__overlay" aria-hidden="true"></div>
-              <div role="dialog" aria-modal="true" class="ss-drawer__content ss-drawer__content--right">
-                <div class="ss-drawer__header">
-                  <h2 class="ss-drawer__title">Filters</h2>
-                  <p class="ss-drawer__description">Refine the current view.</p>
+            <div class="demo-row preview-drawer-row">
+              <div class="ss-drawer ss-drawer--demo preview-drawer-panel">
+                <div class="ss-drawer__overlay" aria-hidden="true"></div>
+                <div role="dialog" aria-modal="true" aria-labelledby="drawer-left-title" class="ss-drawer__content ss-drawer__content--left ss-hamburger-menu__panel">
+                  <button type="button" class="ss-drawer__close" aria-label="Close">×</button>
+                  <div class="ss-drawer__header">
+                    <h2 id="drawer-left-title" class="ss-drawer__title">Menu</h2>
+                  </div>
+                  <div class="ss-drawer__body">
+                    <nav aria-label="Mobile navigation" class="ss-hamburger-menu__nav">
+                      <a href="#">Dashboard</a>
+                      <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Reports</a>
+                      <a href="#">Settings</a>
+                    </nav>
+                  </div>
                 </div>
-                <div class="ss-drawer__body">Status, owner, and date filters appear here.</div>
+              </div>
+              <div class="ss-drawer ss-drawer--demo preview-drawer-panel">
+                <div class="ss-drawer__overlay" aria-hidden="true"></div>
+                <div role="dialog" aria-modal="true" class="ss-drawer__content ss-drawer__content--right">
+                  <div class="ss-drawer__header">
+                    <h2 class="ss-drawer__title">Filters</h2>
+                    <p class="ss-drawer__description">Refine the current view.</p>
+                  </div>
+                  <div class="ss-drawer__body">Status, owner, and date filters appear here.</div>
+                </div>
               </div>
             </div>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Popover</h4>
-            <span class="ss-popover ss-popover--demo">
-              <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Details</button>
-              <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
-                Additional context for this item.
-              </div>
-            </span>
+            <div class="demo-row">
+              <span class="ss-popover ss-popover--demo ss-popover--demo-top">
+                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Top</button>
+                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--top ss-popover__content--center">
+                  Opens above the trigger.
+                </div>
+              </span>
+              <span class="ss-popover ss-popover--demo">
+                <button class="ss-button ss-button--ghost ss-button--md" type="button" aria-expanded="true">Bottom</button>
+                <div role="dialog" aria-modal="false" class="ss-popover__content ss-popover__content--bottom ss-popover__content--center">
+                  Opens below the trigger.
+                </div>
+              </span>
+            </div>
           </section>
 
           <section class="preview-section">
             <h4 class="preview-label">Toast</h4>
-            <div class="ss-toast ss-toast--primary" role="status">
-              <div class="ss-toast__content">
-                <p class="ss-toast__title">Saved</p>
-                <p class="ss-toast__description">Your theme changes were stored.</p>
+            <div class="ss-stack ss-box--gap-md preview-toast-stack">
+              <div class="ss-toast" role="status">
+                <div class="ss-toast__content">
+                  <p class="ss-toast__title">Draft saved</p>
+                  <p class="ss-toast__description">Continue editing when ready.</p>
+                </div>
+                <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
               </div>
-              <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
+              <div class="ss-toast ss-toast--destructive" role="alert">
+                <div class="ss-toast__content">
+                  <p class="ss-toast__title">Payment failed</p>
+                  <p class="ss-toast__description">Update billing details to restore access.</p>
+                </div>
+                <button type="button" class="ss-toast__close" aria-label="Dismiss notification">×</button>
+              </div>
             </div>
           </section>
 
@@ -427,22 +620,32 @@
             <h4 class="preview-label">Table</h4>
             <div class="ss-table-wrap">
               <table class="ss-table">
+                <caption class="ss-table__caption">Team activity for the current billing period</caption>
                 <thead class="ss-table__header">
                   <tr class="ss-table__row">
                     <th scope="col" class="ss-table__head">Name</th>
+                    <th scope="col" class="ss-table__head">Sessions</th>
                     <th scope="col" class="ss-table__head">Role</th>
                   </tr>
                 </thead>
                 <tbody class="ss-table__body">
                   <tr class="ss-table__row">
                     <td class="ss-table__cell">Ada Lovelace</td>
+                    <td class="ss-table__cell" data-numeric="true">1,284</td>
                     <td class="ss-table__cell">Admin</td>
                   </tr>
                   <tr class="ss-table__row">
                     <td class="ss-table__cell">Grace Hopper</td>
+                    <td class="ss-table__cell" data-numeric="true">892</td>
                     <td class="ss-table__cell">Editor</td>
                   </tr>
                 </tbody>
+                <tfoot class="ss-table__footer">
+                  <tr class="ss-table__row">
+                    <td class="ss-table__cell" colspan="2">Total sessions</td>
+                    <td class="ss-table__cell" data-numeric="true">2,176</td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </section>
@@ -467,6 +670,174 @@
                   <path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"></path>
                 </svg>
               </span>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">KPI &amp; charts</h4>
+            <div class="ss-row ss-box--gap-md preview-kpi-grid">
+              <article class="ss-kpi-card ss-kpi-card--primary preview-kpi-card">
+                <div class="ss-kpi-card__header">
+                  <p class="ss-kpi-card__title">Monthly revenue</p>
+                  <span class="ss-kpi-card__trend ss-kpi-card__trend--up">+12.4%</span>
+                </div>
+                <p class="ss-kpi-card__value">$84,250</p>
+                <p class="ss-kpi-card__description">Compared to the previous 30 days.</p>
+                <div class="ss-kpi-card__chart">
+                  <svg class="ss-sparkline ss-sparkline--primary" width="120" height="36" viewBox="0 0 120 36" role="img" aria-label="Revenue sparkline">
+                    <polyline class="ss-sparkline__line" fill="none" points="2,28 22,22 42,24 62,14 82,16 102,8 118,4" />
+                  </svg>
+                </div>
+                <div class="ss-kpi-card__footer">
+                  <span>Updated hourly</span>
+                  <button class="ss-button ss-button--ghost ss-button--sm" type="button">View report</button>
+                </div>
+              </article>
+              <article class="ss-kpi-card ss-kpi-card--muted preview-kpi-card">
+                <div class="ss-kpi-card__header">
+                  <p class="ss-kpi-card__title">Churn rate</p>
+                  <span class="ss-kpi-card__trend ss-kpi-card__trend--down">-3.8%</span>
+                </div>
+                <p class="ss-kpi-card__value">2.1%</p>
+                <p class="ss-kpi-card__description">Muted variant with downward trend.</p>
+                <div class="ss-kpi-card__chart ss-bar-chart ss-bar-chart--muted">
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-45"></div><span class="ss-bar-chart__label">M</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-72"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-58"></div><span class="ss-bar-chart__label">W</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-88"></div><span class="ss-bar-chart__label">T</span></div>
+                  <div class="ss-bar-chart__item"><div class="ss-bar-chart__bar preview-bar-h-64"></div><span class="ss-bar-chart__label">F</span></div>
+                </div>
+              </article>
+            </div>
+            <div class="preview-section preview-section--nested">
+              <h5 class="preview-label">Line chart tones</h5>
+              <div class="demo-row chart-tone-row">
+                <svg class="ss-line-chart ss-line-chart--primary" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Primary line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--secondary" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Secondary line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--destructive" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Destructive line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+                <svg class="ss-line-chart ss-line-chart--muted" width="120" height="48" viewBox="0 0 120 48" role="img" aria-label="Muted line chart">
+                  <path class="ss-line-chart__area" d="M4,40 L34,28 L64,32 L94,16 L116,12 L116,44 L4,44 Z" />
+                  <path class="ss-line-chart__line" d="M4,40 L34,28 L64,32 L94,16 L116,12" fill="none" />
+                </svg>
+              </div>
+            </div>
+            <div class="preview-section preview-section--nested">
+              <h5 class="preview-label">Donut chart tones</h5>
+              <div class="demo-row chart-tone-row">
+                <div class="ss-donut-chart ss-donut-chart--primary preview-donut-chart" role="img" aria-label="Primary donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--secondary preview-donut-chart" role="img" aria-label="Secondary donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--destructive preview-donut-chart" role="img" aria-label="Destructive donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+                <div class="ss-donut-chart ss-donut-chart--muted preview-donut-chart" role="img" aria-label="Muted donut 72 percent">
+                  <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+                    <circle class="ss-donut-chart__track" cx="36" cy="36" r="32" fill="none" stroke-width="8" />
+                    <circle class="ss-donut-chart__value" cx="36" cy="36" r="32" fill="none" stroke-width="8" stroke-dasharray="201" stroke-dashoffset="56" transform="rotate(-90 36 36)" />
+                  </svg>
+                  <span class="ss-donut-chart__label">72%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Layout</h4>
+            <div class="ss-stack ss-box--gap-md">
+              <div class="ss-row ss-box--gap-sm">
+                <div class="ss-container ss-container--sm preview-layout-block">Container sm</div>
+                <div class="ss-container ss-container--md preview-layout-block">Container md</div>
+                <div class="ss-container ss-container--lg preview-layout-block">Container lg</div>
+              </div>
+              <div class="ss-row ss-box--gap-md preview-layout-row">
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Row + gap md</p>
+                  <p class="ss-kpi-card__value">A</p>
+                </div>
+                <div class="ss-divider ss-divider--vertical" role="separator" aria-orientation="vertical"></div>
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Vertical divider</p>
+                  <p class="ss-kpi-card__value">B</p>
+                </div>
+              </div>
+              <div class="ss-row ss-box--gap-sm preview-layout-row">
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">Before spacer</p>
+                </div>
+                <div class="ss-spacer ss-spacer--md" aria-hidden="true"></div>
+                <div class="ss-kpi-card preview-layout-card">
+                  <p class="ss-kpi-card__title">After spacer</p>
+                </div>
+              </div>
+              <hr class="ss-divider ss-divider--horizontal" />
+            </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Page shell</h4>
+            <div class="ss-app-shell ss-app-shell--preview">
+              <aside class="ss-sidebar">
+                <div class="ss-sidebar__brand">Acme</div>
+                <nav aria-label="Sidebar" class="ss-sidebar__nav">
+                  <a href="#" class="ss-sidebar__link ss-sidebar__link--active" aria-current="page">Dashboard</a>
+                  <a href="#" class="ss-sidebar__link">Reports</a>
+                  <a href="#" class="ss-sidebar__link">Settings</a>
+                </nav>
+              </aside>
+              <div class="ss-app-shell__body">
+                <header class="ss-top-bar">
+                  <div class="ss-top-bar__brand">Acme Dashboard</div>
+                  <div class="ss-top-bar__actions">
+                    <button class="ss-button ss-button--ghost ss-button--sm ss-hamburger-menu__trigger" type="button" aria-label="Open menu">
+                      <span class="ss-hamburger-menu__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+                    </button>
+                    <button class="ss-button ss-button--primary ss-button--sm" type="button">New report</button>
+                  </div>
+                </header>
+                <main class="ss-main">
+                  <header class="ss-page-header">
+                    <div class="ss-page-header__content">
+                      <h1 class="ss-page-header__title">Overview</h1>
+                      <p class="ss-page-header__description">Token-driven layout primitives for dashboards and app shells.</p>
+                    </div>
+                  </header>
+                  <div class="ss-row ss-box--gap-md preview-layout-row">
+                    <div class="ss-kpi-card ss-kpi-card--muted preview-layout-card">
+                      <p class="ss-kpi-card__title">Active projects</p>
+                      <p class="ss-kpi-card__value">18</p>
+                    </div>
+                    <div class="ss-kpi-card preview-layout-card">
+                      <p class="ss-kpi-card__title">Open tasks</p>
+                      <p class="ss-kpi-card__value">42</p>
+                    </div>
+                  </div>
+                </main>
+                <footer class="ss-page-footer">© 2026 Super System · Built with token-driven components</footer>
+              </div>
             </div>
           </section>
 

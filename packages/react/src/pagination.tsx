@@ -43,13 +43,46 @@ export const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLink
 );
 PaginationLink.displayName = "PaginationLink";
 
-export interface PaginationPreviousProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+export interface PaginationPreviousProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  disabled?: boolean;
+}
 
-export function PaginationPrevious({ className, children = "Previous", ...props }: PaginationPreviousProps) {
+export function PaginationPrevious({
+  className,
+  children = "Previous",
+  disabled = false,
+  href,
+  onClick,
+  tabIndex,
+  ...props
+}: PaginationPreviousProps) {
+  if (disabled) {
+    return (
+      <span
+        aria-label="Go to previous page"
+        aria-disabled="true"
+        tabIndex={-1}
+        className={classes(
+          "ss-pagination__link",
+          "ss-pagination__previous",
+          "ss-pagination__link--disabled",
+          className
+        )}
+        {...props}
+      >
+        <span className="ss-pagination__chevron" aria-hidden="true" />
+        <span>{children}</span>
+      </span>
+    );
+  }
+
   return (
     <a
       aria-label="Go to previous page"
       className={classes("ss-pagination__link", "ss-pagination__previous", className)}
+      href={href}
+      tabIndex={tabIndex}
+      onClick={onClick}
       {...props}
     >
       <span className="ss-pagination__chevron" aria-hidden="true" />
@@ -58,13 +91,46 @@ export function PaginationPrevious({ className, children = "Previous", ...props 
   );
 }
 
-export interface PaginationNextProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
+export interface PaginationNextProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  disabled?: boolean;
+}
 
-export function PaginationNext({ className, children = "Next", ...props }: PaginationNextProps) {
+export function PaginationNext({
+  className,
+  children = "Next",
+  disabled = false,
+  href,
+  onClick,
+  tabIndex,
+  ...props
+}: PaginationNextProps) {
+  if (disabled) {
+    return (
+      <span
+        aria-label="Go to next page"
+        aria-disabled="true"
+        tabIndex={-1}
+        className={classes(
+          "ss-pagination__link",
+          "ss-pagination__next",
+          "ss-pagination__link--disabled",
+          className
+        )}
+        {...props}
+      >
+        <span>{children}</span>
+        <span className="ss-pagination__chevron ss-pagination__chevron--next" aria-hidden="true" />
+      </span>
+    );
+  }
+
   return (
     <a
       aria-label="Go to next page"
       className={classes("ss-pagination__link", "ss-pagination__next", className)}
+      href={href}
+      tabIndex={tabIndex}
+      onClick={onClick}
       {...props}
     >
       <span>{children}</span>
@@ -77,8 +143,8 @@ export interface PaginationEllipsisProps extends React.HTMLAttributes<HTMLSpanEl
 
 export function PaginationEllipsis({ className, ...props }: PaginationEllipsisProps) {
   return (
-    <span aria-hidden="true" className={classes("ss-pagination__ellipsis", className)} {...props}>
-      …
+    <span className={classes("ss-pagination__ellipsis", className)} {...props}>
+      <span aria-hidden="true">…</span>
       <span className="ss-pagination__sr-only">More pages</span>
     </span>
   );

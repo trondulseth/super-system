@@ -5,13 +5,11 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active change:** expand-react-component-library
+- **Active change:** none (library-quality-pass-2 archived)
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Close out `expand-react-component-library` with release verification, then archive the change.
-- **Work state:** Icon wrapper (`Icon`), CLI `icons setup`, tests, README docs, and Studio icon previews are implemented. Release verification (fresh installs, beta publish) remains open.
-- **Recent evidence:** `Icon` supports decorative and labelled modes; `npx @super-system/cli icons setup` maps `super-system.json` icon library to install guidance; default recommendation is `lucide-react`.
-- **Risks and limitations:** Icon package install is opt-in via `--install`; dropdown and tooltip still render inline without a portal; npm packages remain at `0.1.0-beta.1`.
-- **Next handoff:** Verify installation in fresh React, Next.js, and Vite projects, publish updated beta if requested, sync specs, and archive `expand-react-component-library`.
+- **Objective:** Library quality pass 2 complete — all six review dimensions at 10/10.
+- **Work state:** Phase 7 complete on `cursor/library-quality-pass-2-2c3d`. 107 tests, living specs synced, change archived.
+- **Next handoff:** `0.1.0-beta.2` published. Optional follow-up — start `harden-release-and-quality`.

@@ -19,11 +19,18 @@ export function updatePreviewTheme(config: SuperSystemConfig, mode: "light" | "d
 }
 
 function scopeThemeStylesheet(config: SuperSystemConfig): string {
-  return compileTheme(config)
+  let css = compileTheme(config)
     .replace(/^:root/gm, ".preview-theme")
     .replace(/:root\[data-theme="dark"\]/g, '.preview-theme[data-theme="dark"]')
     .replace(
       /:root:not\(\[data-theme="light"\]\)/g,
-      ".preview-theme:not([data-theme=\"light\"])"
+      '.preview-theme:not([data-theme="light"])'
     );
+
+  css = css.replace(
+    /@media \(prefers-reduced-motion: reduce\) \{\s*\*, \*::before, \*::after \{/g,
+    "@media (prefers-reduced-motion: reduce) { .preview-theme, .preview-theme *, .preview-theme *::before, .preview-theme *::after {"
+  );
+
+  return css;
 }

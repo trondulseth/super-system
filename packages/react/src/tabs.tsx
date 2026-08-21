@@ -1,12 +1,21 @@
 import * as React from "react";
 import { classes, mergeHandlers } from "./utils.js";
 
+interface RegisteredTrigger {
+  value: string;
+  disabled: boolean;
+}
+
 interface TabsContextValue {
   value: string;
   setValue: (value: string) => void;
   baseId: string;
   orientation: "horizontal" | "vertical";
   listRef: React.RefObject<HTMLDivElement | null>;
+  autoSelectedRef: React.MutableRefObject<boolean>;
+  isControlled: boolean;
+  registerValue: (value: string, disabled?: boolean) => void;
+  unregisterValue: (value: string) => void;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -28,17 +37,62 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Tabs({
   value: valueProp,
-  defaultValue = "",
+  defaultValue,
   onValueChange,
   orientation = "horizontal",
   className,
   children,
   ...props
 }: TabsProps) {
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
+  const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue ?? "");
   const baseId = React.useId();
   const listRef = React.useRef<HTMLDivElement>(null);
-  const value = valueProp ?? uncontrolledValue;
+  const autoSelectedRef = React.useRef(false);
+  const [registeredTriggers, setRegisteredTriggers] = React.useState<RegisteredTrigger[]>([]);
+  const uncontrolledValueResolved = valueProp ?? uncontrolledValue;
+  const isControlled = valueProp !== undefined;
+
+  const registerValue = React.useCallback((next: string, disabled = false) => {
+    setRegisteredTriggers((current) => {
+      const existing = current.find((entry) => entry.value === next);
+      if (existing) {
+        if (existing.disabled === disabled) return current;
+        return current.map((entry) =>
+          entry.value === next ? { ...entry, disabled } : entry
+        );
+      }
+      return [...current, { value: next, disabled }];
+    });
+  }, []);
+
+  const unregisterValue = React.useCallback((next: string) => {
+    setRegisteredTriggers((current) => current.filter((entry) => entry.value !== next));
+  }, []);
+
+  const resolvedValue = React.useMemo(() => {
+    if (
+      !isControlled ||
+      uncontrolledValueResolved === "" ||
+      registeredTriggers.some((entry) => entry.value === uncontrolledValueResolved)
+    ) {
+      return uncontrolledValueResolved;
+    }
+
+    const firstEnabled = registeredTriggers.find((entry) => !entry.disabled);
+    return firstEnabled?.value ?? uncontrolledValueResolved;
+  }, [isControlled, registeredTriggers, uncontrolledValueResolved]);
+
+  React.useEffect(() => {
+    if (!isControlled || !valueProp || process.env.NODE_ENV === "production") return;
+    if (
+      registeredTriggers.length > 0 &&
+      !registeredTriggers.some((entry) => entry.value === valueProp)
+    ) {
+      console.warn(
+        `[Super System Tabs] Controlled value "${valueProp}" does not match any TabsTrigger.`
+      );
+    }
+  }, [isControlled, registeredTriggers, valueProp]);
 
   const setValue = React.useCallback(
     (next: string) => {
@@ -51,7 +105,19 @@ export function Tabs({
   );
 
   return (
-    <TabsContext.Provider value={{ value, setValue, baseId, orientation, listRef }}>
+    <TabsContext.Provider
+      value={{
+        value: resolvedValue,
+        setValue,
+        baseId,
+        orientation,
+        listRef,
+        autoSelectedRef,
+        isControlled,
+        registerValue,
+        unregisterValue
+      }}
+    >
       <div className={classes("ss-tabs", className)} data-orientation={orientation} {...props}>
         {children}
       </div>
@@ -119,10 +185,29 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
   { value, className, disabled, onClick, ...props },
   ref
 ) {
-  const { value: activeValue, setValue, baseId } = useTabsContext("TabsTrigger");
+  const { value: activeValue, setValue, baseId, autoSelectedRef, isControlled, listRef, registerValue, unregisterValue } =
+    useTabsContext("TabsTrigger");
   const selected = activeValue === value;
   const triggerId = `${baseId}-trigger-${value}`;
   const panelId = `${baseId}-panel-${value}`;
+
+  React.useEffect(() => {
+    registerValue(value, Boolean(disabled));
+    return () => unregisterValue(value);
+  }, [disabled, registerValue, unregisterValue, value]);
+
+  React.useEffect(() => {
+    if (isControlled || autoSelectedRef.current || activeValue !== "" || disabled) return;
+
+    const triggers = Array.from(
+      listRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []
+    );
+    const firstEnabled = triggers.find((trigger) => !trigger.disabled);
+    if (!firstEnabled || firstEnabled.id !== triggerId) return;
+
+    autoSelectedRef.current = true;
+    setValue(value);
+  }, [activeValue, autoSelectedRef, disabled, isControlled, listRef, setValue, triggerId, value]);
 
   return (
     <button
@@ -146,13 +231,15 @@ TabsTrigger.displayName = "TabsTrigger";
 
 export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
+  forceMount?: boolean;
 }
 
-export function TabsContent({ value, className, children, ...props }: TabsContentProps) {
+export function TabsContent({ value, forceMount, className, children, ...props }: TabsContentProps) {
   const { value: activeValue, baseId } = useTabsContext("TabsContent");
   const selected = activeValue === value;
   const triggerId = `${baseId}-trigger-${value}`;
   const panelId = `${baseId}-panel-${value}`;
+  const mounted = forceMount || selected;
 
   return (
     <div
@@ -164,7 +251,7 @@ export function TabsContent({ value, className, children, ...props }: TabsConten
       className={classes("ss-tabs__content", className)}
       {...props}
     >
-      {selected ? children : null}
+      {mounted ? children : null}
     </div>
   );
 }

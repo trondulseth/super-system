@@ -37,8 +37,6 @@ export interface BreadcrumbPageProps extends React.HTMLAttributes<HTMLSpanElemen
 export function BreadcrumbPage({ className, ...props }: BreadcrumbPageProps) {
   return (
     <span
-      role="link"
-      aria-disabled="true"
       aria-current="page"
       className={classes("ss-breadcrumb__page", className)}
       {...props}

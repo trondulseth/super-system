@@ -44,3 +44,4 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(function Rad
     </label>
   );
 });
+Radio.displayName = "Radio";

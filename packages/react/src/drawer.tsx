@@ -1,6 +1,7 @@
 import * as React from "react";
-import { OverlayPortal, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
-import { classes, mergeHandlers } from "./utils.js";
+import { OverlayClose } from "./overlay-close.js";
+import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
+import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DrawerContextValue {
   open: boolean;
@@ -9,6 +10,12 @@ interface DrawerContextValue {
   contentId: string;
   titleId: string;
   descriptionId: string;
+  hasTitle: boolean;
+  hasDescription: boolean;
+  registerTitle: () => void;
+  unregisterTitle: () => void;
+  registerDescription: () => void;
+  unregisterDescription: () => void;
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -42,7 +49,14 @@ export function Drawer({
   const baseId = React.useId();
   const triggerRef = React.useRef<HTMLElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const [hasTitle, setHasTitle] = React.useState(false);
+  const [hasDescription, setHasDescription] = React.useState(false);
   const open = openProp ?? uncontrolledOpen;
+
+  const registerTitle = React.useCallback(() => setHasTitle(true), []);
+  const unregisterTitle = React.useCallback(() => setHasTitle(false), []);
+  const registerDescription = React.useCallback(() => setHasDescription(true), []);
+  const unregisterDescription = React.useCallback(() => setHasDescription(false), []);
 
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -65,6 +79,12 @@ export function Drawer({
         contentId: `${baseId}-content`,
         titleId: `${baseId}-title`,
         descriptionId: `${baseId}-description`,
+        hasTitle,
+        hasDescription,
+        registerTitle,
+        unregisterTitle,
+        registerDescription,
+        unregisterDescription,
         triggerRef,
         contentRef
       }}
@@ -83,16 +103,11 @@ export function DrawerTrigger({ children }: DrawerTriggerProps) {
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
 
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+
   return React.cloneElement(child, {
     ...childProps,
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node;
-      const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
-    },
+    ref: composeRefs(childRef, triggerRef),
     "aria-haspopup": "dialog",
     "aria-expanded": open,
     "aria-controls": open ? contentId : undefined,
@@ -114,12 +129,23 @@ export function DrawerContent({
   closeOnOverlayClick = true,
   className,
   children,
+  "aria-label": ariaLabel,
   ...props
 }: DrawerContentProps) {
-  const { open, setOpen, side, contentId, titleId, descriptionId, triggerRef, contentRef } =
+  const { open, setOpen, side, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDrawerContext("DrawerContent");
 
   useFocusTrap(contentRef, open, triggerRef);
+  useBackgroundInert(open);
+
+  React.useEffect(() => {
+    if (!open || process.env.NODE_ENV === "production") return;
+    if (!hasTitle && !ariaLabel) {
+      console.warn(
+        "[Super System Drawer] DrawerContent should include DrawerTitle or an aria-label for accessibility."
+      );
+    }
+  }, [ariaLabel, hasTitle, open]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -153,8 +179,9 @@ export function DrawerContent({
           id={contentId}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
+          aria-labelledby={hasTitle ? titleId : undefined}
+          aria-describedby={hasDescription ? descriptionId : undefined}
+          aria-label={!hasTitle ? ariaLabel : undefined}
           tabIndex={-1}
           className={classes("ss-drawer__content", `ss-drawer__content--${side}`, className)}
           {...props}
@@ -175,14 +202,27 @@ export function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
 export interface DrawerTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 
 export function DrawerTitle({ className, ...props }: DrawerTitleProps) {
-  const { titleId } = useDrawerContext("DrawerTitle");
+  const { titleId, registerTitle, unregisterTitle } = useDrawerContext("DrawerTitle");
+
+  React.useLayoutEffect(() => {
+    registerTitle();
+    return unregisterTitle;
+  }, [registerTitle, unregisterTitle]);
+
   return <h2 id={titleId} className={classes("ss-drawer__title", className)} {...props} />;
 }
 
 export interface DrawerDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 export function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
-  const { descriptionId } = useDrawerContext("DrawerDescription");
+  const { descriptionId, registerDescription, unregisterDescription } =
+    useDrawerContext("DrawerDescription");
+
+  React.useLayoutEffect(() => {
+    registerDescription();
+    return unregisterDescription;
+  }, [registerDescription, unregisterDescription]);
+
   return <p id={descriptionId} className={classes("ss-drawer__description", className)} {...props} />;
 }
 
@@ -201,16 +241,15 @@ export function DrawerFooter({ className, ...props }: DrawerFooterProps) {
 export interface DrawerCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  function DrawerClose({ className, onClick, ...props }, ref) {
+  function DrawerClose({ className, ...props }, ref) {
     const { setOpen } = useDrawerContext("DrawerClose");
 
     return (
-      <button
+      <OverlayClose
         ref={ref}
-        type="button"
-        className={classes("ss-drawer__close", className)}
-        onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
+        className={classes("ss-drawer__close", className)}
+        onClose={() => setOpen(false)}
       />
     );
   }

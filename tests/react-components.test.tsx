@@ -1,6 +1,8 @@
 /**
  * @vitest-environment happy-dom
  */
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { act, createRef, type HTMLAttributes, type ReactElement, type SVGProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
@@ -11,6 +13,24 @@ import {
   AccordionTrigger,
   Alert,
   Badge,
+  BarChart,
+  Box,
+  DonutChart,
+  HamburgerMenu,
+  KpiCard,
+  KpiCardChart,
+  KpiCardHeader,
+  KpiCardTitle,
+  KpiCardTrend,
+  KpiCardValue,
+  LineChart,
+  PageHeader,
+  Row,
+  SidebarNavItem,
+  Sparkline,
+  Stack,
+  TopBar,
+  TopBarBrand,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -26,6 +46,7 @@ import {
   Checkbox,
   Dialog,
   DialogBody,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -34,12 +55,14 @@ import {
   DialogTrigger,
   Drawer,
   DrawerBody,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
+  Divider,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -55,6 +78,7 @@ import {
   PaginationNext,
   PaginationPrevious,
   Popover,
+  PopoverClose,
   PopoverContent,
   PopoverTrigger,
   Radio,
@@ -640,6 +664,31 @@ describe("Accordion", () => {
     expect(triggers[0]?.getAttribute("aria-expanded")).toBe("true");
     expect(triggers[1]?.getAttribute("aria-expanded")).toBe("true");
   });
+
+  it("does not toggle disabled accordion items", () => {
+    const container = render(
+      <Accordion type="single">
+        <AccordionItem value="open">
+          <AccordionTrigger>Open</AccordionTrigger>
+          <AccordionContent>Open content</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="locked" disabled>
+          <AccordionTrigger>Locked</AccordionTrigger>
+          <AccordionContent>Locked content</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    const triggers = container.querySelectorAll(".ss-accordion__trigger");
+    expect(triggers[1]?.hasAttribute("disabled")).toBe(true);
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("false");
+
+    act(() => {
+      triggers[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(triggers[1]?.getAttribute("aria-expanded")).toBe("false");
+  });
 });
 
 describe("Breadcrumb", () => {
@@ -662,6 +711,7 @@ describe("Breadcrumb", () => {
     expect(container.querySelector(".ss-breadcrumb__page")?.getAttribute("aria-current")).toBe(
       "page"
     );
+    expect(container.querySelector(".ss-breadcrumb__page")?.getAttribute("role")).toBeNull();
   });
 });
 
@@ -681,22 +731,37 @@ describe("DropdownMenu", () => {
 
     const trigger = container.querySelector("button") as HTMLButtonElement;
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
-    expect(container.querySelector('[role="menu"]')).toBeNull();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
 
     act(() => {
       trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
-    expect(container.querySelectorAll('[role="menuitem"]').length).toBe(2);
+    expect(document.body.querySelectorAll('[role="menuitem"]').length).toBe(2);
 
-    const menu = container.querySelector('[role="menu"]') as HTMLElement;
+    const menu = document.body.querySelector('[role="menu"]') as HTMLElement;
     act(() => {
       menu.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     });
 
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
-    expect(container.querySelector('[role="menu"]')).toBeNull();
+    expect(document.body.querySelector('[role="menu"]')).toBeNull();
+  });
+
+  it("renders menu content in the portal root", () => {
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>
+          <Button variant="secondary">Actions</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    expect(document.querySelector("[data-ss-portal-root] [role='menu']")).not.toBeNull();
   });
 });
 
@@ -731,6 +796,7 @@ describe("Pagination", () => {
       "page"
     );
     expect(container.querySelector(".ss-pagination__ellipsis")?.textContent).toContain("More pages");
+    expect(container.querySelector(".ss-pagination__ellipsis")?.getAttribute("aria-hidden")).toBeNull();
   });
 });
 
@@ -784,6 +850,35 @@ describe("Dialog", () => {
     expect(document.body.querySelector('[role="dialog"]')).toBeNull();
     expect(document.activeElement).toBe(trigger);
   });
+
+  it("omits aria-labelledby and aria-describedby when title and description are absent", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogBody>Confirm your changes.</DialogBody>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = document.body.querySelector('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-labelledby")).toBeNull();
+    expect(dialog?.getAttribute("aria-describedby")).toBeNull();
+  });
+
+  it("sets aria-labelledby when only a title is provided", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Quick note</DialogTitle>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = document.body.querySelector('[role="dialog"]') as HTMLElement;
+    const title = document.body.querySelector(".ss-dialog__title") as HTMLElement;
+    expect(dialog.getAttribute("aria-labelledby")).toBe(title.id);
+    expect(dialog.getAttribute("aria-describedby")).toBeNull();
+  });
 });
 
 describe("Drawer", () => {
@@ -803,6 +898,20 @@ describe("Drawer", () => {
     const drawer = document.body.querySelector(".ss-drawer__content--right");
     expect(drawer?.getAttribute("role")).toBe("dialog");
     expect(drawer?.getAttribute("aria-modal")).toBe("true");
+  });
+
+  it("omits aria-labelledby when drawer title is absent", () => {
+    render(
+      <Drawer defaultOpen side="left">
+        <DrawerContent>
+          <DrawerBody>Panel content</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    );
+
+    const drawer = document.body.querySelector(".ss-drawer__content--left");
+    expect(drawer?.getAttribute("aria-labelledby")).toBeNull();
+    expect(drawer?.getAttribute("aria-describedby")).toBeNull();
   });
 });
 
@@ -830,6 +939,93 @@ describe("Popover", () => {
 
     expect(document.body.querySelector(".ss-popover__content")).toBeNull();
     expect(document.activeElement).toBe(trigger);
+  });
+
+  it("positions top popovers above the trigger", () => {
+    const rect = {
+      top: 120,
+      bottom: 160,
+      left: 40,
+      right: 140,
+      width: 100,
+      height: 40,
+      x: 40,
+      y: 120,
+      toJSON: () => ({})
+    };
+
+    render(
+      <Popover>
+        <PopoverTrigger>
+          <Button variant="ghost">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent side="top" align="center">
+          Above the trigger
+        </PopoverContent>
+      </Popover>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    trigger.getBoundingClientRect = () => rect as DOMRect;
+
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const content = document.body.querySelector(".ss-popover__content") as HTMLElement;
+    expect(content).not.toBeNull();
+    expect(content.style.transform).toBe("translate(-50%, -100%)");
+    expect(content.style.top).toBe("112px");
+  });
+});
+
+describe("Floating position quality", () => {
+  it("repositions floating content when the page scrolls", () => {
+    let top = 120;
+    const rect = {
+      top,
+      bottom: top + 40,
+      left: 40,
+      right: 140,
+      width: 100,
+      height: 40,
+      x: 40,
+      y: top,
+      toJSON: () => ({})
+    };
+
+    render(
+      <Popover defaultOpen>
+        <PopoverTrigger>
+          <Button variant="ghost">Details</Button>
+        </PopoverTrigger>
+        <PopoverContent>Scroll with the page</PopoverContent>
+      </Popover>
+    );
+
+    const trigger = document.querySelector("button") as HTMLButtonElement;
+    trigger.getBoundingClientRect = () =>
+      ({
+        ...rect,
+        top,
+        bottom: top + 40,
+        y: top
+      }) as DOMRect;
+
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+
+    const content = document.body.querySelector(".ss-popover__content") as HTMLElement;
+    expect(content).not.toBeNull();
+    expect(content.style.top).toBe("168px");
+
+    top = 200;
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+
+    expect(content.style.top).toBe("248px");
   });
 });
 
@@ -974,5 +1170,425 @@ describe("Icon", () => {
     expect(container.querySelector(".ss-icon")?.getAttribute("role")).toBe("img");
     expect(container.querySelector(".ss-icon")?.getAttribute("aria-label")).toBe("Favorite");
     expect(container.querySelector("[data-testid='custom-glyph']")?.getAttribute("aria-hidden")).toBe("true");
+  });
+});
+
+describe("Tabs quality", () => {
+  it("auto-selects the first tab when no default value is provided", () => {
+    const container = render(
+      <Tabs>
+        <TabsList>
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>
+    );
+
+    const triggers = container.querySelectorAll('[role="tab"]');
+    expect(triggers[0]?.getAttribute("aria-selected")).toBe("true");
+    expect(triggers[0]?.getAttribute("tabindex")).toBe("0");
+  });
+
+  it("keeps force-mounted panel content in the DOM when hidden", () => {
+    const container = render(
+      <Tabs defaultValue="a">
+        <TabsList>
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b" forceMount>
+          <input defaultValue="persisted" />
+        </TabsContent>
+      </Tabs>
+    );
+
+    expect(container.querySelector('[role="tabpanel"][hidden] input')).not.toBeNull();
+  });
+
+  it("falls back to the first enabled tab when controlled value is invalid", () => {
+    const container = render(
+      <Tabs value="missing">
+        <TabsList>
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>
+    );
+
+    act(() => {});
+
+    expect(container.querySelector('[role="tab"][aria-selected="true"]')?.textContent).toBe("A");
+    expect(container.querySelector('[role="tabpanel"]:not([hidden])')?.textContent).toBe("Panel A");
+  });
+});
+
+describe("Accessibility quality", () => {
+  it("exposes default accessible names on overlay close buttons", () => {
+    render(
+      <>
+        <Dialog defaultOpen>
+          <DialogContent aria-label="Settings">
+            <DialogClose />
+          </DialogContent>
+        </Dialog>
+        <Drawer defaultOpen>
+          <DrawerContent aria-label="Filters">
+            <DrawerClose />
+          </DrawerContent>
+        </Drawer>
+        <Popover defaultOpen>
+          <PopoverTrigger>
+            <Button variant="secondary">Open</Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverClose />
+          </PopoverContent>
+        </Popover>
+      </>
+    );
+
+    const closeButtons = document.querySelectorAll(
+      ".ss-dialog__close, .ss-drawer__close, .ss-popover__close"
+    );
+    expect(closeButtons.length).toBeGreaterThanOrEqual(3);
+    for (const button of closeButtons) {
+      expect(button.getAttribute("aria-label")).toBe("Close");
+    }
+  });
+
+  it("shows tooltip content for disabled triggers via the focusable wrapper", () => {
+    const container = render(
+      <Tooltip content="Unavailable while syncing">
+        <Button disabled>Sync</Button>
+      </Tooltip>
+    );
+
+    const wrapper = container.querySelector(".ss-tooltip__trigger-wrap");
+    expect(wrapper).not.toBeNull();
+    expect(container.querySelector("button")?.disabled).toBe(true);
+
+    act(() => {
+      wrapper?.focus();
+    });
+
+    expect(container.querySelector('[role="tooltip"]')?.textContent).toBe(
+      "Unavailable while syncing"
+    );
+  });
+
+  it("auto-selects the first enabled tab when the first trigger is disabled", () => {
+    const container = render(
+      <Tabs>
+        <TabsList>
+          <TabsTrigger value="disabled" disabled>
+            Disabled
+          </TabsTrigger>
+          <TabsTrigger value="enabled">Enabled</TabsTrigger>
+        </TabsList>
+        <TabsContent value="disabled">Disabled panel</TabsContent>
+        <TabsContent value="enabled">Enabled panel</TabsContent>
+      </Tabs>
+    );
+
+    const enabledTrigger = container.querySelector('[role="tab"][aria-selected="true"]');
+    expect(enabledTrigger?.textContent).toBe("Enabled");
+  });
+
+  it("marks pagination previous as unavailable on the first page", () => {
+    const container = render(
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious disabled />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              1
+            </PaginationLink>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+
+    const previous = container.querySelector(".ss-pagination__previous");
+    expect(previous?.tagName).toBe("SPAN");
+    expect(previous?.getAttribute("aria-disabled")).toBe("true");
+    expect(previous?.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("renders vertical dividers as separators", () => {
+    const container = render(<Divider orientation="vertical" data-testid="divider" />);
+
+    const divider = container.querySelector('[data-testid="divider"]');
+    expect(divider?.getAttribute("role")).toBe("separator");
+    expect(divider?.getAttribute("aria-orientation")).toBe("vertical");
+  });
+
+  it("exposes chart values through an optional data table", () => {
+    const container = render(
+      <BarChart
+        data={[
+          { label: "Alpha", value: 4 },
+          { label: "Beta", value: 7 }
+        ]}
+        dataTable
+      />
+    );
+
+    const table = container.querySelector(".ss-chart__data-table");
+    expect(table).not.toBeNull();
+    expect(table?.textContent).toContain("Alpha");
+    expect(table?.textContent).toContain("7");
+  });
+
+  it("marks background content inert while a dialog is open", () => {
+    const background = document.createElement("main");
+    background.textContent = "Background content";
+    document.body.appendChild(background);
+
+    render(
+      <Dialog defaultOpen>
+        <DialogContent aria-label="Confirm">
+          <DialogTitle>Confirm</DialogTitle>
+        </DialogContent>
+      </Dialog>
+    );
+
+    act(() => {});
+
+    expect(background.getAttribute("aria-hidden")).toBe("true");
+    expect(document.querySelector("[data-ss-portal-root]")?.getAttribute("aria-hidden")).toBeNull();
+  });
+});
+
+describe("Toast quality", () => {
+  it("uses polite viewport live region and alert role on destructive toasts", () => {
+    function Demo() {
+      const { toast } = useToast();
+      return (
+        <Button
+          onClick={() =>
+            toast({ title: "Failed", description: "Try again", variant: "destructive" })
+          }
+        >
+          Notify
+        </Button>
+      );
+    }
+
+    const container = render(
+      <ToastProvider>
+        <Demo />
+      </ToastProvider>
+    );
+
+    act(() => {
+      container.querySelector("button")?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(document.body.querySelector(".ss-toast-viewport")?.getAttribute("aria-live")).toBe(
+      "polite"
+    );
+    expect(document.body.querySelector(".ss-toast--destructive")?.getAttribute("role")).toBe(
+      "alert"
+    );
+  });
+});
+
+describe("Tooltip quality", () => {
+  it("forwards refs to the trigger element", () => {
+    const ref = createRef<HTMLButtonElement>();
+    render(
+      <Tooltip content="Help">
+        <Button ref={ref}>Help</Button>
+      </Tooltip>
+    );
+
+    expect(ref.current?.tagName).toBe("BUTTON");
+  });
+});
+
+describe("Label quality", () => {
+  it("propagates required state to wrapped Radio controls", () => {
+    const container = render(
+      <Label required>
+        <Radio name="plan" value="pro" label="Pro" />
+      </Label>
+    );
+
+    const input = container.querySelector('input[type="radio"]') as HTMLInputElement;
+    expect(input.required).toBe(true);
+    expect(input.getAttribute("aria-required")).toBe("true");
+  });
+});
+
+describe("Charts", () => {
+  it("renders sparkline and bar chart semantics", () => {
+    const container = render(
+      <div>
+        <Sparkline data={[1, 3, 2, 5, 4]} label="Weekly trend" />
+        <BarChart data={[{ label: "A", value: 4 }, { label: "B", value: 7 }]} label="Usage" />
+      </div>
+    );
+
+    expect(container.querySelector(".ss-sparkline")?.getAttribute("aria-label")).toBe("Weekly trend");
+    expect(container.querySelector(".ss-bar-chart")?.getAttribute("aria-label")).toBe("Usage");
+  });
+
+  it("describes flat sparklines when values are unchanged", () => {
+    const container = render(<Sparkline data={[5, 5, 5, 5]} />);
+
+    expect(container.querySelector(".ss-sparkline")?.getAttribute("aria-label")).toBe(
+      "Sparkline chart trending flat"
+    );
+  });
+
+  it("renders line and donut charts", () => {
+    const container = render(
+      <div>
+        <LineChart data={[2, 4, 3, 6, 5]} />
+        <DonutChart value={72} />
+      </div>
+    );
+
+    expect(container.querySelector(".ss-line-chart")).not.toBeNull();
+    expect(container.querySelector(".ss-donut-chart")?.getAttribute("aria-label")).toContain("72");
+  });
+
+  it("applies muted tone classes to line and donut charts", () => {
+    const container = render(
+      <div>
+        <LineChart data={[2, 4, 3, 6, 5]} tone="muted" />
+        <DonutChart value={40} tone="muted" />
+      </div>
+    );
+
+    expect(container.querySelector(".ss-line-chart--muted")).not.toBeNull();
+    expect(container.querySelector(".ss-donut-chart--muted")).not.toBeNull();
+  });
+
+  it("uses stable keys for duplicate bar labels", () => {
+    const container = render(
+      <BarChart
+        data={[
+          { label: "A", value: 4 },
+          { label: "A", value: 7 }
+        ]}
+      />
+    );
+
+    expect(container.querySelectorAll(".ss-bar-chart__item")).toHaveLength(2);
+  });
+});
+
+describe("KPI cards", () => {
+  it("composes KPI card parts with a chart slot", () => {
+    const container = render(
+      <KpiCard variant="primary">
+        <KpiCardHeader>
+          <KpiCardTitle>Revenue</KpiCardTitle>
+          <KpiCardTrend trend="up">+8%</KpiCardTrend>
+        </KpiCardHeader>
+        <KpiCardValue>$12,400</KpiCardValue>
+        <KpiCardChart>
+          <Sparkline data={[1, 2, 4, 3, 6]} />
+        </KpiCardChart>
+      </KpiCard>
+    );
+
+    expect(container.querySelector(".ss-kpi-card--primary")).not.toBeNull();
+    expect(container.querySelector(".ss-kpi-card__value")?.textContent).toBe("$12,400");
+    expect(container.querySelector(".ss-kpi-card__chart .ss-sparkline")).not.toBeNull();
+  });
+
+  it("omits the default variant modifier class", () => {
+    const container = render(<KpiCard>Metric</KpiCard>);
+
+    expect(container.querySelector(".ss-kpi-card")).not.toBeNull();
+    expect(container.querySelector(".ss-kpi-card--default")).toBeNull();
+  });
+});
+
+describe("Layout", () => {
+  it("renders flex layout primitives with gap utilities", () => {
+    const container = render(
+      <Stack gap="md" data-testid="stack">
+        <Row gap="sm" data-testid="row">
+          <Box grow>One</Box>
+          <Box grow>Two</Box>
+        </Row>
+      </Stack>
+    );
+
+    expect(container.querySelector('[data-testid="stack"]')?.classList.contains("ss-box--gap-md")).toBe(true);
+    expect(container.querySelector('[data-testid="row"]')?.classList.contains("ss-box--gap-sm")).toBe(true);
+  });
+});
+
+describe("Page shell", () => {
+  it("renders page header and top bar structure", () => {
+    const container = render(
+      <div>
+        <TopBar>
+          <TopBarBrand>Acme</TopBarBrand>
+        </TopBar>
+        <PageHeader title="Dashboard" description="Overview">
+          <Button variant="primary">Create</Button>
+        </PageHeader>
+        <SidebarNavItem href="#" active>
+          Home
+        </SidebarNavItem>
+      </div>
+    );
+
+    expect(container.querySelector(".ss-page-header__title")?.textContent).toBe("Dashboard");
+    expect(container.querySelector(".ss-top-bar__brand")?.textContent).toBe("Acme");
+    expect(container.querySelector(".ss-sidebar__link--active")?.getAttribute("aria-current")).toBe("page");
+  });
+
+  it("opens mobile navigation from the hamburger menu", () => {
+    render(
+      <HamburgerMenu title="Navigation">
+        <SidebarNavItem href="#">Home</SidebarNavItem>
+        <SidebarNavItem href="#">Settings</SidebarNavItem>
+      </HamburgerMenu>
+    );
+
+    const trigger = document.querySelector(".ss-hamburger-menu__trigger") as HTMLButtonElement;
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(document.body.querySelector(".ss-hamburger-menu__panel")).not.toBeNull();
+  });
+});
+
+describe("Production CSS hygiene", () => {
+  it("does not ship demo-only modifier classes", () => {
+    const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
+    expect(css.includes("--demo")).toBe(false);
+  });
+
+  it("does not ship hardcoded success greens or literal white color mixes", () => {
+    const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
+    expect(css.includes("#15803d")).toBe(false);
+    expect(css.includes(", white)")).toBe(false);
+    expect(css).toContain("var(--ss-color-background)");
+    expect(css.includes("ss-kpi-card__trend--up")).toBe(true);
+    expect(css).toContain("var(--ss-color-success)");
+    expect(css).toContain(".ss-line-chart--muted");
+    expect(css).toContain(".ss-donut-chart--muted");
+  });
+
+  it("uses monospace tokens for KPI values and alert code", () => {
+    const css = readFileSync(resolve(process.cwd(), "packages/react/src/styles.css"), "utf8");
+    expect(css).toMatch(/\.ss-kpi-card__value[\s\S]*var\(--ss-font-mono/);
+    expect(css).toMatch(/\.ss-alert__body code[\s\S]*var\(--ss-font-mono/);
+    expect(css).toMatch(/\.ss-table__cell\[data-numeric="true"\][\s\S]*var\(--ss-font-mono/);
   });
 });

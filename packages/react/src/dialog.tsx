@@ -1,6 +1,7 @@
 import * as React from "react";
-import { OverlayPortal, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
-import { classes, mergeHandlers } from "./utils.js";
+import { OverlayClose } from "./overlay-close.js";
+import { OverlayPortal, useBackgroundInert, useBodyScrollLock, useFocusTrap } from "./overlay-utils.js";
+import { classes, composeRefs, mergeHandlers } from "./utils.js";
 
 interface DialogContextValue {
   open: boolean;
@@ -8,6 +9,12 @@ interface DialogContextValue {
   contentId: string;
   titleId: string;
   descriptionId: string;
+  hasTitle: boolean;
+  hasDescription: boolean;
+  registerTitle: () => void;
+  unregisterTitle: () => void;
+  registerDescription: () => void;
+  unregisterDescription: () => void;
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -39,7 +46,14 @@ export function Dialog({
   const baseId = React.useId();
   const triggerRef = React.useRef<HTMLElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const [hasTitle, setHasTitle] = React.useState(false);
+  const [hasDescription, setHasDescription] = React.useState(false);
   const open = openProp ?? uncontrolledOpen;
+
+  const registerTitle = React.useCallback(() => setHasTitle(true), []);
+  const unregisterTitle = React.useCallback(() => setHasTitle(false), []);
+  const registerDescription = React.useCallback(() => setHasDescription(true), []);
+  const unregisterDescription = React.useCallback(() => setHasDescription(false), []);
 
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -61,6 +75,12 @@ export function Dialog({
         contentId: `${baseId}-content`,
         titleId: `${baseId}-title`,
         descriptionId: `${baseId}-description`,
+        hasTitle,
+        hasDescription,
+        registerTitle,
+        unregisterTitle,
+        registerDescription,
+        unregisterDescription,
         triggerRef,
         contentRef
       }}
@@ -79,16 +99,11 @@ export function DialogTrigger({ children }: DialogTriggerProps) {
   const child = React.Children.only(children);
   const childProps = child.props as React.HTMLAttributes<HTMLElement>;
 
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+
   return React.cloneElement(child, {
     ...childProps,
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node;
-      const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
-      }
-    },
+    ref: composeRefs(childRef, triggerRef),
     "aria-haspopup": "dialog",
     "aria-expanded": open,
     "aria-controls": open ? contentId : undefined,
@@ -111,12 +126,23 @@ export function DialogContent({
   className,
   children,
   onKeyDown,
+  "aria-label": ariaLabel,
   ...props
 }: DialogContentProps) {
-  const { open, setOpen, contentId, titleId, descriptionId, triggerRef, contentRef } =
+  const { open, setOpen, contentId, titleId, descriptionId, hasTitle, hasDescription, triggerRef, contentRef } =
     useDialogContext("DialogContent");
 
   useFocusTrap(contentRef, open, triggerRef);
+  useBackgroundInert(open);
+
+  React.useEffect(() => {
+    if (!open || process.env.NODE_ENV === "production") return;
+    if (!hasTitle && !ariaLabel) {
+      console.warn(
+        "[Super System Dialog] DialogContent should include DialogTitle or an aria-label for accessibility."
+      );
+    }
+  }, [ariaLabel, hasTitle, open]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -154,8 +180,9 @@ export function DialogContent({
           id={contentId}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
+          aria-labelledby={hasTitle ? titleId : undefined}
+          aria-describedby={hasDescription ? descriptionId : undefined}
+          aria-label={!hasTitle ? ariaLabel : undefined}
           tabIndex={-1}
           className={classes("ss-dialog__content", className)}
           onKeyDown={handleContentKeyDown}
@@ -177,14 +204,27 @@ export function DialogHeader({ className, ...props }: DialogHeaderProps) {
 export interface DialogTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
 
 export function DialogTitle({ className, ...props }: DialogTitleProps) {
-  const { titleId } = useDialogContext("DialogTitle");
+  const { titleId, registerTitle, unregisterTitle } = useDialogContext("DialogTitle");
+
+  React.useLayoutEffect(() => {
+    registerTitle();
+    return unregisterTitle;
+  }, [registerTitle, unregisterTitle]);
+
   return <h2 id={titleId} className={classes("ss-dialog__title", className)} {...props} />;
 }
 
 export interface DialogDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 export function DialogDescription({ className, ...props }: DialogDescriptionProps) {
-  const { descriptionId } = useDialogContext("DialogDescription");
+  const { descriptionId, registerDescription, unregisterDescription } =
+    useDialogContext("DialogDescription");
+
+  React.useLayoutEffect(() => {
+    registerDescription();
+    return unregisterDescription;
+  }, [registerDescription, unregisterDescription]);
+
   return <p id={descriptionId} className={classes("ss-dialog__description", className)} {...props} />;
 }
 
@@ -203,16 +243,15 @@ export function DialogFooter({ className, ...props }: DialogFooterProps) {
 export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
 
 export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
-  function DialogClose({ className, onClick, ...props }, ref) {
+  function DialogClose({ className, ...props }, ref) {
     const { setOpen } = useDialogContext("DialogClose");
 
     return (
-      <button
+      <OverlayClose
         ref={ref}
-        type="button"
-        className={classes("ss-dialog__close", className)}
-        onClick={mergeHandlers(onClick, () => setOpen(false))}
         {...props}
+        className={classes("ss-dialog__close", className)}
+        onClose={() => setOpen(false)}
       />
     );
   }

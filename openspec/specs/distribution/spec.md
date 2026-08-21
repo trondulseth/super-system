@@ -15,7 +15,7 @@ The project SHALL publish separate public packages for framework-independent tok
 - **THEN** React is not required to compile or consume the token output
 
 ### Requirement: Beta release availability
-The packages `@super-system/tokens`, `@super-system/react`, and `@super-system/cli` SHALL be publicly available at version `0.1.0-beta.1` under the npm beta distribution tag.
+The packages `@super-system/tokens`, `@super-system/react`, and `@super-system/cli` SHALL be publicly available at version `0.1.0-beta.2` under the npm beta distribution tag.
 
 #### Scenario: A user installs the beta CLI
 - **GIVEN** access to the public npm registry

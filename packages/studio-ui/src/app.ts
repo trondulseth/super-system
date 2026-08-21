@@ -1,21 +1,14 @@
 import type { SuperSystemConfig } from "@super-system/tokens";
 import { updatePreviewTheme } from "./preview-theme.js";
+import {
+  applyConfigToForm,
+  FORM_COLOR_IDS,
+  readConfigFromForm,
+  syncColorPickerFromHex,
+  syncHexFromColorPicker,
+  validateStudioForm
+} from "./studio-form.js";
 import type { StudioBackend, StudioOptions } from "./types.js";
-
-const colorIds = [
-  "primary",
-  "primaryForeground",
-  "background",
-  "foreground",
-  "secondary",
-  "secondaryForeground",
-  "muted",
-  "mutedForeground",
-  "border",
-  "destructive",
-  "destructiveForeground",
-  "focus"
-] as const;
 
 function $(id: string): HTMLElement {
   const element = document.getElementById(id);
@@ -36,6 +29,10 @@ function esc(value: string): string {
   });
 }
 
+function formatModeDefault(mode: SuperSystemConfig["mode"]["default"]): string {
+  return mode.charAt(0).toUpperCase() + mode.slice(1);
+}
+
 export async function initStudio(backend: StudioBackend, options: StudioOptions = {}): Promise<void> {
   let config: SuperSystemConfig;
   let preview: "light" | "dark" = "light";
@@ -45,6 +42,8 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   const status = $("status");
   const checks = $("checks");
   const demoBanner = $("demo-banner");
+  const editingTheme = $("editing-theme");
+  const modeDefaultBadge = $("mode-default-badge");
 
   saveButton.textContent = options.saveLabel ?? "Save theme";
   if (options.demoBanner) {
@@ -53,38 +52,13 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   }
 
   function fill(): void {
-    const theme = config.themes[preview];
-    colorIds.forEach((id) => {
-      (document.getElementById(id) as HTMLInputElement).value = theme[id];
-    });
-    (document.getElementById("fontSans") as HTMLInputElement).value = config.typography.fontSans;
-    (document.getElementById("baseSize") as HTMLInputElement).value = config.typography.baseSize;
-    (document.getElementById("radiusMd") as HTMLInputElement).value = config.radius.md;
-    (document.getElementById("density") as HTMLSelectElement).value = config.spacing.density;
-    (document.getElementById("icons") as HTMLSelectElement).value = config.icons.library;
-    (document.getElementById("contrast") as HTMLSelectElement).value = config.accessibility.contrast;
-    (document.getElementById("target") as HTMLInputElement).value = String(
-      config.accessibility.minimumTargetSize
-    );
+    applyConfigToForm(config, preview);
+    editingTheme.textContent = `Editing: ${preview === "light" ? "Light" : "Dark"} theme`;
+    modeDefaultBadge.textContent = `Default mode: ${formatModeDefault(config.mode.default)}`;
   }
 
   function collect(): void {
-    const theme = config.themes[preview];
-    colorIds.forEach((id) => {
-      theme[id] = (document.getElementById(id) as HTMLInputElement).value;
-    });
-    config.typography.fontSans = (document.getElementById("fontSans") as HTMLInputElement).value;
-    config.typography.baseSize = (document.getElementById("baseSize") as HTMLInputElement).value;
-    config.radius.md = (document.getElementById("radiusMd") as HTMLInputElement).value;
-    config.spacing.density = (document.getElementById("density") as HTMLSelectElement)
-      .value as SuperSystemConfig["spacing"]["density"];
-    config.icons.library = (document.getElementById("icons") as HTMLSelectElement)
-      .value as SuperSystemConfig["icons"]["library"];
-    config.accessibility.contrast = (document.getElementById("contrast") as HTMLSelectElement)
-      .value as SuperSystemConfig["accessibility"]["contrast"];
-    config.accessibility.minimumTargetSize = Number(
-      (document.getElementById("target") as HTMLInputElement).value
-    );
+    config = readConfigFromForm(config, preview);
   }
 
   async function render(): Promise<void> {
@@ -92,12 +66,21 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
     updatePreviewTheme(config, preview);
 
     const results = await backend.checkContrast(config);
-    checks.innerHTML = results
-      .filter((result) => result.theme === preview)
-      .map(
-        (result) =>
-          `<div class="check"><span>${esc(result.pair)}</span><span class="${result.passes ? "pass" : "fail"}">${result.ratio}:1 ${result.passes ? "Pass" : "Fail"}</span></div>`
-      )
+    checks.innerHTML = (["light", "dark"] as const)
+      .map((theme) => {
+        const heading =
+          theme === preview
+            ? `<h3 class="checks-theme checks-theme--active">${esc(theme)} theme · editing</h3>`
+            : `<h3 class="checks-theme">${esc(theme)} theme</h3>`;
+        const rows = results
+          .filter((result) => result.theme === theme)
+          .map(
+            (result) =>
+              `<div class="check"><span>${esc(result.pair)}</span><span class="${result.passes ? "pass" : "fail"}">${result.ratio}:1 ${result.passes ? "Pass" : "Fail"}</span></div>`
+          )
+          .join("");
+        return `${heading}${rows}`;
+      })
       .join("");
   }
 
@@ -109,7 +92,32 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
     element.addEventListener("input", () => {
       void render();
     });
+    element.addEventListener("change", () => {
+      void render();
+    });
   });
+
+  for (const id of FORM_COLOR_IDS) {
+    const picker = document.getElementById(id) as HTMLInputElement | null;
+    const hex = document.getElementById(`${id}Hex`) as HTMLInputElement | null;
+    if (!picker || !hex) continue;
+
+    picker.addEventListener("input", () => {
+      syncHexFromColorPicker(id);
+      void render();
+    });
+
+    hex.addEventListener("input", () => {
+      if (syncColorPickerFromHex(id)) {
+        void render();
+      }
+    });
+
+    hex.addEventListener("change", () => {
+      syncColorPickerFromHex(id);
+      void render();
+    });
+  }
 
   toggleButton.addEventListener("click", () => {
     collect();
@@ -122,6 +130,12 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   saveButton.addEventListener("click", () => {
     void (async () => {
       collect();
+      const validationError = validateStudioForm();
+      if (validationError) {
+        status.textContent = validationError;
+        return;
+      }
+
       const result = await backend.saveConfig(config);
       status.textContent = result.message;
       setTimeout(() => {
