@@ -1,4 +1,13 @@
 import type { MigrationPlanItem } from "./migration.js";
+import {
+  canTransformNativeInput,
+  canTransformNativeSelect,
+  canTransformNativeTextarea,
+  replaceNativeInput,
+  replaceNativeSelect,
+  replaceNativeTextarea
+} from "./migration-form-controls.js";
+import { finalizeComponentImports } from "./migration-imports.js";
 import { applyColorTokenReplacements } from "./migration-tokens.js";
 
 export interface TransformResult {
@@ -17,6 +26,27 @@ function joinLines(lines: string[], eol: "\n" | "\r\n"): string {
   return lines.join(eol);
 }
 
+function replaceLine(
+  content: string,
+  item: MigrationPlanItem,
+  replace: (line: string) => string,
+  description: string
+): TransformResult | null {
+  const { eol, lines } = splitLines(content);
+  const index = item.line - 1;
+  const line = lines[index];
+  if (!line) return null;
+
+  const updated = replace(line);
+  if (updated === line) return null;
+
+  lines[index] = updated;
+  return {
+    content: joinLines(lines, eol),
+    description
+  };
+}
+
 export function transformImgAddAlt(content: string, item: MigrationPlanItem): TransformResult | null {
   const { eol, lines } = splitLines(content);
   const index = item.line - 1;
@@ -33,42 +63,43 @@ export function transformImgAddAlt(content: string, item: MigrationPlanItem): Tr
   };
 }
 
-function ensureButtonImport(content: string): string {
-  if (/import\s+\{[^}]*\bButton\b[^}]*\}\s+from\s+["']@super-system\/react["']/.test(content)) {
-    return content;
-  }
-
-  const existing = content.match(/import\s+\{([^}]+)\}\s+from\s+["']@super-system\/react["']/);
-  if (existing?.[1]) {
-    const names = existing[1]
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean);
-    if (!names.includes("Button")) names.push("Button");
-    return content.replace(existing[0], `import { ${names.join(", ")} } from "@super-system/react"`);
-  }
-
-  const { eol, lines } = splitLines(content);
-  const useDirective = lines[0]?.match(/^["']use (?:client|server)["'];?$/);
-  const insertAt = useDirective ? 1 : 0;
-  lines.splice(insertAt, 0, 'import { Button } from "@super-system/react";');
-  return joinLines(lines, eol);
+export function transformNativeButtonToButton(content: string, item: MigrationPlanItem): TransformResult | null {
+  return replaceLine(
+    content,
+    item,
+    (line) => {
+      if (!/<button\b/i.test(line) || /<Button\b/.test(line)) return line;
+      return line.replace(/<button\b/gi, "<Button").replace(/<\/button>/gi, "</Button>");
+    },
+    "Replaced native <button> with <Button>"
+  );
 }
 
-export function transformNativeButtonToButton(content: string, item: MigrationPlanItem): TransformResult | null {
-  const { eol, lines } = splitLines(content);
-  const index = item.line - 1;
-  const line = lines[index];
-  if (!line || !/<button\b/i.test(line) || /<Button\b/.test(line)) return null;
+export function transformNativeInputToInput(content: string, item: MigrationPlanItem): TransformResult | null {
+  return replaceLine(
+    content,
+    item,
+    (line) => (canTransformNativeInput(line) ? replaceNativeInput(line) : line),
+    "Replaced native <input> with <Input>"
+  );
+}
 
-  const updated = line.replace(/<button\b/gi, "<Button").replace(/<\/button>/gi, "</Button>");
-  if (updated === line) return null;
+export function transformNativeTextareaToTextarea(content: string, item: MigrationPlanItem): TransformResult | null {
+  return replaceLine(
+    content,
+    item,
+    (line) => (canTransformNativeTextarea(line) ? replaceNativeTextarea(line) : line),
+    "Replaced native <textarea> with <Textarea>"
+  );
+}
 
-  lines[index] = updated;
-  return {
-    content: joinLines(lines, eol),
-    description: "Replaced native <button> with <Button>"
-  };
+export function transformNativeSelectToSelect(content: string, item: MigrationPlanItem): TransformResult | null {
+  return replaceLine(
+    content,
+    item,
+    (line) => (canTransformNativeSelect(line) ? replaceNativeSelect(line) : line),
+    "Replaced native <select> with <Select>"
+  );
 }
 
 export function transformTokenReplaceColor(content: string, item: MigrationPlanItem): TransformResult | null {
@@ -90,13 +121,18 @@ export function transformTokenReplaceColor(content: string, item: MigrationPlanI
 }
 
 export function finalizeButtonImport(content: string): string {
-  return ensureButtonImport(content);
+  return finalizeComponentImports(content, ["Button"]);
 }
+
+export { finalizeComponentImports };
 
 export const transforms: Record<string, TransformFn> = {
   "img-add-alt": transformImgAddAlt,
   "token-replace-color": transformTokenReplaceColor,
-  "native-button-to-button": transformNativeButtonToButton
+  "native-button-to-button": transformNativeButtonToButton,
+  "native-input-to-input": transformNativeInputToInput,
+  "native-textarea-to-textarea": transformNativeTextareaToTextarea,
+  "native-select-to-select": transformNativeSelectToSelect
 };
 
 export function applyTransform(
@@ -106,3 +142,9 @@ export function applyTransform(
 ): TransformResult | null {
   return transforms[transformId]?.(content, item) ?? null;
 }
+
+export {
+  canTransformNativeInput,
+  canTransformNativeSelect,
+  canTransformNativeTextarea
+} from "./migration-form-controls.js";

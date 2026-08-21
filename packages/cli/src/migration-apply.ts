@@ -2,7 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { assertSafeToWrite } from "./git-worktree.js";
 import { createMigrationPlan, type MigrationPlanItem } from "./migration.js";
-import { applyTransform, finalizeButtonImport } from "./migration-transforms.js";
+import { applyTransform, finalizeComponentImports } from "./migration-transforms.js";
+import { transformComponentImports } from "./migration-imports.js";
 
 export interface AppliedTransform {
   id: string;
@@ -95,20 +96,21 @@ async function applyAutoTransformsToFile(
 
   const ordered = [...items].sort((left, right) => {
     const order = (item: MigrationPlanItem) => {
-      if (item.transformId === "native-button-to-button") return 2;
+      if (item.transformId && transformComponentImports[item.transformId]) return 2;
       if (item.transformId === "token-replace-color") return 1;
       return 0;
     };
     return order(left) - order(right) || left.line - right.line;
   });
 
-  let buttonReplaced = false;
+  const componentsToImport = new Set<string>();
   for (const item of ordered) {
     if (item.mode !== "auto" || !item.transformId) continue;
     const result = applyTransform(item.transformId, content, item);
     if (!result) continue;
     content = result.content;
-    if (item.transformId === "native-button-to-button") buttonReplaced = true;
+    const component = transformComponentImports[item.transformId];
+    if (component) componentsToImport.add(component);
     applied.push({
       id: item.id,
       transformId: item.transformId,
@@ -118,16 +120,16 @@ async function applyAutoTransformsToFile(
     });
   }
 
-  if (buttonReplaced) {
-    const withImport = finalizeButtonImport(content);
-    if (withImport !== content) {
-      content = withImport;
+  if (componentsToImport.size > 0) {
+    const withImports = finalizeComponentImports(content, [...componentsToImport]);
+    if (withImports !== content) {
+      content = withImports;
       applied.push({
-        id: `${file}:import:button`,
-        transformId: "native-button-to-button",
+        id: `${file}:import:components`,
+        transformId: "component-import",
         file,
         line: 1,
-        description: "Added Button import from @super-system/react"
+        description: `Added ${[...componentsToImport].sort().join(", ")} import from @super-system/react`
       });
     }
   }

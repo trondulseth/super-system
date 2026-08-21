@@ -25,11 +25,30 @@ export const migrationRules: MigrationRuleDefinition[] = [
   },
   {
     rule: "raw-input",
-    pattern: /<(input|select|textarea)\b/i,
-    message: "Use a shared form component where possible.",
+    pattern: /<input\b/i,
+    message: "Use the shared Input component for text-like controls.",
     confidence: "low",
     mode: "manual",
-    plannedAction: "Review the control and map it to Input, Select, Textarea, Checkbox, Switch, or Radio."
+    plannedAction: "Replace native <input> with <Input> when the control is a standard text-like field.",
+    assumption: "Checkbox, radio, file, hidden, and submit inputs need different Super System components."
+  },
+  {
+    rule: "raw-textarea",
+    pattern: /<textarea\b/i,
+    message: "Use the shared Textarea component.",
+    confidence: "medium",
+    mode: "manual",
+    plannedAction: "Replace native <textarea> with <Textarea> from @super-system/react.",
+    assumption: "The control is a standard textarea without custom non-DOM behavior."
+  },
+  {
+    rule: "raw-select",
+    pattern: /<select\b/i,
+    message: "Use the shared Select component.",
+    confidence: "medium",
+    mode: "manual",
+    plannedAction: "Replace native <select> with <Select> from @super-system/react.",
+    assumption: "The control is a standard select without custom non-DOM behavior."
   },
   {
     rule: "hardcoded-color",
