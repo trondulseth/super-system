@@ -10,8 +10,19 @@ describe("theme tokens", () => {
     expect(css).toContain("prefers-reduced-motion");
   });
 
-  it("passes every default contrast pair", () => {
-    expect(checkThemeContrast(defaultTheme).every((result) => result.passes)).toBe(true);
+  it("passes every default text and semantic contrast pair", () => {
+    const results = checkThemeContrast(defaultTheme).filter(
+      (result) => result.pair !== "border/background"
+    );
+    expect(results.every((result) => result.passes)).toBe(true);
+  });
+
+  it("checks border/background at the UI component contrast threshold", () => {
+    const borderResults = checkThemeContrast(defaultTheme).filter(
+      (result) => result.pair === "border/background"
+    );
+    expect(borderResults).toHaveLength(2);
+    expect(borderResults.every((result) => result.required === 3)).toBe(true);
   });
 
   it("uses distinct secondary, muted, focus, and primary values in defaults", () => {

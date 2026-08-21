@@ -19,28 +19,117 @@
     </header>
     <main>
       <aside>
+        <p id="editing-theme" class="editing-theme">Editing: Light theme</p>
         <h2>Brand</h2>
-        <label>Primary color<input id="primary" type="color" /></label>
-        <label>Primary text<input id="primaryForeground" type="color" /></label>
+        <label class="color-field">
+          Primary color
+          <div class="color-input-row">
+            <input id="primary" type="color" />
+            <input id="primaryHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
+        <label class="color-field">
+          Primary text
+          <div class="color-input-row">
+            <input id="primaryForeground" type="color" />
+            <input id="primaryForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <div class="row">
-          <label>Background<input id="background" type="color" /></label>
-          <label>Text<input id="foreground" type="color" /></label>
+          <label class="color-field">
+            Background
+            <div class="color-input-row">
+              <input id="background" type="color" />
+              <input id="backgroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Text
+            <div class="color-input-row">
+              <input id="foreground" type="color" />
+              <input id="foregroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
         <div class="row">
-          <label>Secondary<input id="secondary" type="color" /></label>
-          <label>Secondary text<input id="secondaryForeground" type="color" /></label>
+          <label class="color-field">
+            Secondary
+            <div class="color-input-row">
+              <input id="secondary" type="color" />
+              <input id="secondaryHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Secondary text
+            <div class="color-input-row">
+              <input id="secondaryForeground" type="color" />
+              <input id="secondaryForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
         <h2>Semantic colors</h2>
         <div class="row">
-          <label>Muted surface<input id="muted" type="color" /></label>
-          <label>Muted text<input id="mutedForeground" type="color" /></label>
+          <label class="color-field">
+            Muted surface
+            <div class="color-input-row">
+              <input id="muted" type="color" />
+              <input id="mutedHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Muted text
+            <div class="color-input-row">
+              <input id="mutedForeground" type="color" />
+              <input id="mutedForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
-        <label>Border<input id="border" type="color" /></label>
+        <label class="color-field">
+          Border
+          <div class="color-input-row">
+            <input id="border" type="color" />
+            <input id="borderHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <div class="row">
-          <label>Destructive<input id="destructive" type="color" /></label>
-          <label>Destructive text<input id="destructiveForeground" type="color" /></label>
+          <label class="color-field">
+            Destructive
+            <div class="color-input-row">
+              <input id="destructive" type="color" />
+              <input id="destructiveHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Destructive text
+            <div class="color-input-row">
+              <input id="destructiveForeground" type="color" />
+              <input id="destructiveForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
         </div>
-        <label>Focus ring<input id="focus" type="color" /></label>
+        <div class="row">
+          <label class="color-field">
+            Success
+            <div class="color-input-row">
+              <input id="success" type="color" />
+              <input id="successHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+          <label class="color-field">
+            Success text
+            <div class="color-input-row">
+              <input id="successForeground" type="color" />
+              <input id="successForegroundHex" type="text" spellcheck="false" autocomplete="off" />
+            </div>
+          </label>
+        </div>
+        <label class="color-field">
+          Focus ring
+          <div class="color-input-row">
+            <input id="focus" type="color" />
+            <input id="focusHex" type="text" spellcheck="false" autocomplete="off" />
+          </div>
+        </label>
         <h2>Typography and shape</h2>
         <label>Font family<input id="fontSans" /></label>
         <div class="row">
@@ -51,10 +140,14 @@
           <label>Small radius<input id="radiusSm" /></label>
           <label>Large radius<input id="radiusLg" /></label>
         </div>
+        <label>Pill radius<input id="radiusFull" /></label>
         <label>Line height<input id="lineHeight" type="number" min="1.1" max="2" step="0.05" /></label>
         <label>Monospace font<input id="fontMono" /></label>
         <p class="field-help">Used for KPI values, numeric table cells, and inline <code>code</code> in alerts.</p>
         <div class="row">
+          <label
+            >Spacing unit<input id="spacingUnit" type="number" min="2" max="8" step="1"
+          /></label>
           <label
             >Density<select id="density">
               <option>compact</option>
@@ -62,18 +155,18 @@
               <option>spacious</option>
             </select></label
           >
-          <label
-            >Icon library<select id="icons">
-              <option>lucide</option>
-              <option>phosphor</option>
-              <option>heroicons</option>
-              <option>custom</option>
-            </select></label
-          >
-          <p class="field-help">
-            Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
-          </p>
         </div>
+        <label
+          >Icon library<select id="icons">
+            <option>lucide</option>
+            <option>phosphor</option>
+            <option>heroicons</option>
+            <option>custom</option>
+          </select></label
+        >
+        <p class="field-help">
+          Saved to config. Run <code>npx @super-system/cli icons setup</code> for install guidance, or use <code>&lt;Icon&gt;</code> with your SVG library in app code.
+        </p>
         <h2>Accessibility</h2>
         <div class="row">
           <label
@@ -101,7 +194,10 @@
       </aside>
       <section class="preview">
         <article class="ss-card preview-theme" id="preview-root" data-theme="light">
-          <span class="ss-badge ss-badge--primary">Super powered</span>
+          <div class="preview-header">
+            <span class="ss-badge ss-badge--neutral" id="mode-default-badge">Default mode: System</span>
+            <span class="ss-badge ss-badge--primary">Super powered</span>
+          </div>
           <h3 class="preview-title">Create your account</h3>
           <p class="preview-lead">
             Every component follows the same theme, spacing, and accessibility rules.
@@ -290,6 +386,11 @@
                 <div class="ss-skeleton ss-skeleton--text ss-skeleton--short" style="margin-top: 8px"></div>
               </div>
             </div>
+          </section>
+
+          <section class="preview-section">
+            <h4 class="preview-label">Monospace</h4>
+            <p class="preview-mono">const revenue = 84250;</p>
           </section>
 
           <section class="preview-section">

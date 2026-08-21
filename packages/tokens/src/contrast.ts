@@ -24,23 +24,25 @@ export function contrastRatio(foreground: string, background: string): number | 
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 
-const pairs: Array<[string, keyof ThemeColors, keyof ThemeColors]> = [
+const pairs: Array<[string, keyof ThemeColors, keyof ThemeColors, number?]> = [
   ["foreground/background", "foreground", "background"],
   ["primary", "primaryForeground", "primary"],
   ["secondary", "secondaryForeground", "secondary"],
   ["muted", "mutedForeground", "muted"],
   ["destructive", "destructiveForeground", "destructive"],
   ["success", "successForeground", "success"],
-  ["focus/background", "focus", "background"]
+  ["focus/background", "focus", "background"],
+  ["border/background", "border", "background", 3]
 ];
 
 export function checkThemeContrast(config: SuperSystemConfig): ContrastResult[] {
-  const required = config.accessibility.contrast === "AAA" ? 7 : 4.5;
+  const defaultRequired = config.accessibility.contrast === "AAA" ? 7 : 4.5;
   return (["light", "dark"] as const).flatMap((theme) =>
-    pairs.map(([pair, foregroundKey, backgroundKey]) => {
+    pairs.map(([pair, foregroundKey, backgroundKey, pairRequired]) => {
       const foreground = config.themes[theme][foregroundKey];
       const background = config.themes[theme][backgroundKey];
       const ratio = contrastRatio(foreground, background) ?? 0;
+      const required = pairRequired ?? defaultRequired;
       return {
         theme,
         pair,
