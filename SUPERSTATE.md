@@ -5,13 +5,13 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active change:** none (polish + expand archived 2026-08-21)
+- **Active change:** library-quality-pass-2
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Optional npm publish (`0.1.0-beta.2`) and post-release hardening.
-- **Work state:** Phase 6 complete on `cursor/polish-and-dashboard-2c3d`. 84 tests, fresh-install smoke passing (Vite + Next.js), living specs synced, both OpenSpec changes archived.
-- **Recent evidence:** `react-dom` externalized from published bundle; charts/KPI/layout/page-shell shipped; overlay tokens + MIGRATION.md updated.
-- **Risks and limitations:** npm publish not run; beta tag still at `0.1.0-beta.1`.
-- **Next handoff:** Publish beta.2 on user request; consider dedicated change for release hardening or next component batch.
+- **Objective:** Execute library-quality-pass-2 — remediate all review findings to 10/10 across six dimensions.
+- **Work state:** Planning complete (proposal, design, tasks, delta specs). Implementation not started.
+- **Recent evidence:** Post–Phase 6 code review identified CSS bugs, a11y gaps, Studio controller/preview gaps.
+- **Risks and limitations:** Success token is schema addition; modal inert affects overlay behavior.
+- **Next handoff:** Start Phase 1 (visual/token consistency) on feature branch.
