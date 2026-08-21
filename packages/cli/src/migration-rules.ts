@@ -15,7 +15,7 @@ export interface MigrationRuleDefinition {
 export const migrationRules: MigrationRuleDefinition[] = [
   {
     rule: "raw-button",
-    pattern: /<button\b/i,
+    pattern: /<button\b/,
     message: "Use the shared Button component.",
     confidence: "medium",
     mode: "auto",
@@ -25,7 +25,7 @@ export const migrationRules: MigrationRuleDefinition[] = [
   },
   {
     rule: "raw-input",
-    pattern: /<input\b/i,
+    pattern: /<input\b/,
     message: "Use the shared Input component for text-like controls.",
     confidence: "low",
     mode: "manual",
@@ -34,7 +34,7 @@ export const migrationRules: MigrationRuleDefinition[] = [
   },
   {
     rule: "raw-textarea",
-    pattern: /<textarea\b/i,
+    pattern: /<textarea\b/,
     message: "Use the shared Textarea component.",
     confidence: "medium",
     mode: "manual",
@@ -43,7 +43,7 @@ export const migrationRules: MigrationRuleDefinition[] = [
   },
   {
     rule: "raw-select",
-    pattern: /<select\b/i,
+    pattern: /<select\b/,
     message: "Use the shared Select component.",
     confidence: "medium",
     mode: "manual",

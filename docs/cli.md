@@ -19,6 +19,12 @@
 | `npx @super-system/cli migrate apply --dry-run --json` | Prints the dry-run result as JSON. |
 | `npx @super-system/cli migrate apply` | Applies supported auto-fixes and writes changed files. |
 | `npx @super-system/cli migrate apply --allow-dirty` | Applies auto-fixes even when the git worktree has uncommitted changes. |
+| `npx @super-system/cli migrate apply --only <transformId>` | Applies only the listed transform(s). Repeatable. |
+| `npx @super-system/cli migrate apply --skip <transformId>` | Skips a transform. Repeatable. |
+| `npx @super-system/cli migrate apply --skip-rule <rule>` | Skips all items for an audit rule. |
+| `npx @super-system/cli migrate apply --verify` | Runs post-migration verification after writing files. |
+| `npx @super-system/cli migrate plan --out path` | Saves a resumable migration manifest. |
+| `npx @super-system/cli migrate verify` | Runs configured npm scripts plus audit. |
 | `npx @super-system/cli migrate apply --json` | Prints the apply result as JSON. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |
