@@ -20,3 +20,9 @@ Super System is a lightweight design system for React apps, built for teams ship
 | [AI coding tools](./ai-tools.md) | Project rules for Cursor, Copilot, Claude Code, and more |
 | [Troubleshooting](./troubleshooting.md) | Common fixes for styling, theme, and Studio issues |
 | [Roadmap & contributing](./roadmap.md) | Beta roadmap, OpenSpec specs, and dev setup |
+
+## Maintainer playbooks
+
+| Playbook | Description |
+| --- | --- |
+| [GitHub org migration](./playbook-github-org-migration.md) | Move the repo from `trondulseth/super-system` to `superhero-codes/super-system` |
