@@ -61,7 +61,7 @@ GitHub oppretter automatisk redirect: `trondulseth/super-system` → `superhero-
 
 > **Ikke** opprett et nytt repo og push manuelt med `--force` med mindre du bevisst vil miste issues/PRs/stjerner.
 
-### 1.2 Etter transfer — org-innstillinger
+### 1.2 Etter transfer — org-innstillinger (oversikt)
 
 På `superhero-codes/super-system`:
 
@@ -69,10 +69,202 @@ På `superhero-codes/super-system`:
 | --- | --- |
 | **Settings → General** | Beskrivelse, topics, default branch `main` |
 | **Settings → Actions → General** | Actions enabled; workflow permissions for OIDC |
-| **Settings → Environments** | Gjenopprett **`npm`** og **`github-pages`** med protection rules |
+| **Settings → Environments** | Gjenopprett **`npm`** og **`github-pages`** — [steg-for-steg nedenfor](#123-miljø-npm-steg-for-steg) |
 | **Settings → Pages** | Source: **GitHub Actions** (som i dag) |
 | **Settings → Secrets and variables** | Sjekk at ingenting mangler etter flytt |
 | **Settings → Collaborators** | Sett org-team som maintainers |
+
+> **Viktig:** Miljøene `npm` og `github-pages` **overføres ikke automatisk** med protection rules intakt. Du må opprette dem på nytt (eller rekonfigurere dem) manuelt etter transfer. Følg seksjon **1.2.1–1.2.5** — copy/paste-vennlig «for dummies»-guide.
+
+### 1.2.1 GitHub Actions — grunninnstillinger (steg for steg)
+
+Dette må gjøres **før** du tester publish eller Pages.
+
+#### A) Org-nivå (anbefalt først)
+
+1. Åpne `https://github.com/organizations/superhero-codes/settings/actions`
+2. Under **Actions permissions**:
+   - Velg **Allow all actions and reusable workflows** (eller «Allow superhero-codes, and select non-superhero-codes, actions…» hvis du vil stramme inn senere)
+3. Under **Workflow permissions**:
+   - Velg **Read and write permissions**
+   - **Kryss av** for **Allow GitHub Actions to create and approve pull requests** — *valgfritt*; ikke nødvendig for Super System
+4. Klikk **Save**
+
+#### B) Repo-nivå
+
+1. Åpne `https://github.com/superhero-codes/super-system/settings/actions`
+2. Under **Actions permissions**:
+   - Velg **Allow all actions and reusable workflows**
+3. Under **Workflow permissions**:
+   - Velg **Read and write permissions**
+4. Klikk **Save**
+
+**Hvorfor:** `publish.yml` trenger `id-token: write` (OIDC til npm). `pages.yml` trenger `pages: write` + `id-token: write`. Med kun «Read repository contents» feiler deploy/publish med permissions-feil.
+
+---
+
+### 1.2.2 Finn Environments-siden
+
+1. Gå til `https://github.com/superhero-codes/super-system`
+2. Klikk **Settings** (repo-fane, ikke org)
+3. I venstremenyen: **Environments**
+
+Du skal nå se enten en tom liste, eller miljøer uten regler. Begge deler håndteres likt: opprett på nytt eller åpne eksisterende og sett regler som beskrevet under.
+
+---
+
+### 1.2.3 Miljø: `npm` (steg for steg)
+
+**Brukes av:** workflow **Publish beta** (`.github/workflows/publish.yml`)  
+**Formål:** Publisere `@super-system/*` til npm via Trusted Publishing (OIDC — **ingen** `NPM_TOKEN` secret nødvendig)
+
+#### Steg 1 — Opprett miljøet
+
+1. På **Environments**-siden → **New environment**
+2. **Name:** skriv nøyaktig `npm` (små bokstaver — må matche `environment: npm` i workflow-filen)
+3. Klikk **Configure environment**
+
+#### Steg 2 — Deployment branches and tags (viktigste regelen)
+
+Under **Deployment branches and tags** (eller **Deployment protection rules** → **Deployment branches**):
+
+1. Velg **Selected branches and tags** (ikke «All branches» — da kan hvem som helst trigge publish fra en tilfeldig branch)
+2. Klikk **Add deployment branch or tag rule**
+3. Velg **Tags**
+4. Skriv mønster: `v0.1.0-beta.*`
+5. Lagre regelen
+
+**Resultat:** Bare tag-push som matcher `v0.1.0-beta.N` kan bruke `npm`-miljøet. Manuell **Run workflow** fra Actions fungerer fortsatt, men er fortsatt bundet til miljøreglene.
+
+> Hvis GitHub UI viser «Add rule» med regex: bruk `v0.1.0-beta.*` eller `v0.1.0-beta.**` avhengig av UI — poenget er at kun beta-tags kan publisere.
+
+#### Steg 3 — Required reviewers (valgfritt, anbefalt for team)
+
+Under **Required reviewers**:
+
+| Scenario | Anbefaling |
+| --- | --- |
+| **Kun deg (solo)** | La stå **av** — ellers må du godkjenne egne publish-kjøringer manuelt |
+| **Team / flere maintainers** | **Slå på** → legg til 1–2 personer som må godkene før npm publish |
+
+For solo: hopp over dette steget.
+
+#### Steg 4 — Wait timer
+
+La stå **av** (0 minutter). Ikke nødvendig for dette prosjektet.
+
+#### Steg 5 — Secrets og variables
+
+**Legg ikke til secrets** for npm publish — prosjektet bruker Trusted Publishing (OIDC).
+
+Sjekkliste:
+
+- [ ] **Environment secrets:** tom (ingen `NPM_TOKEN`)
+- [ ] **Environment variables:** tom
+
+Hvis du har en gammel `NPM_TOKEN` fra før OIDC: **ikke** legg den tilbake — den er unødvendig og mindre sikkert.
+
+#### Steg 6 — Lagre
+
+Klikk **Save protection rules** (eller tilsvarende knapp nederst).
+
+---
+
+### 1.2.4 Miljø: `github-pages` (steg for steg)
+
+**Brukes av:** workflow **Deploy Studio Demo** (`.github/workflows/pages.yml`, jobben `deploy`)  
+**Formål:** Publisere Studio-demo til `https://superhero-codes.github.io/super-system/`
+
+#### Steg 0 — Aktiver Pages (hvis ikke gjort)
+
+1. Gå til **Settings → Pages**
+2. Under **Build and deployment** → **Source:** velg **GitHub Actions**
+3. Lagre
+
+GitHub oppretter ofte miljøet `github-pages` automatisk første gang Pages deploy kjører — men reglene må du sette selv.
+
+#### Steg 1 — Opprett miljøet (hvis det ikke finnes)
+
+1. **Settings → Environments → New environment**
+2. **Name:** `github-pages` (nøyaktig — matcher `environment.name` i workflow)
+3. **Configure environment**
+
+> Hvis miljøet allerede finnes (auto-opprettet): klikk på navnet og gå til steg 2.
+
+#### Steg 2 — Deployment branches and tags
+
+1. Velg **Selected branches and tags**
+2. **Add deployment branch or tag rule**
+3. Velg **Branch**
+4. Velg **`main`** (kun default branch skal deploye demo)
+5. Lagre
+
+**Ikke** tillat alle branches — da kan en feature-branch overskrive produksjons-demoen.
+
+#### Steg 3 — Required reviewers
+
+| Scenario | Anbefaling |
+| --- | --- |
+| **Solo / liten org** | **Av** — demo skal deploye automatisk ved merge til `main` |
+| **Streng kontroll** | Slå på 1 reviewer (sjeldent nødvendig for en statisk demo) |
+
+#### Steg 4 — Secrets og variables
+
+Ingen secrets nødvendig for Pages med OIDC (`pages: write` + `id-token: write` i workflow).
+
+- [ ] **Environment secrets:** tom
+- [ ] **Environment variables:** tom
+
+#### Steg 5 — Lagre
+
+Lagre protection rules.
+
+---
+
+### 1.2.5 Verifiser miljøene (2 minutter)
+
+#### Test `github-pages`
+
+1. Gå til **Actions → Deploy Studio Demo**
+2. Klikk **Run workflow** → branch **`main`** → **Run workflow**
+3. Vent til grønt ✓
+4. Åpne `https://superhero-codes.github.io/super-system/` — Studio-demo skal laste
+
+**Feilsøking:**
+
+| Feilmelding | Fix |
+| --- | --- |
+| `Environment github-pages not found` | Opprett miljøet (1.2.4) |
+| `Deployment was rejected` | Sjekk at du kjører fra `main` og at branch-regelen tillater `main` |
+| `Resource not accessible by integration` | Workflow permissions → Read and write (1.2.1) |
+
+#### Test `npm` (uten faktisk ny versjon)
+
+1. Gå til **Actions → Publish beta**
+2. Klikk **Run workflow**
+3. Velg en **eksisterende tag** (f.eks. `v0.1.0-beta.18`) — scriptet skipper allerede publiserte pakker
+4. Workflow skal **starte** og nå `environment: npm`-steget (grønt eller skipped packages — ikke «environment protection»-feil)
+
+**Feilsøking:**
+
+| Feilmelding | Fix |
+| --- | --- |
+| `Waiting for approval` | Required reviewers er på — godkjenn i Actions, eller slå av (1.2.3 steg 3) |
+| `Environment npm not found` | Opprett miljøet (1.2.3) |
+| `403 Forbidden` ved npm publish | Trusted Publisher peker feil repo — se [Fase 3](#fase-3--npm-trusted-publishing) |
+| `Resource not accessible by integration` | Workflow permissions (1.2.1) + `id-token: write` i workflow |
+
+---
+
+### 1.2.6 Oppsummert: hvilke regler skal stå hvor?
+
+| Miljø | Workflow | Trigger | Deployment rule | Reviewers | Secrets |
+| --- | --- | --- | --- | --- | --- |
+| **`npm`** | Publish beta | Tag `v0.1.0-beta.*` | Tags: `v0.1.0-beta.*` | Av (solo) / 1+ (team) | Ingen (OIDC) |
+| **`github-pages`** | Deploy Studio Demo | Push til `main` | Branch: `main` | Av | Ingen (OIDC) |
+
+**Navn må være eksakte:** `npm` og `github-pages` — ikke `NPM`, `production`, eller `github-pages-production`.
+
 
 ### 1.3 Oppdater lokale remotes (alle utviklere)
 
@@ -206,19 +398,25 @@ rg 'trondulseth' .   # skal gi 0 treff (unntatt denne playbooken / historikk)
 
 ## Fase 5 — CI og miljøer
 
+Miljøoppsett er dokumentert i detalj under [1.2.1–1.2.6](#121-github-actions--grunninnstillinger-steg-for-steg). Denne fasen er en kort sjekkliste etter at du har fulgt den guiden.
+
 ### 5.1 Workflows (ingen endring i filnavn nødvendig)
 
-| Workflow | Fil | Avhengighet |
-| --- | --- | --- |
-| CI | `.github/workflows/ci.yml` | — |
-| Publish beta | `.github/workflows/publish.yml` | Environment **`npm`**, OIDC |
-| Deploy Studio Demo | `.github/workflows/pages.yml` | Environment **`github-pages`** |
+| Workflow | Fil | Miljø | Protection rule (anbefalt) |
+| --- | --- | --- | --- |
+| CI | `.github/workflows/ci.yml` | *(ingen)* | — |
+| Publish beta | `.github/workflows/publish.yml` | **`npm`** | Tags: `v0.1.0-beta.*` |
+| Deploy Studio Demo | `.github/workflows/pages.yml` | **`github-pages`** | Branch: `main` |
 
 ### 5.2 Sjekkliste etter flytt
 
+- [ ] **Actions → General:** Read and write permissions (repo + org)
+- [ ] **Environment `npm`:** opprettet, tag-regel `v0.1.0-beta.*`, ingen NPM_TOKEN
+- [ ] **Environment `github-pages`:** opprettet, kun branch `main`
+- [ ] **Settings → Pages:** Source = GitHub Actions
+- [ ] Publish beta workflow når `npm`-miljøet uten protection-feil
+- [ ] Deploy Studio Demo grønn; demo laster på ny URL
 - [ ] CI grønn på `main`
-- [ ] Pages deploy grønn; demo laster
-- [ ] `workflow_dispatch` på Publish beta fungerer
 - [ ] Branch protection på `main` (hvis brukt) gjenopprettet
 
 ---
@@ -278,7 +476,12 @@ Etter URL-er er oppdatert i `main` og publisert: **ikke** rollback transfer uten
 
 | Symptom | Sannsynlig årsak | Fix |
 | --- | --- | --- |
+| `Environment npm not found` | Miljø ikke opprettet etter transfer | [1.2.3 Miljø: npm](#123-miljø-npm-steg-for-steg) |
+| `Environment github-pages not found` | Miljø ikke opprettet | [1.2.4 Miljø: github-pages](#124-miljø-github-pages-steg-for-steg) |
+| `Deployment was rejected` / protection error | Feil branch/tag for miljøregel | Sjekk deployment rules i 1.2.3 / 1.2.4 |
+| `Waiting for approval` på publish | Required reviewers på `npm` | Godkjenn i Actions, eller slå av reviewers (solo) |
 | Publish workflow 403 | Trusted Publisher peker fortsatt på `trondulseth/super-system` | Oppdater npm Trusted Publisher (Fase 3) |
+| `Resource not accessible by integration` | Workflow permissions for restriktive | [1.2.1 Actions grunninnstillinger](#121-github-actions--grunninnstillinger-steg-for-steg) |
 | Pages 404 | Org Pages ikke aktivert, eller workflow feilet | Settings → Pages; sjekk Actions-logg |
 | Clone feiler for bidragsytere | Gammel remote URL | `git remote set-url` (Fase 1.3) |
 | `pnpm check` feiler etter URL-bytte | Glemt fil i Fase 4 | Kjør `rg trondulseth` |
