@@ -26,6 +26,9 @@ describe("studio demo", () => {
     expect(html).toContain('id="mode-default-badge"');
     expect(html).toContain("preview-mono");
     expect(html).toContain("studio-brand");
+    expect(html).toContain("studio-mobile-nav");
+    expect(html).toContain('data-studio-tab="preview"');
+    expect(html).toContain("studio-checks__title");
     expect(html).toContain("./brand/logo.png");
     expect(html).toContain("ss-button--destructive");
     expect(html).toContain("ss-button--ghost");
