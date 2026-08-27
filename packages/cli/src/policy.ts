@@ -31,6 +31,7 @@ export interface SuperSystemPolicy {
   adapters?: {
     generatorVersion?: string;
     lastGeneratedAt?: string;
+    targets?: Partial<Record<string, { formatVersion?: string; lastGeneratedAt?: string }>>;
   };
 }
 

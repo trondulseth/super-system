@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { checkThemeContrast } from "@super-system/tokens";
-import { generateAdapter, formatAdapterResult } from "./adapters.js";
+import { generateAdapter, formatAdapterCatalog, formatAdapterResult, ADAPTER_TARGETS } from "./adapters.js";
 import { auditProject } from "./audit.js";
 import { DirtyWorktreeError } from "./git-worktree.js";
 import { applyMigration, formatMigrationApplyResult, saveMigrationPlan } from "./migration-apply.js";
@@ -31,7 +31,8 @@ Usage:
   super-system migrate verify [--json] [--cwd path]
   super-system policy init [--force] [--cwd path]
   super-system policy check [--json] [--strict] [--cwd path]
-  super-system adapters generate [--target agents-md] [--dry-run] [--cwd path]
+  super-system adapters list
+  super-system adapters generate [--target agents-md|cursor-rules] [--dry-run] [--cwd path]
   super-system build-theme [--cwd path]
   super-system check-contrast [--cwd path]
   super-system icons setup [--install] [--cwd path]
@@ -142,19 +143,25 @@ async function main(): Promise<void> {
       break;
     }
     case "adapters": {
+      if (args[0] === "list") {
+        console.log(formatAdapterCatalog());
+        break;
+      }
       if (args[0] !== "generate") {
         help();
         break;
       }
       const targetFlag = args.indexOf("--target");
       const target = targetFlag >= 0 ? args[targetFlag + 1] : "agents-md";
-      if (target !== "agents-md") {
+      const supported = ADAPTER_TARGETS.some((entry) => entry.id === target);
+      if (!supported) {
         console.error(`Unsupported adapter target: ${target}`);
+        console.error(`Supported targets: ${ADAPTER_TARGETS.map((entry) => entry.id).join(", ")}`);
         process.exitCode = 1;
         break;
       }
       const result = await generateAdapter(cwd, {
-        target: "agents-md",
+        target: target as "agents-md" | "cursor-rules",
         dryRun: args.includes("--dry-run")
       });
       console.log(formatAdapterResult(result));

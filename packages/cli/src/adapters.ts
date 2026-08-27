@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import {
   ADAPTER_GENERATOR_VERSION,
@@ -8,7 +8,35 @@ import {
 } from "@super-system/rules";
 import { defaultPolicy, pathExists, readPolicy, writePolicy } from "./policy.js";
 
-export type AdapterTarget = "agents-md";
+export type AdapterTarget = "agents-md" | "cursor-rules";
+
+export interface AdapterTargetDefinition {
+  id: AdapterTarget;
+  relativePath: string;
+  label: string;
+  formatVersion: string;
+  beta: boolean;
+  description: string;
+}
+
+export const ADAPTER_TARGETS: AdapterTargetDefinition[] = [
+  {
+    id: "agents-md",
+    relativePath: "AGENTS.md",
+    label: "Generic AGENTS.md",
+    formatVersion: "1",
+    beta: true,
+    description: "Vendor-neutral guidance for any AI coding tool that reads AGENTS.md."
+  },
+  {
+    id: "cursor-rules",
+    relativePath: ".cursor/rules/super-system.mdc",
+    label: "Cursor rules (.mdc)",
+    formatVersion: "1",
+    beta: true,
+    description: "Cursor project rule with globs for TS/JS/TSX/JSX sources."
+  }
+];
 
 export interface AdapterGenerateOptions {
   target: AdapterTarget;
@@ -24,7 +52,7 @@ export interface AdapterGenerateResult {
   preview: boolean;
 }
 
-function buildAgentsSection(): string {
+function buildGeneratedBody(): string {
   const components = [
     "Button", "Input", "Textarea", "Label", "Checkbox", "Radio group", "Switch", "Slider", "Select",
     "Alert", "Spinner", "Skeleton", "Tooltip", "Badge", "Card", "Tabs", "Accordion", "Breadcrumb",
@@ -51,6 +79,7 @@ function buildAgentsSection(): string {
     "- Never edit `.super-system/theme.css` manually.",
     "- Use semantic Super System CSS variables instead of hard-coded colors or spacing.",
     "- After UI work, run `npx @super-system/cli audit` and `check-contrast`.",
+    "- Use inline suppressions only with justification: `// super-system-ignore <rule>: <reason>`.",
     "",
     "### Audit rules enforced by policy",
     "",
@@ -75,32 +104,91 @@ export function mergeGeneratedSection(existing: string, generatedBody: string): 
   return `${trimmed}\n\n${generatedBody}\n`;
 }
 
+function defaultCursorFrontmatter(): string {
+  return [
+    "---",
+    "description: Super System design system rules (generated)",
+    "globs: **/*.{tsx,jsx,ts,js}",
+    "alwaysApply: false",
+    "---",
+    ""
+  ].join("\n");
+}
+
+export function mergeCursorRules(existing: string, generatedBody: string): string {
+  const frontmatterMatch = existing.match(/^---\n[\s\S]*?\n---\n?/);
+  if (frontmatterMatch) {
+    const rest = existing.slice(frontmatterMatch[0].length);
+    return `${frontmatterMatch[0]}${mergeGeneratedSection(rest, generatedBody)}`;
+  }
+
+  if (!existing.trim()) {
+    return `${defaultCursorFrontmatter()}${generatedBody}\n`;
+  }
+
+  return mergeGeneratedSection(existing, generatedBody);
+}
+
+function getTargetDefinition(target: AdapterTarget): AdapterTargetDefinition {
+  const definition = ADAPTER_TARGETS.find((entry) => entry.id === target);
+  if (!definition) throw new Error(`Unsupported adapter target: ${target}`);
+  return definition;
+}
+
+export function formatAdapterCatalog(): string {
+  const lines = ["Super System instruction adapters (opt-in beta)", ""];
+  for (const target of ADAPTER_TARGETS) {
+    lines.push(
+      `- ${target.id} (${target.beta ? "beta" : "stable"}) — ${target.label}`,
+      `  file: ${target.relativePath}`,
+      `  format version: ${target.formatVersion}`,
+      `  ${target.description}`,
+      ""
+    );
+  }
+  lines.push(`Generator version: ${ADAPTER_GENERATOR_VERSION}`);
+  lines.push("Run `npx @super-system/cli adapters generate --target <id>`.");
+  return lines.join("\n");
+}
+
 export async function generateAdapter(
   cwd: string,
   options: AdapterGenerateOptions
 ): Promise<AdapterGenerateResult> {
-  if (options.target !== "agents-md") {
-    throw new Error(`Unsupported adapter target: ${options.target}`);
-  }
-
-  const file = path.join(cwd, "AGENTS.md");
-  const generatedBody = buildAgentsSection();
+  const definition = getTargetDefinition(options.target);
+  const file = path.join(cwd, definition.relativePath);
+  const generatedBody = buildGeneratedBody();
   const existing = (await pathExists(file)) ? await readFile(file, "utf8") : "";
-  const content = mergeGeneratedSection(existing, generatedBody);
+
+  const content =
+    options.target === "cursor-rules"
+      ? mergeCursorRules(existing, generatedBody)
+      : mergeGeneratedSection(existing, generatedBody);
 
   if (!options.dryRun) {
+    if (options.target === "cursor-rules") {
+      await mkdir(path.dirname(file), { recursive: true });
+    }
     await writeFile(file, content, "utf8");
     const policy = (await readPolicy(cwd)) ?? defaultPolicy();
     policy.adapters = {
+      ...(policy.adapters ?? {}),
       generatorVersion: ADAPTER_GENERATOR_VERSION,
-      lastGeneratedAt: new Date().toISOString()
+      lastGeneratedAt: new Date().toISOString(),
+      targets: {
+        ...(policy.adapters?.targets ?? {}),
+        [options.target]: {
+          formatVersion: definition.formatVersion,
+          lastGeneratedAt: new Date().toISOString()
+        }
+      }
     };
     await writePolicy(cwd, policy);
   }
 
   return {
     target: options.target,
-    file: "AGENTS.md",
+    file: definition.relativePath,
     content,
     wrote: !options.dryRun,
     preview: options.dryRun ?? false
@@ -109,7 +197,40 @@ export async function generateAdapter(
 
 export function formatAdapterResult(result: AdapterGenerateResult): string {
   if (result.preview) {
-    return ["Super System adapter preview (AGENTS.md):", "", result.content].join("\n");
+    return [`Super System adapter preview (${result.target}):`, "", result.content].join("\n");
   }
   return `Wrote generated Super System section to ${result.file}.`;
+}
+
+export async function detectStaleAdapters(cwd: string): Promise<string[]> {
+  const warnings: string[] = [];
+  const policy = await readPolicy(cwd);
+
+  for (const target of ADAPTER_TARGETS) {
+    const filePath = path.join(cwd, target.relativePath);
+    if (!(await pathExists(filePath))) continue;
+
+    const content = await readFile(filePath, "utf8");
+    if (!content.includes(GENERATED_SECTION_BEGIN)) {
+      warnings.push(`${target.relativePath} is missing generated section markers — run adapters generate --target ${target.id}.`);
+      continue;
+    }
+
+    const versionMatch = content.match(/Generator version:\s*(\S+)/);
+    const fileVersion = versionMatch?.[1];
+    if (fileVersion && fileVersion !== ADAPTER_GENERATOR_VERSION) {
+      warnings.push(`${target.relativePath} was generated with ${fileVersion}; current generator is ${ADAPTER_GENERATOR_VERSION}.`);
+    }
+  }
+
+  if (
+    policy?.adapters?.generatorVersion &&
+    policy.adapters.generatorVersion !== ADAPTER_GENERATOR_VERSION
+  ) {
+    warnings.push(
+      `super-system.policy.json records generator ${policy.adapters.generatorVersion}; regenerate adapters for ${ADAPTER_GENERATOR_VERSION}.`
+    );
+  }
+
+  return warnings;
 }

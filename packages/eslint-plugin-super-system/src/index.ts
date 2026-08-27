@@ -5,7 +5,7 @@ import { imageAltRule, rawButtonRule, rawInputRule } from "./rules/shared-jsx-ru
 const plugin: ESLint.Plugin = {
   meta: {
     name: "eslint-plugin-super-system",
-    version: "0.1.0-beta.18"
+    version: "0.1.0-beta.19"
   },
   rules: {
     "raw-button": rawButtonRule,
