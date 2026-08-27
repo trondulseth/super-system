@@ -4,9 +4,8 @@
 
 ## Beta roadmap
 
-Batch 1–3 component batches and **assisted migration** (beta.15) are **shipped**. **Governance foundation** (beta.16) adds policy, shared rules, and ESLint. Next planned work:
+Batch 1–3 component batches and **assisted migration** (beta.15) are **shipped**. **Governance** (beta.16–19) adds policy, shared rules, ESLint parity, suppressions, and Cursor/AGENTS adapters. Next planned work:
 
-- deeper syntax-aware ESLint/audit rules and vendor adapters (`add-governance-and-ai-adapters`);
 - release matrix, visual regression, and RC workflow (`harden-release-and-quality`);
 - hosted theme sharing in addition to the private local Studio.
 
@@ -22,8 +21,8 @@ Super System uses [OpenSpec](https://openspec.dev/) to keep the product plan rev
 
 Active work to watch:
 
-- [`add-governance-and-ai-adapters`](../openspec/changes/add-governance-and-ai-adapters) — canonical policy, ESLint plugin, AI instruction adapters
 - [`harden-release-and-quality`](../openspec/changes/harden-release-and-quality) — release candidates, expanded tests, 1.0 policies
+- [`add-hosted-theme-sharing`](../openspec/changes/add-hosted-theme-sharing) — optional hosted theme previews
 
 Before implementing a planned feature, review its OpenSpec change. When the work and verification tasks are complete, sync the living specification and archive the change. This gives people and AI coding tools the same source of truth.
 
