@@ -2,28 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2563eb" />
     <link rel="icon" href="./brand/logo-mark.png" type="image/png" />
     <title>Super System Studio</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./components.css" />
     <link rel="stylesheet" href="./demo-components.css" />
   </head>
-  <body>
+  <body class="studio-body">
     <p id="demo-banner" class="demo-banner" hidden></p>
-    <header>
+    <header class="studio-header">
       <div class="studio-brand">
-        <img class="studio-brand__logo" src="./brand/logo.png" alt="Super System" width="1451" height="449" />
+        <img class="studio-brand__logo studio-brand__logo--full" src="./brand/logo.png" alt="Super System" width="1451" height="449" />
+        <img class="studio-brand__logo studio-brand__logo--mark" src="./brand/logo-mark.png" alt="Super System" width="64" height="64" />
         <p class="studio-brand__subtitle">Studio</p>
       </div>
-      <div class="actions">
-        <span id="status"></span>
-        <button class="theme-toggle" id="toggle" type="button">Dark preview</button>
-        <button class="save" id="save" type="button">Save theme</button>
+      <div class="actions studio-actions">
+        <span id="status" class="studio-status" role="status" aria-live="polite"></span>
+        <button class="theme-toggle studio-action-btn" id="toggle" type="button">
+          <span class="studio-action-btn__short" aria-hidden="true">Dark</span>
+          <span class="studio-action-btn__long">Dark preview</span>
+        </button>
+        <button class="save studio-action-btn studio-action-btn--primary" id="save" type="button">
+          <span class="studio-action-btn__short" aria-hidden="true">Save</span>
+          <span class="studio-action-btn__long">Save theme</span>
+        </button>
       </div>
     </header>
-    <main>
-      <aside>
+    <main class="studio-main" data-active-panel="theme">
+      <aside class="studio-sidebar" data-studio-panel="theme">
         <p id="editing-theme" class="editing-theme">Editing: Light theme</p>
         <h2>Brand</h2>
         <label class="color-field">
@@ -407,7 +415,8 @@
           <p class="field-help">Mode default and reduced motion are saved to config; preview toggle controls the live demo theme.</p>
         </div>
       </aside>
-      <section class="preview">
+      <div class="studio-workspace">
+      <section class="preview studio-preview" data-studio-panel="preview" hidden aria-hidden="true">
         <article class="ss-card preview-theme" id="preview-root" data-theme="light">
           <div class="preview-header">
             <span class="ss-badge ss-badge--neutral" id="mode-default-badge">Default mode: System</span>
@@ -1131,10 +1140,31 @@
             </div>
           </section>
 
-          <div id="checks"></div>
         </article>
       </section>
+      <section class="studio-checks" data-studio-panel="checks" aria-labelledby="studio-checks-title" hidden aria-hidden="true">
+        <div class="studio-checks__card ss-card">
+          <h2 id="studio-checks-title" class="studio-checks__title">Contrast checks</h2>
+          <p class="studio-checks__lead">Live WCAG ratios for light and dark themes. Edit colors on the Theme tab, then verify here.</p>
+          <div id="checks"></div>
+        </div>
+      </section>
+      </div>
     </main>
+    <nav class="studio-mobile-nav" aria-label="Studio panels">
+      <button type="button" class="studio-mobile-nav__btn is-active" data-studio-tab="theme" aria-selected="true">
+        <span class="studio-mobile-nav__icon" aria-hidden="true">◐</span>
+        <span class="studio-mobile-nav__label">Theme</span>
+      </button>
+      <button type="button" class="studio-mobile-nav__btn" data-studio-tab="preview" aria-selected="false">
+        <span class="studio-mobile-nav__icon" aria-hidden="true">▣</span>
+        <span class="studio-mobile-nav__label">Preview</span>
+      </button>
+      <button type="button" class="studio-mobile-nav__btn" data-studio-tab="checks" aria-selected="false">
+        <span class="studio-mobile-nav__icon" aria-hidden="true">✓</span>
+        <span class="studio-mobile-nav__label">A11y</span>
+      </button>
+    </nav>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

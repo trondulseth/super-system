@@ -1,6 +1,7 @@
 import type { SuperSystemConfig } from "@super-system/tokens";
 import { initPreviewInteractions } from "./preview-interactions.js";
 import { updatePreviewTheme } from "./preview-theme.js";
+import { initStudioShell } from "./studio-shell.js";
 import {
   applyConfigToForm,
   FORM_COLOR_IDS,
@@ -33,6 +34,14 @@ function esc(value: string): string {
 
 function formatModeDefault(mode: SuperSystemConfig["mode"]["default"]): string {
   return mode.charAt(0).toUpperCase() + mode.slice(1);
+}
+
+function setToggleLabels(button: HTMLButtonElement, preview: "light" | "dark"): void {
+  const short = preview === "light" ? "Dark" : "Light";
+  const long = preview === "light" ? "Dark preview" : "Light preview";
+  button.querySelector(".studio-action-btn__short")!.textContent = short;
+  button.querySelector(".studio-action-btn__long")!.textContent = long;
+  button.setAttribute("aria-label", long);
 }
 
 const DEVICE_HINTS: Record<"desktop" | "tablet" | "mobile", string> = {
@@ -128,7 +137,17 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   const editingTheme = $("editing-theme");
   const modeDefaultBadge = $("mode-default-badge");
 
-  saveButton.textContent = options.saveLabel ?? "Save theme";
+  const defaultSaveLabel = options.saveLabel ?? "Save theme";
+  const saveShort = saveButton.querySelector(".studio-action-btn__short");
+  const saveLong = saveButton.querySelector(".studio-action-btn__long");
+  if (saveShort && saveLong) {
+    saveShort.textContent = defaultSaveLabel.startsWith("Download") ? "Download" : "Save";
+    saveLong.textContent = defaultSaveLabel;
+    saveButton.setAttribute("aria-label", defaultSaveLabel);
+  } else {
+    saveButton.textContent = defaultSaveLabel;
+  }
+  setToggleLabels(toggleButton, preview);
   if (options.demoBanner) {
     demoBanner.hidden = false;
     demoBanner.textContent = options.demoBanner;
@@ -170,6 +189,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   config = await backend.loadConfig();
   fill();
   await render();
+  initStudioShell();
   initPageShellPreview();
   initPreviewInteractions();
 
@@ -208,7 +228,7 @@ export async function initStudio(backend: StudioBackend, options: StudioOptions 
   toggleButton.addEventListener("click", () => {
     collect();
     preview = preview === "light" ? "dark" : "light";
-    toggleButton.textContent = preview === "light" ? "Dark preview" : "Light preview";
+    setToggleLabels(toggleButton, preview);
     fill();
     void render();
   });
