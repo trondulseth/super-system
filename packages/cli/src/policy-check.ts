@@ -1,4 +1,5 @@
 import { checkThemeContrast } from "@super-system/tokens";
+import { detectStaleAdapters } from "./adapters.js";
 import { auditProject, type Finding } from "./audit.js";
 import { readConfig } from "./files.js";
 import {
@@ -18,6 +19,7 @@ export interface PolicyCheckResult {
   findings: PolicyFinding[];
   deprecations: Array<{ id: string; message: string; severity: "warn" | "error" }>;
   contrast?: { passed: boolean; detail?: string };
+  adapterWarnings: string[];
   passed: boolean;
 }
 
@@ -61,6 +63,7 @@ export async function checkPolicy(cwd: string, options: { strict?: boolean } = {
 
   const hasErrors = findings.some((entry) => entry.severity === "error");
   const contrastFailed = contrast?.passed === false;
+  const adapterWarnings = await detectStaleAdapters(cwd);
   const passed = !hasErrors && !contrastFailed && (!options.strict || findings.length === 0);
 
   return {
@@ -68,6 +71,7 @@ export async function checkPolicy(cwd: string, options: { strict?: boolean } = {
     findings,
     deprecations,
     contrast,
+    adapterWarnings,
     passed
   };
 }
@@ -100,6 +104,14 @@ export function formatPolicyCheckResult(result: PolicyCheckResult): string {
 
   if (result.contrast) {
     lines.push(result.contrast.passed ? "Contrast: passed configured threshold." : `Contrast: failed — ${result.contrast.detail}`);
+    lines.push("");
+  }
+
+  if (result.adapterWarnings.length > 0) {
+    lines.push("Adapter warnings:");
+    for (const warning of result.adapterWarnings) {
+      lines.push(`  [WARN] ${warning}`);
+    }
     lines.push("");
   }
 

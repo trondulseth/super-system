@@ -1,5 +1,13 @@
 # Migration notes
 
+## 0.1.0-beta.19 (governance completion)
+
+No breaking API changes.
+
+- **Suppressions:** Shared `super-system-ignore <rule>: <justification>` for CLI audit and ESLint (min 8 char reason).
+- **Adapters:** `cursor-rules` target (`.cursor/rules/super-system.mdc`), `adapters list`, stale-generator warnings in `policy check`.
+- **Policy:** CI-oriented pass/warn/fail fixtures documented in governance docs.
+
 ## 0.1.0-beta.18 (syntax-aware CLI audit)
 
 No breaking API changes.

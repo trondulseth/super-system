@@ -3,11 +3,11 @@ import { execFileSync } from "node:child_process";
 
 describe("verify-release script", () => {
   it("passes when tag matches package versions and MIGRATION.md", () => {
-    const output = execFileSync("node", ["scripts/verify-release.mjs", "v0.1.0-beta.18"], {
+    const output = execFileSync("node", ["scripts/verify-release.mjs", "v0.1.0-beta.19"], {
       cwd: process.cwd(),
       encoding: "utf8"
     });
-    expect(output).toContain("0.1.0-beta.18");
+    expect(output).toContain("0.1.0-beta.19");
   });
 
   it("fails on version mismatch", () => {

@@ -1,6 +1,6 @@
 {
   "name": "@super-system/rules",
-  "version": "0.1.0-beta.18",
+  "version": "0.1.0-beta.19",
   "description": "Shared Super System audit rule catalog for CLI and ESLint.",
   "type": "module",
   "license": "MIT",

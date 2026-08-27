@@ -1,5 +1,6 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { findSuppressionNearLine } from "@super-system/rules";
 import { auditJsxFile, isSyntaxJsxRule, supportsSyntaxJsxAudit } from "./audit-jsx.js";
 import { migrationRules } from "./migration-rules.js";
 
@@ -30,10 +31,12 @@ function auditLines(content: string, relativePath: string, skipSyntaxJsxRules: b
     for (const rule of migrationRules) {
       if (skipSyntaxJsxRules && isSyntaxJsxRule(rule.rule)) continue;
       if (rule.pattern.test(line)) {
+        const lineNumber = index + 1;
+        if (findSuppressionNearLine(content, lineNumber, rule.rule)) continue;
         findings.push({
           rule: rule.rule,
           file: relativePath,
-          line: index + 1,
+          line: lineNumber,
           message: rule.message
         });
       }

@@ -132,4 +132,4 @@ export function listAuditRuleIds(): string[] {
 
 export const GENERATED_SECTION_BEGIN = "<!-- super-system:generated begin -->";
 export const GENERATED_SECTION_END = "<!-- super-system:generated end -->";
-export const ADAPTER_GENERATOR_VERSION = "0.1.0-beta.18";
+export const ADAPTER_GENERATOR_VERSION = "0.1.0-beta.19";

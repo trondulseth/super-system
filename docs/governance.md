@@ -30,7 +30,7 @@ Example structure:
   },
   "deprecations": [],
   "adapters": {
-    "generatorVersion": "0.1.0-beta.18"
+    "generatorVersion": "0.1.0-beta.19"
   }
 }
 ```
@@ -72,18 +72,57 @@ npx @super-system/cli policy check --strict   # warnings also fail
 
 Runs audit findings through policy severity, optional contrast threshold, and deprecation notices. Exits non-zero when blocking rules fail.
 
-## Instruction adapters
+## Instruction adapters (opt-in beta)
 
-Generate a merge-safe section in `AGENTS.md`:
+Adapters are **optional** and **beta**. They generate guidance only — no tool permissions.
+
+List supported targets:
+
+```bash
+npx @super-system/cli adapters list
+```
+
+| Target | Output | Format version | Status |
+| --- | --- | --- | --- |
+| `agents-md` | `AGENTS.md` | 1 | beta |
+| `cursor-rules` | `.cursor/rules/super-system.mdc` | 1 | beta |
+
+Generate merge-safe content:
 
 ```bash
 npx @super-system/cli adapters generate --target agents-md
+npx @super-system/cli adapters generate --target cursor-rules
 npx @super-system/cli adapters generate --dry-run
 ```
 
 Content between `<!-- super-system:generated begin -->` and `<!-- super-system:generated end -->` is owned by the CLI. User text outside those markers is preserved.
 
+`policy check` warns when adapter files were generated with an older generator version.
+
 Adapters provide **guidance only** — they do not grant tools permission to publish packages or bypass review.
+
+## Inline suppressions
+
+When a violation is intentional and documented, suppress it inline (CLI audit and ESLint use the same syntax):
+
+```tsx
+// super-system-ignore raw-button: Legacy checkout until Q2 migration
+<button>Checkout</button>
+```
+
+```tsx
+{/* super-system-ignore image-alt: Decorative background; parent has aria-hidden */}
+<img src="/hero.png" />
+```
+
+Rules:
+
+- Format: `super-system-ignore <rule-id>: <justification>`
+- Use `*` as the rule id to suppress all rules on the next line
+- Justification must be at least **8 characters**
+- Place the comment on the line above or the same line as the violation
+
+Prefer fixing the underlying issue or using policy `excludeGlobs` for whole directories instead of broad suppressions.
 
 ## ESLint plugin
 

@@ -31,7 +31,9 @@
 | `npx @super-system/cli policy check` | Runs audit through policy severity and contrast rules. |
 | `npx @super-system/cli policy check --json` | Prints policy check results as JSON. |
 | `npx @super-system/cli policy check --strict` | Treat warnings as failures. |
+| `npx @super-system/cli adapters list` | Lists supported adapter targets and format versions (opt-in beta). |
 | `npx @super-system/cli adapters generate --target agents-md` | Writes a merge-safe Super System section to `AGENTS.md`. |
+| `npx @super-system/cli adapters generate --target cursor-rules` | Writes `.cursor/rules/super-system.mdc` for Cursor. |
 | `npx @super-system/cli adapters generate --dry-run` | Previews adapter output without writing files. |
 | `npx @super-system/cli build-theme` | Regenerates CSS from `super-system.json`. |
 | `npx @super-system/cli check-contrast` | Checks configured light/dark color pairs. |

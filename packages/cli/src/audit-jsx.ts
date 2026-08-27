@@ -1,6 +1,7 @@
 import { parse, type ParserPlugin } from "@babel/parser";
 import {
   auditJsxOpeningElement,
+  findSuppressionNearLine,
   SYNTAX_JSX_RULE_IDS,
   type JsxOpeningElementLike
 } from "@super-system/rules";
@@ -89,6 +90,7 @@ export function auditJsxFile(content: string, relativePath: string): JsxAuditRes
     if (node.type !== "JSXOpeningElement" || !node.loc) return;
 
     for (const violation of auditJsxOpeningElement(toJsxOpeningElementLike(node))) {
+      if (findSuppressionNearLine(content, node.loc.start.line, violation.ruleId)) continue;
       findings.push({
         rule: violation.ruleId,
         file: relativePath,

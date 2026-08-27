@@ -12,13 +12,13 @@
 - [x] Extract a shared, versioned rule catalog for CLI and editor integrations.
 - [x] Add syntax-aware JavaScript and TypeScript analysis for supported rules.
 - [x] Publish an ESLint plugin with recommended and strict configurations.
-- [ ] Add safe inline suppression syntax with required justification guidance.
+- [x] Add safe inline suppression syntax with required justification guidance.
 
 ## Adapter generation
 
 - [x] Define the adapter interface and generated-section markers.
 - [x] Implement generic `AGENTS.md` output.
-- [ ] Select and implement the first vendor-specific adapters from verified formats.
+- [x] Select and implement the first vendor-specific adapters from verified formats.
 - [x] Add preview, merge-safe update, stale-output detection, and removal commands.
 
 ## Verification
@@ -26,11 +26,11 @@
 - [x] Test policy validation and lifecycle transitions.
 - [x] Test adapters against empty, missing, generated, and hand-edited target files.
 - [x] Verify that regeneration is deterministic and preserves user-owned content.
-- [ ] Add CI fixtures for pass, warning, and failure policies.
+- [x] Add CI fixtures for pass, warning, and failure policies.
 - [x] Add parity fixtures proving that ESLint and CLI audit agree on shared rules.
 
 ## Documentation and release
 
 - [x] Write governance examples for solo projects and teams.
 - [x] Explain that adapters provide guidance and do not grant tool permissions.
-- [ ] Publish adapters as opt-in beta features and document format support versions.
+- [x] Publish adapters as opt-in beta features and document format support versions.

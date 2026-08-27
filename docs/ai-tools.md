@@ -14,4 +14,12 @@ Never edit .super-system/theme.css manually.
 After UI work, run npx @super-system/cli audit and check-contrast.
 ```
 
-The rule works in an `AGENTS.md`, `CLAUDE.md`, Cursor rule, Copilot instruction, or ordinary project documentation.
+For a maintained setup, run:
+
+```bash
+npx @super-system/cli policy init
+npx @super-system/cli adapters generate --target cursor-rules   # or agents-md
+npx @super-system/cli adapters list
+```
+
+See [Governance](./governance.md) for policy severity, inline suppressions, and adapter format versions.
