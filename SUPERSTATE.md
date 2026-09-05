@@ -5,11 +5,11 @@ Super System is a lightweight, AI-independent design system for React teams. It 
 
 - **Planning system:** openspec
 - **OpenSpec root:** openspec/
-- **Active changes:** `harden-release-and-quality` (release matrix, visual regression, RC workflow)
+- **Active changes:** `harden-release-and-quality` (release matrix, visual regression, RC workflow), `add-hosted-theme-sharing`, `add-studio-github-pages-demo`, `support-more-frameworks`
 - **Journal:** openspec/journal/
 
 ## Active handoff
 
-- **Objective:** Governance adapters complete (beta.19); continue release hardening.
-- **Work state:** Inline suppressions, Cursor adapter, policy CI fixtures, stale adapter warnings.
-- **Next handoff:** Archive `add-governance-and-ai-adapters`; Node/React matrix, visual regression, RC workflow.
+- **Objective:** Release hardening and quality gates (Node/React matrix, visual regression, RC workflow).
+- **Work state:** Governance shipped in beta.19; change archived with main spec synced.
+- **Next handoff:** `harden-release-and-quality` — Node/React matrix, visual regression, RC workflow.
